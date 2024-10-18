@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/data-wrangle/index.html",
       "/posts/data-vis/index.html"
     ]
   }
