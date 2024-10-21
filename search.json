@@ -4,7 +4,7 @@
     "href": "posts/data-wrangle/index.html",
     "title": "Live Session 2: Introduction to Data Wrangling in R",
     "section": "",
-    "text": "Before you start\n\n\n\nAll of the raw materials, including the R code and data, are available in the Github repository.\nWe will be using the tidyverse and validate packages in this tutorial. You may need to install them if you do not have them already. To install, run the following command in your R console: install.packages(\"tidyverse\", \"validate\"). Note that the tidyverse package is large and may take a few minutes to install."
+    "text": "Take the survey!\n\n\n\nIf you are present for the live session on Monday October 21st, please click here to take the survey."
   },
   {
     "objectID": "posts/data-wrangle/index.html#introduction",
