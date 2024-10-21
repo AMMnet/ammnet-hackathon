@@ -14,6 +14,10 @@ categories:
  - Live session
 ---
 
+::: {.callout-note title="Take the survey!"}
+If you are present for the live session on Monday October 21st, please [click here](https://docs.google.com/forms/d/e/1FAIpQLSeZU0mYYkKJbJKnTr0EfO_CA4nZJhUYRdbxZcqds3vnU82w1g/viewform?usp=sharing) to take the survey.
+:::
+
 ::: {.callout-tip title="Before you start"}
 All of the raw materials, including the [R code](https://github.com/AMMnet/ammnet-hackathon/tree/main/02_data-wrangle/R) and [data](https://github.com/AMMnet/ammnet-hackathon/tree/main/02_data-wrangle/data), are available in the [Github repository](https://github.com/AMMnet/ammnet-hackathon/tree/main/02_data-wrangle).
 
