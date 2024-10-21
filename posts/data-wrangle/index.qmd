@@ -22,7 +22,11 @@ If you are present for the live session on Monday October 21st, please [click he
 All of the raw materials, including the [R code](https://github.com/AMMnet/ammnet-hackathon/tree/main/02_data-wrangle/R) and [data](https://github.com/AMMnet/ammnet-hackathon/tree/main/02_data-wrangle/data), are available in the [Github repository](https://github.com/AMMnet/ammnet-hackathon/tree/main/02_data-wrangle).
 
 We will be using the `tidyverse` and `validate` packages in this tutorial. You may need to install them if you do not have them already. To install, run the following command in your R console: `install.packages("tidyverse", "validate")`. Note that the `tidyverse` package is large and may take a few minutes to install.
+
+Code from the live session is avaible [on the Github](https://github.com/AMMnet/ammnet-hackathon/tree/main/02_data-wrangle/R/live-session-code.R).
 :::
+
+{{< video https://www.youtube.com/embed/GkuePnX4MrQ?si=LoGYPdp6tHToo6Zl >}}
 
 ## Introduction
 
