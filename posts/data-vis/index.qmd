@@ -30,7 +30,7 @@ Next, we will load the `tidyverse` package. This package provides a set of usefu
 library(tidyverse)
 ```
 
-Next, let's download the two example datasets we will use in this tutorial. These are avialable in the [AMMnet Hackathon GitHub repository](https://github.com/AMMnet/AMMnet-Hackathon). 
+Next, let's download the two example datasets we will use in this tutorial. These are available in the [AMMnet Hackathon GitHub repository](https://github.com/AMMnet/AMMnet-Hackathon). 
 
 I suggest creating a `data` folder inside your R project, then we can download the two example datasets so that they are saved to your computer.
 
@@ -60,7 +60,7 @@ malaria_data   <- read_csv(paste0(url, "mockdata_cases.csv"), col_types = cols()
 mosquito_data  <- read_csv(paste0(url, "mosq_mock.csv"), col_types = cols())
 ```
 
-The two datasets we will use are `mockdata_cases.csv` and `mosq_mock.csv`, which are mock example datasets that should be similar to malaria case surviellance and mosquito field collection data, respectively. In the following sections we will use the `mockdata_cases.csv` to introduce concepts of data visualization in R. The `mosq_mock.csv` dataset is used in the challenge sections.
+The two datasets we will use are `mockdata_cases.csv` and `mosq_mock.csv`, which are mock example datasets that should be similar to malaria case surveillance and mosquito field collection data, respectively. In the following sections we will use the `mockdata_cases.csv` to introduce concepts of data visualization in R. The `mosq_mock.csv` dataset is used in the challenge sections.
 
 ## Characterizing our data
 
@@ -132,7 +132,7 @@ hist(malaria_data$prev,
     border = "black")
 ``` 
 
-Annother useful function for single variable comparisons is `barplot()`. In this case, we will use the `table()` function to count the number of observations in each category, then use `barplot()` to create a barplot.
+Another useful function for single variable comparisons is `barplot()`. In this case, we will use the `table()` function to count the number of observations in each category, then use `barplot()` to create a barplot.
 ```{r barplot}
 #| warning: false
 #| message: false
@@ -364,7 +364,7 @@ ggplot(data = malaria_data, aes(x = total, y = positive, color = prev)) +
 
 Facets are a powerful feature of ggplot2 that allow us to create multiple plots
 based on a single variable. This "small multiple" approach is another effective
-way to visualize relationships between mutliple variables.
+way to visualize relationships between multiple variables.
 
 Facets also make use of the `~` operator.
 
