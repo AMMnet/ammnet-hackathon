@@ -150,7 +150,7 @@ data_mordor_reordered
 ##### GRAPHS
 
 #Plotting evolution over time
-# Sphagetti plot
+# Spaghetti plot
 
 evolution_plot <- ggplot2::ggplot(data=data_use_ordered,
                                   mapping=aes(x=month,
