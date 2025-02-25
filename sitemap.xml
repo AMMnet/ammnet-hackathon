@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://AMMnet.github.io/ammnet-hackathon/posts/data-wrangle/index.html</loc>
-    <lastmod>2025-02-17T18:19:35.912Z</lastmod>
+    <loc>https://AMMnet.github.io/ammnet-hackathon/posts/mapping-r/index.html</loc>
+    <lastmod>2025-02-25T21:13:15.111Z</lastmod>
   </url>
   <url>
-    <loc>https://AMMnet.github.io/ammnet-hackathon/index.html</loc>
-    <lastmod>2024-07-19T22:28:39.179Z</lastmod>
+    <loc>https://AMMnet.github.io/ammnet-hackathon/posts/data-vis/index.html</loc>
+    <lastmod>2025-02-25T20:52:12.997Z</lastmod>
   </url>
   <url>
     <loc>https://AMMnet.github.io/ammnet-hackathon/about.html</loc>
     <lastmod>2024-07-19T23:22:11.269Z</lastmod>
   </url>
   <url>
-    <loc>https://AMMnet.github.io/ammnet-hackathon/posts/data-vis/index.html</loc>
-    <lastmod>2025-02-17T18:19:09.306Z</lastmod>
+    <loc>https://AMMnet.github.io/ammnet-hackathon/index.html</loc>
+    <lastmod>2024-07-19T22:28:39.179Z</lastmod>
+  </url>
+  <url>
+    <loc>https://AMMnet.github.io/ammnet-hackathon/posts/data-wrangle/index.html</loc>
+    <lastmod>2025-02-17T18:19:35.912Z</lastmod>
   </url>
 </urlset>
