@@ -2,6 +2,8 @@
 title: "Live Session 4: Introduction à la manipulation de données dans R"
 format: html
 author: 
+  - Charlène Naomie Tedto Mfangnia
+  - Didier Adjakidje
   - Lazaro Mwandigha  
   - Christian Selinger
   - Ellie Sherrard-Smith
