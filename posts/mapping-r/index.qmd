@@ -74,6 +74,8 @@ Code from the live session is available [on the
 Github](https://github.com/AMMnet/ammnet-hackathon/tree/main/02_data-wrangle/R/live-session-code.R).
 :::
 
+{{< video https://www.youtube.com/embed/z-yGKvORJE8?si=G3HdTeloRFm8Ol1f >}}
+
 ## Overview
 
 This live session aims to introduce participants to mapping in R, with a
