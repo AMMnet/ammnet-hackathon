@@ -18,7 +18,7 @@ library(RColorBrewer)
 ## ----load, message = FALSE---------------------------------------------------
 
 #lets load a population raster in R
-population <- rast("data/rasters/tza_ppp_2020_constrained.tif")
+population <- rast("data/rasters/tza_pop_2022_constrained.tif")
 population
 
 
@@ -193,7 +193,7 @@ ggplot(tz_districts)+
 ## ----sol3--------------------------------------------------------------------
 
 pfpr <- terra::extract(pfpr_2022, vect(tz_districts), mean, na.rm=TRUE, ID = FALSE)
-pop <- terra::extract(population, vect(tz_districts), sum, na.rm=TRUE, ID = FALSE)
+pop <- terra::extract(population_1km_resamp, vect(tz_districts), sum, na.rm=TRUE, ID = FALSE)
 
 tz_districts <- bind_cols(tz_districts, pfpr, pop)
 
