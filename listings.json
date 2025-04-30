@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/mapping-r-part2/mapping_rasters.html",
       "/posts/data-wrangle-french/index.html",
       "/posts/mapping-r/index.html",
       "/posts/data-wrangle/index.html",

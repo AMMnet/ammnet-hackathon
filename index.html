@@ -78,9 +78,9 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      valueNames: ['listing-date','listing-title','listing-author','listing-subtitle','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
+      searchColumns: ["listing-date","listing-title","listing-author","listing-subtitle","listing-image","listing-description","listing-categories"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -199,7 +199,7 @@ window.Quarto = {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(4)</span></div><div class="category" data-category="Data Visualization">Data Visualization <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Data cleaning">Data cleaning <span class="quarto-category-count">(3)</span></div><div class="category" data-category="Data validation">Data validation <span class="quarto-category-count">(2)</span></div><div class="category" data-category="Data visualization">Data visualization <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Français">Français <span class="quarto-category-count">(1)</span></div><div class="category" data-category="GIS">GIS <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Live session">Live session <span class="quarto-category-count">(4)</span></div><div class="category" data-category="R">R <span class="quarto-category-count">(4)</span></div><div class="category" data-category="Spatial data">Spatial data <span class="quarto-category-count">(1)</span></div><div class="category" data-category="ggplot2">ggplot2 <span class="quarto-category-count">(1)</span></div></div></div>
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(5)</span></div><div class="category" data-category="Data Visualization">Data Visualization <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Data cleaning">Data cleaning <span class="quarto-category-count">(4)</span></div><div class="category" data-category="Data validation">Data validation <span class="quarto-category-count">(2)</span></div><div class="category" data-category="Data visualization">Data visualization <span class="quarto-category-count">(2)</span></div><div class="category" data-category="Français">Français <span class="quarto-category-count">(1)</span></div><div class="category" data-category="GIS">GIS <span class="quarto-category-count">(2)</span></div><div class="category" data-category="Live session">Live session <span class="quarto-category-count">(5)</span></div><div class="category" data-category="R">R <span class="quarto-category-count">(5)</span></div><div class="category" data-category="Spatial data">Spatial data <span class="quarto-category-count">(2)</span></div><div class="category" data-category="ggplot2">ggplot2 <span class="quarto-category-count">(1)</span></div></div></div>
 <!-- main -->
 <main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
 
@@ -213,7 +213,55 @@ window.Quarto = {
 
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="R,Data cleaning,Data validation,Français,Live session" data-listing-date-sort="1744149600000" data-listing-file-modified-sort="1744231626016" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="31" data-listing-word-count-sort="6103">
+<div class="quarto-post image-right" data-index="0" data-categories="R,Spatial data,Data cleaning,Data visualization,GIS,Live session" data-listing-date-sort="1744862400000" data-listing-file-modified-sort="1746031263659" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="18" data-listing-word-count-sort="3503">
+<div class="thumbnail">
+<p><a href="./posts/mapping-r-part2/mapping_rasters.html" class="no-external"></a></p><a href="./posts/mapping-r-part2/mapping_rasters.html" class="no-external">
+<p class="card-img-top"><img src="posts\mapping-r-part2\figs\raster_concept.png"  class="thumbnail-image card-img"/></p>
+</a><p><a href="./posts/mapping-r-part2/mapping_rasters.html" class="no-external"></a></p>
+</div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/mapping-r-part2/mapping_rasters.html" class="no-external">Live Session 4: Mapping in R part 2</a>
+</h3>
+<div class="listing-subtitle">
+<a href="./posts/mapping-r-part2/mapping_rasters.html" class="no-external">Rasters</a>
+</div>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('R'); return false;">
+R
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('Spatial data'); return false;">
+Spatial data
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('Data cleaning'); return false;">
+Data cleaning
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('Data visualization'); return false;">
+Data visualization
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('GIS'); return false;">
+GIS
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('Live session'); return false;">
+Live session
+</div>
+</div>
+<div class="listing-description">
+<a href="./posts/mapping-r-part2/mapping_rasters.html" class="no-external">If you are present for the live session on Wednesday May 7th 2025, please click here to take the survey.</a>
+</div>
+</div>
+<div class="metadata">
+<a href="./posts/mapping-r-part2/mapping_rasters.html" class="no-external">
+<div class="listing-date">
+Apr 17, 2025
+</div>
+<div class="listing-author">
+Punam Amratia, Herieth Mboya, Jailos Lubinda, Adam Saddler, Paulina Dzianach, Ellie Sherrard-Smith, Justin Millar, Naomi Tedto
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="1" data-categories="R,Data cleaning,Data validation,Français,Live session" data-listing-date-sort="1744171200000" data-listing-file-modified-sort="1744231626016" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="31" data-listing-word-count-sort="6103">
 <div class="thumbnail">
 <p><a href="./posts/data-wrangle-french/index.html" class="no-external"></a></p><a href="./posts/data-wrangle-french/index.html" class="no-external">
 <p class="card-img-top"><img src="posts\data-wrangle-french\index_files\figure-html\data-evoplot-1.png"  class="thumbnail-image card-img"/></p>
@@ -258,7 +306,7 @@ Charlène Naomie Tedto Mfangnia, Didier Adjakidje, Lazaro Mwandigha, Christian S
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="1" data-categories="R,Spatial data,Data cleaning,Data visualization,GIS,Live session" data-listing-date-sort="1740002400000" data-listing-file-modified-sort="1741295902234" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="27" data-listing-word-count-sort="5283">
+<div class="quarto-post image-right" data-index="2" data-categories="R,Spatial data,Data cleaning,Data visualization,GIS,Live session" data-listing-date-sort="1740027600000" data-listing-file-modified-sort="1741295902234" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="27" data-listing-word-count-sort="5283">
 <div class="thumbnail">
 <p><a href="./posts/mapping-r/index.html" class="no-external"></a></p><a href="./posts/mapping-r/index.html" class="no-external">
 <p class="card-img-top"><img src="posts\mapping-r\figs\sf_features.png"  class="thumbnail-image card-img"/></p>
@@ -306,7 +354,7 @@ Punam Amratia, Jailos Lubinda, Adam Saddler, Paulina Dzianach, Justin Millar, Na
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="2" data-categories="R,Data cleaning,Data validation,Live session" data-listing-date-sort="1728856800000" data-listing-file-modified-sort="1739816375912" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="30" data-listing-word-count-sort="5818">
+<div class="quarto-post image-right" data-index="3" data-categories="R,Data cleaning,Data validation,Live session" data-listing-date-sort="1728878400000" data-listing-file-modified-sort="1739816375912" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="30" data-listing-word-count-sort="5818">
 <div class="thumbnail">
 <p><a href="./posts/data-wrangle/index.html" class="no-external"></a></p><a href="./posts/data-wrangle/index.html" class="no-external">
 <p class="card-img-top"><img src="posts\data-wrangle\index_files\figure-html\data-evoplot-1.png"  class="thumbnail-image card-img"/></p>
@@ -348,7 +396,7 @@ Lazaro Mwandigha, Christian Selinger, Ellie Sherrard-Smith, Justin Millar
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="3" data-categories="R,Data Visualization,ggplot2,Live session" data-listing-date-sort="1721340000000" data-listing-file-modified-sort="1740516732997" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="14" data-listing-word-count-sort="2610">
+<div class="quarto-post image-right" data-index="4" data-categories="R,Data Visualization,ggplot2,Live session" data-listing-date-sort="1721361600000" data-listing-file-modified-sort="1740516732997" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="14" data-listing-word-count-sort="2610">
 <div class="thumbnail">
 <p><a href="./posts/data-vis/index.html" class="no-external"></a></p><a href="./posts/data-vis/index.html" class="no-external">
 <p class="card-img-top"><img src="posts\data-vis\index_files\figure-html\unnamed-chunk-1-1.png"  class="thumbnail-image card-img"/></p>
