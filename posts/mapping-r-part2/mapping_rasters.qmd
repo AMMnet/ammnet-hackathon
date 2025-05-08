@@ -6,6 +6,7 @@ format:
     toc: true
     html-math-method: katex
     css: styles.css
+author:
   - Punam Amratia
   - Herieth Mboya
   - Jailos Lubinda
