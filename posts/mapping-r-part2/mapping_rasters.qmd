@@ -74,6 +74,8 @@ Data for this tutorial has been uploaded onto
 and we recommend you run the following code to download the data for
 this tutorial
 
+
+
 ```{r download-data, eval = FALSE}
 #Only run this if you don't have these packages
 #install.packages(c("httr", "fs"))
@@ -89,6 +91,8 @@ GET(download_url, write_disk(output_file, overwrite = TRUE))
 unzip("rasters.zip", exdir = "data") #exdir is the folder which you want to unzip in
 ```
 :::
+
+{{< video https://www.youtube.com/embed/NP74ttyDff0?si=7zZImcQ0y8y1DGkM>}}
 
 ## Overview
 
