@@ -16,7 +16,7 @@
 <meta name="author" content="Naomi Tedto">
 <meta name="dcterms.date" content="2025-04-17">
 
-<title>Live Session 4: Mapping in R part 2 – AMMnet Hackathon</title>
+<title>Live Session 5: Mapping in R part 2 – AMMnet Hackathon</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -165,7 +165,7 @@ gtag('config', 'G-072Z4G50DN', { 'anonymize_ip': true});
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Live Session 4: Mapping in R part 2</h1>
+      <h1 class="title">Live Session 5: Mapping in R part 2</h1>
             <p class="subtitle lead">Rasters</p>
                                 <div class="quarto-categories">
                 <div class="quarto-category">R</div>
@@ -293,13 +293,14 @@ Before you start
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Replace with the actual download URL</span></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>download_url <span class="ot">&lt;-</span> <span class="st">"https://figshare.com/ndownloader/articles/28839191/versions/1"</span></span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">#make this the destination where you want to keep the data in your local computer</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>output_file <span class="ot">&lt;-</span> <span class="st">"data/rasters.zip"</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>output_file <span class="ot">&lt;-</span> <span class="st">"mapping-r-part2/data/rasters.zip"</span></span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">GET</span>(download_url, <span class="fu">write_disk</span>(output_file, <span class="at">overwrite =</span> <span class="cn">TRUE</span>))</span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">unzip</span>(<span class="st">"rasters.zip"</span>, <span class="at">exdir =</span> <span class="st">"data"</span>) <span class="co">#exdir is the folder which you want to unzip in</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
+<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/NP74ttyDff0?si=7zZImcQ0y8y1DGkM" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
 <section id="overview" class="level2">
 <h2 class="anchored" data-anchor-id="overview">Overview</h2>
 <p>Welcome back! We hope you enjoyed the first part of our Mapping in R series, which focused on vector data. In this follow-up session, we’ll dive into working with <strong>raster data</strong> in R. We’ll begin with a brief introduction to raster concepts and attributes, followed by a hands-on walkthrough using real-world examples.</p>
@@ -513,7 +514,7 @@ max values  :                       0.3834594,                      NaN </code><
 dimensions  : 40, 40, 1  (nrow, ncol, nlyr)
 resolution  : 0.5, 0.5  (x, y)
 extent      : -110, -90, 40, 60  (xmin, xmax, ymin, ymax)
-coord. ref. : lon/lat WGS 84 
+coord. ref. : lon/lat WGS 84 (CRS84) (OGC:CRS84) 
 source(s)   : memory
 name        : lyr.1 
 min value   :     1 
@@ -548,9 +549,14 @@ max value   :  1600 </code></pre>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>target_crs <span class="ot">&lt;-</span> <span class="st">"EPSG:3857"</span></span>
 <span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Reproject raster</span></span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>projected_population <span class="ot">&lt;-</span> <span class="fu">project</span>(population, target_crs, <span class="at">method =</span> <span class="st">"bilinear"</span>) <span class="co">#bilinear because we assume population is continuous</span></span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(projected_population)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>projected_population <span class="ot">&lt;-</span> <span class="fu">project</span>(population, target_crs, <span class="at">method =</span> <span class="st">"bilinear"</span>) <span class="co">#bilinear because we assume population is continuous</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+|---------|---------|---------|---------|
+=========================================
+                                          </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(projected_population)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -564,9 +570,9 @@ max value   :  1600 </code></pre>
 <h2 class="anchored" data-anchor-id="plotting-raster-data">Plotting Raster Data</h2>
 <p>so far we’ve seen we can plot raster data using the basic <code>terra</code> functions of <code>plot()</code>. But perhaps you might want to change things about how the raster looks (e.g.&nbsp;colors) or bin the information, we might want to plot the data in <code>ggplot()</code> instead. We’re going to do this with our parasite prevalence surface</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>()<span class="sc">+</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_raster</span>(<span class="at">data =</span> pfpr_2022, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>x, <span class="at">y =</span>y, <span class="at">fill =</span> pfpr_2022))<span class="sc">+</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_equal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>()<span class="sc">+</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_raster</span>(<span class="at">data =</span> pfpr_2022, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>x, <span class="at">y =</span>y, <span class="at">fill =</span> pfpr_2022))<span class="sc">+</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_equal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -578,13 +584,18 @@ max value   :  1600 </code></pre>
 <p><code>geom_raster()</code> or <code>geom_tile()</code> are the two main functions you can use ggplot to plot raster/gridded data. Typically in both you would need to give it the x,y (coordinates) and the value to fill in the cell for it to plot correctly. You would also need to include the extra layer on how to deal with coordinates called <code>coord_equal()</code>. When you are adding in sf shapefiles you might switch to <code>coord_sf()</code> for it to know how to treat the coordinates appropriately. Try and see what the image looks like when you leave it out.</p>
 <p>Alternatively, <code>geom_spatraster()</code> comes from the package <code>tidyterra</code> and is the fastest and easiest way to make a plot of a raster in ggplot, we’ll mostly use <code>geom_spatraster</code> from here onwards as then we won’t need to include additional information on x,y and the coordinates information. From the above plot you can see the default is not particularly pretty, so let’s make this look prettier</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(tz_districts)<span class="sc">+</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>()<span class="sc">+</span></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_spatraster</span>(<span class="at">data =</span> pfpr_2022, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">fill =</span> pfpr_2022))<span class="sc">+</span></span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">fill =</span> <span class="cn">NA</span>)<span class="sc">+</span></span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">palette =</span> <span class="st">"RdYlGn"</span>, <span class="at">na.value =</span> <span class="st">'transparent'</span>)<span class="sc">+</span></span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()<span class="sc">+</span></span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Plasmodium falciparum 2-10 for 2022"</span>, <span class="at">fill =</span> <span class="st">"PfPR"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(tz_districts)<span class="sc">+</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>()<span class="sc">+</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_spatraster</span>(<span class="at">data =</span> pfpr_2022, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">fill =</span> pfpr_2022))<span class="sc">+</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">fill =</span> <span class="cn">NA</span>)<span class="sc">+</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">palette =</span> <span class="st">"RdYlGn"</span>, <span class="at">na.value =</span> <span class="st">'transparent'</span>)<span class="sc">+</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()<span class="sc">+</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Plasmodium falciparum 2-10 for 2022"</span>, <span class="at">fill =</span> <span class="st">"PfPR"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Computation failed in `stat_terra_spat_raster()`.
+Caused by error:
+! [spatSample] at least one of 'values', 'cells', or 'xy' must be TRUE; or 'as.points' must be TRUE</code></pre>
+</div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -594,19 +605,19 @@ max value   :  1600 </code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define color palette (5 bins = 5 colors)</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>pfpr_pal <span class="ot">&lt;-</span> <span class="fu">brewer.pal</span>(<span class="at">n =</span> <span class="dv">5</span>, <span class="at">name =</span> <span class="st">"RdYlGn"</span>)</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>pfpr_pal <span class="ot">&lt;-</span> <span class="fu">rev</span>(pfpr_pal) <span class="co">#reverse it to make low green and high red</span></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Define break points</span></span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>pfpr_breaks <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.05</span>, <span class="fl">0.1</span>, <span class="fl">0.2</span>, <span class="fl">0.3</span>, <span class="dv">1</span>)</span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_spatraster</span>(<span class="at">data =</span> pfpr_2022, <span class="fu">aes</span>(<span class="at">fill =</span> pfpr_2022)) <span class="sc">+</span></span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> tz_districts, <span class="at">fill =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
-<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_stepsn</span>(<span class="at">colours =</span> pfpr_pal, <span class="at">breaks =</span> pfpr_breaks, <span class="at">na.value =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
-<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
-<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Plasmodium falciparum 2-10 for 2022"</span>, <span class="at">fill =</span> <span class="st">"PfPR"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define color palette (5 bins = 5 colors)</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>pfpr_pal <span class="ot">&lt;-</span> <span class="fu">brewer.pal</span>(<span class="at">n =</span> <span class="dv">5</span>, <span class="at">name =</span> <span class="st">"RdYlGn"</span>)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>pfpr_pal <span class="ot">&lt;-</span> <span class="fu">rev</span>(pfpr_pal) <span class="co">#reverse it to make low green and high red</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Define break points</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>pfpr_breaks <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.05</span>, <span class="fl">0.1</span>, <span class="fl">0.2</span>, <span class="fl">0.3</span>, <span class="dv">1</span>)</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_spatraster</span>(<span class="at">data =</span> pfpr_2022, <span class="fu">aes</span>(<span class="at">fill =</span> pfpr_2022)) <span class="sc">+</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> tz_districts, <span class="at">fill =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_stepsn</span>(<span class="at">colours =</span> pfpr_pal, <span class="at">breaks =</span> pfpr_breaks, <span class="at">na.value =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Plasmodium falciparum 2-10 for 2022"</span>, <span class="at">fill =</span> <span class="st">"PfPR"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -645,19 +656,20 @@ Solution
 <div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(tz_districts)<span class="sc">+</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>()<span class="sc">+</span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_spatraster</span>(<span class="at">data =</span> population, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">fill =</span> tza_ppp_2020_constrained))<span class="sc">+</span></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">fill =</span> <span class="cn">NA</span>)<span class="sc">+</span></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>(<span class="at">option =</span> <span class="st">"D"</span>, <span class="at">na.value =</span> <span class="st">"transparent"</span>, <span class="at">trans =</span> <span class="st">"log10"</span>, <span class="at">direction =</span> <span class="sc">-</span><span class="dv">1</span>)<span class="sc">+</span></span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()<span class="sc">+</span></span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Population count for 2022"</span>, <span class="at">fill =</span> <span class="st">"All age"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(tz_districts)<span class="sc">+</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>()<span class="sc">+</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_spatraster</span>(<span class="at">data =</span> population, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">fill =</span> tza_ppp_2020_constrained))<span class="sc">+</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">fill =</span> <span class="cn">NA</span>)<span class="sc">+</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>(<span class="at">option =</span> <span class="st">"D"</span>, <span class="at">na.value =</span> <span class="st">"transparent"</span>, <span class="at">trans =</span> <span class="st">"log10"</span>, <span class="at">direction =</span> <span class="sc">-</span><span class="dv">1</span>)<span class="sc">+</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()<span class="sc">+</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Population count for 2022"</span>, <span class="at">fill =</span> <span class="st">"All age"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>&lt;SpatRaster&gt; resampled to 500424 cells.</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Warning in scale_fill_viridis_c(option = "D", na.value = "transparent", :
-log-10 transformation introduced infinite values.</code></pre>
+<pre><code>Warning: Computation failed in `stat_terra_spat_raster()`.
+Caused by error:
+! [spatSample] at least one of 'values', 'cells', or 'xy' must be TRUE; or 'as.points' must be TRUE</code></pre>
 </div>
 <div class="cell-output-display">
 <div>
@@ -675,12 +687,12 @@ log-10 transformation introduced infinite values.</code></pre>
 <h2 class="anchored" data-anchor-id="manipulating-rasters">Manipulating rasters</h2>
 <p>We can find out the spatial extent of a raster by using the <code>ext()</code> function, and easily crop the raster to other extents using <code>crop()</code>. We can specify the coordinates we wish to crop the raster to, or a take the extent from a spatial object and crop the raster to that.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ext</span>(pfpr_2022)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ext</span>(pfpr_2022)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>SpatExtent : 29.3333333333333, 40.4166666666666, -11.7499987284343, -0.999998728434268 (xmin, xmax, ymin, ymax)</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>pfpr1 <span class="ot">&lt;-</span> <span class="fu">crop</span>(pfpr_2022, <span class="fu">c</span>(<span class="sc">-</span><span class="dv">8</span>,<span class="dv">35</span>,<span class="sc">-</span><span class="dv">6</span>,<span class="dv">25</span>))   <span class="co"># c(xmin, xmax, ymin, ymax)</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pfpr1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>pfpr1 <span class="ot">&lt;-</span> <span class="fu">crop</span>(pfpr_2022, <span class="fu">c</span>(<span class="sc">-</span><span class="dv">8</span>,<span class="dv">35</span>,<span class="sc">-</span><span class="dv">6</span>,<span class="dv">25</span>))   <span class="co"># c(xmin, xmax, ymin, ymax)</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pfpr1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -688,10 +700,10 @@ log-10 transformation introduced infinite values.</code></pre>
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># crop malaria prevalence to just kilimanjaro</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>mtwara <span class="ot">&lt;-</span> <span class="fu">filter</span>(tz_districts, name_1 <span class="sc">==</span> <span class="st">'Mtwara'</span>)</span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>mtwara_pfpr <span class="ot">&lt;-</span> <span class="fu">crop</span>(pfpr_2022, mtwara)</span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mtwara_pfpr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># crop malaria prevalence to just kilimanjaro</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>mtwara <span class="ot">&lt;-</span> <span class="fu">filter</span>(tz_districts, name_1 <span class="sc">==</span> <span class="st">'Mtwara'</span>)</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>mtwara_pfpr <span class="ot">&lt;-</span> <span class="fu">crop</span>(pfpr_2022, mtwara)</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mtwara_pfpr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -702,10 +714,10 @@ log-10 transformation introduced infinite values.</code></pre>
 </div>
 <p>We may then want to change all of the raster cells which lay outside of the polygon for Mtwara region to be NA. This can be done using <code>mask()</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># mask malaria prevalence to just kilimanjaro</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>mtwara <span class="ot">&lt;-</span> <span class="fu">filter</span>(tz_districts, name_1 <span class="sc">==</span> <span class="st">'Mtwara'</span>)</span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>mtwara_pfpr <span class="ot">&lt;-</span> <span class="fu">crop</span>(pfpr_2022, mtwara) <span class="sc">%&gt;%</span> <span class="fu">mask</span>(mtwara) <span class="co">#reccomend to crop to set new extents</span></span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mtwara_pfpr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># mask malaria prevalence to just kilimanjaro</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>mtwara <span class="ot">&lt;-</span> <span class="fu">filter</span>(tz_districts, name_1 <span class="sc">==</span> <span class="st">'Mtwara'</span>)</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>mtwara_pfpr <span class="ot">&lt;-</span> <span class="fu">crop</span>(pfpr_2022, mtwara) <span class="sc">%&gt;%</span> <span class="fu">mask</span>(mtwara) <span class="co">#reccomend to crop to set new extents</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mtwara_pfpr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -720,14 +732,14 @@ log-10 transformation introduced infinite values.</code></pre>
 <h2 class="anchored" data-anchor-id="aggregatingresampling">Aggregating/Resampling</h2>
 <p>As you noticed in the population raster you have a very high resolution on 100m, when visualising it can be challenging so we may want to aggregate the rasters up.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>population_1km <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(population, <span class="at">fact =</span> <span class="dv">10</span>, <span class="at">fun =</span> <span class="st">"sum"</span>, <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>population_1km <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(population, <span class="at">fact =</span> <span class="dv">10</span>, <span class="at">fun =</span> <span class="st">"sum"</span>, <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 |---------|---------|---------|---------|
 =========================================
                                           </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(population_1km)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(population_1km)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -742,25 +754,25 @@ log-10 transformation introduced infinite values.</code></pre>
 <h2 class="anchored" data-anchor-id="raster-maths">Raster maths</h2>
 <p>with multiple rasters you can also do some simple calculations. One that might be useful is if you wanted to calculated the population at risk of malaria. A few things to remember is that the rasters must be of the same extent. We can use the <code>resample</code> function to align them</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co">#check extent matches</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ext</span>(population_1km) <span class="sc">==</span> <span class="fu">ext</span>(pfpr_2022)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co">#check extent matches</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ext</span>(population_1km) <span class="sc">==</span> <span class="fu">ext</span>(pfpr_2022)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] FALSE</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co">#if they don't match use resample to get them to match</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>population_1km_resamp <span class="ot">&lt;-</span> <span class="fu">resample</span>(population_1km, pfpr_2022)</span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Now we can multiply the population and prevalence information to get population at risk</span></span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>pop_at_risk <span class="ot">&lt;-</span> population_1km_resamp <span class="sc">*</span> pfpr_2022</span>
-<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(pop_at_risk) <span class="ot">=</span> <span class="st">"population_at_risk"</span></span>
-<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>()<span class="sc">+</span></span>
-<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_raster</span>(pop_at_risk, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">fill =</span> population_at_risk))<span class="sc">+</span></span>
-<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(tz_districts, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">geometry =</span> geometry), <span class="at">fill=</span><span class="cn">NA</span>)<span class="sc">+</span></span>
-<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>(<span class="at">option =</span> <span class="st">"B"</span>, <span class="at">trans =</span> <span class="st">"log10"</span>, <span class="at">na.value =</span> <span class="st">"transparent"</span>)<span class="sc">+</span></span>
-<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()<span class="sc">+</span></span>
-<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_sf</span>()<span class="sc">+</span></span>
-<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Population at risk in 2022"</span>, <span class="at">fill =</span> <span class="st">"Population"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co">#if they don't match use resample to get them to match</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>population_1km_resamp <span class="ot">&lt;-</span> <span class="fu">resample</span>(population_1km, pfpr_2022)</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Now we can multiply the population and prevalence information to get population at risk</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>pop_at_risk <span class="ot">&lt;-</span> population_1km_resamp <span class="sc">*</span> pfpr_2022</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(pop_at_risk) <span class="ot">=</span> <span class="st">"population_at_risk"</span></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>()<span class="sc">+</span></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_raster</span>(pop_at_risk, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">fill =</span> population_at_risk))<span class="sc">+</span></span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(tz_districts, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">geometry =</span> geometry), <span class="at">fill=</span><span class="cn">NA</span>)<span class="sc">+</span></span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>(<span class="at">option =</span> <span class="st">"B"</span>, <span class="at">trans =</span> <span class="st">"log10"</span>, <span class="at">na.value =</span> <span class="st">"transparent"</span>)<span class="sc">+</span></span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()<span class="sc">+</span></span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_sf</span>()<span class="sc">+</span></span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Population at risk in 2022"</span>, <span class="at">fill =</span> <span class="st">"Population"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning in scale_fill_viridis_c(option = "B", trans = "log10", na.value =
 "transparent"): log-10 transformation introduced infinite values.</code></pre>
@@ -803,20 +815,25 @@ Solution
 <div id="callout-7" class="callout-7-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define color palette (5 bins = 5 colors)</span></span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>pfpr_pal <span class="ot">&lt;-</span> <span class="fu">brewer.pal</span>(<span class="at">n =</span> <span class="dv">5</span>, <span class="at">name =</span> <span class="st">"RdYlGn"</span>)</span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>pfpr_pal <span class="ot">&lt;-</span> <span class="fu">rev</span>(pfpr_pal) <span class="co">#reverse it to make low green and high red</span></span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Define break points</span></span>
-<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>pfpr_breaks <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">30</span>,<span class="dv">100</span>)</span>
-<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(tz_districts)<span class="sc">+</span></span>
-<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>()<span class="sc">+</span></span>
-<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_spatraster</span>(<span class="at">data =</span> pfpr_2022<span class="sc">*</span><span class="dv">100</span>, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">fill =</span> pfpr_2022))<span class="sc">+</span></span>
-<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">fill =</span> <span class="cn">NA</span>)<span class="sc">+</span></span>
-<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_stepsn</span>(<span class="at">colours =</span> pfpr_pal, <span class="at">breaks =</span> pfpr_breaks, <span class="at">na.value =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
-<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()<span class="sc">+</span></span>
-<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Plasmodium falciparum 2-10 for 2022"</span>, <span class="at">fill =</span> <span class="st">"PfPR"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define color palette (5 bins = 5 colors)</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>pfpr_pal <span class="ot">&lt;-</span> <span class="fu">brewer.pal</span>(<span class="at">n =</span> <span class="dv">5</span>, <span class="at">name =</span> <span class="st">"RdYlGn"</span>)</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>pfpr_pal <span class="ot">&lt;-</span> <span class="fu">rev</span>(pfpr_pal) <span class="co">#reverse it to make low green and high red</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Define break points</span></span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>pfpr_breaks <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">30</span>,<span class="dv">100</span>)</span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(tz_districts)<span class="sc">+</span></span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>()<span class="sc">+</span></span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_spatraster</span>(<span class="at">data =</span> pfpr_2022<span class="sc">*</span><span class="dv">100</span>, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">fill =</span> pfpr_2022))<span class="sc">+</span></span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">fill =</span> <span class="cn">NA</span>)<span class="sc">+</span></span>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_stepsn</span>(<span class="at">colours =</span> pfpr_pal, <span class="at">breaks =</span> pfpr_breaks, <span class="at">na.value =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()<span class="sc">+</span></span>
+<span id="cb43-14"><a href="#cb43-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Plasmodium falciparum 2-10 for 2022"</span>, <span class="at">fill =</span> <span class="st">"PfPR"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Computation failed in `stat_terra_spat_raster()`.
+Caused by error:
+! [spatSample] at least one of 'values', 'cells', or 'xy' must be TRUE; or 'as.points' must be TRUE</code></pre>
+</div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -833,14 +850,14 @@ Solution
 <h2 class="anchored" data-anchor-id="extracting-information">Extracting information</h2>
 <p>We might want to summarise the rasters to the district level. We can do that using the <code>extract</code> function</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>pop_risk <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">extract</span>(pop_at_risk, <span class="fu">vect</span>(tz_districts), sum, <span class="at">na.rm=</span><span class="cn">TRUE</span>, <span class="at">ID =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>tz_districts <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(tz_districts, pop_risk)</span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(tz_districts)<span class="sc">+</span></span>
-<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">fill =</span> population_at_risk))<span class="sc">+</span></span>
-<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">palette =</span> <span class="st">"Reds"</span>, <span class="at">direction =</span> <span class="dv">1</span>, <span class="at">trans =</span> <span class="st">'log10'</span>, <span class="at">na.value =</span> <span class="st">"lightblue"</span>)<span class="sc">+</span></span>
-<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>pop_risk <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">extract</span>(pop_at_risk, <span class="fu">vect</span>(tz_districts), sum, <span class="at">na.rm=</span><span class="cn">TRUE</span>, <span class="at">ID =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>tz_districts <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(tz_districts, pop_risk)</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(tz_districts)<span class="sc">+</span></span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">fill =</span> population_at_risk))<span class="sc">+</span></span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">palette =</span> <span class="st">"Reds"</span>, <span class="at">direction =</span> <span class="dv">1</span>, <span class="at">trans =</span> <span class="st">'log10'</span>, <span class="at">na.value =</span> <span class="st">"lightblue"</span>)<span class="sc">+</span></span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -879,15 +896,15 @@ Solution
 <div id="callout-9" class="callout-9-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>pfpr <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">extract</span>(pfpr_2022, <span class="fu">vect</span>(tz_districts), mean, <span class="at">na.rm=</span><span class="cn">TRUE</span>, <span class="at">ID =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>pop <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">extract</span>(population, <span class="fu">vect</span>(tz_districts), sum, <span class="at">na.rm=</span><span class="cn">TRUE</span>, <span class="at">ID =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>tz_districts <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(tz_districts, pfpr, pop)</span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(tz_districts)<span class="sc">+</span></span>
-<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">fill =</span> pfpr_2022))<span class="sc">+</span></span>
-<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">palette =</span> <span class="st">"RdYlGn"</span>, <span class="at">na.value =</span> <span class="st">"lightblue"</span>)<span class="sc">+</span></span>
-<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>pfpr <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">extract</span>(pfpr_2022, <span class="fu">vect</span>(tz_districts), mean, <span class="at">na.rm=</span><span class="cn">TRUE</span>, <span class="at">ID =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>pop <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">extract</span>(population_1km_resamp, <span class="fu">vect</span>(tz_districts), sum, <span class="at">na.rm=</span><span class="cn">TRUE</span>, <span class="at">ID =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>tz_districts <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(tz_districts, pfpr, pop)</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(tz_districts)<span class="sc">+</span></span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">fill =</span> pfpr_2022))<span class="sc">+</span></span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">palette =</span> <span class="st">"RdYlGn"</span>, <span class="at">na.value =</span> <span class="st">"lightblue"</span>)<span class="sc">+</span></span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -904,12 +921,12 @@ Solution
 <h2 class="anchored" data-anchor-id="mutliband-data">Mutliband data</h2>
 <p>i’ve mentioned previously that terra in R has the ability to deal with multiple bands/layers of rasters. So we can load several rasters all in at the same time and perform calculations on them in the same way which is great! the rasters do need to be of the same spatial extent and projection for them to be loaded in correctly. Here we’re going to load in data pulled from <a href="https://www.chc.ucsb.edu/data/chirps">CHIRPS</a> about monthly rainfall in 2022.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co">#first we create a list of all the rasters for chirps</span></span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>rainfall_rasters <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="at">path =</span> <span class="st">"data/rasters/"</span>, <span class="at">pattern =</span> <span class="st">"chirps"</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a><span class="co">#then we'll load it into R the same way we do a single band</span></span>
-<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>rainfall_2022 <span class="ot">&lt;-</span> <span class="fu">rast</span>(rainfall_rasters)</span>
-<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>rainfall_2022</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co">#first we create a list of all the rasters for chirps</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>rainfall_rasters <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="at">path =</span> <span class="st">"data/rasters/"</span>, <span class="at">pattern =</span> <span class="st">"chirps"</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a><span class="co">#then we'll load it into R the same way we do a single band</span></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>rainfall_2022 <span class="ot">&lt;-</span> <span class="fu">rast</span>(rainfall_rasters)</span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>rainfall_2022</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>class       : SpatRaster 
 dimensions  : 258, 267, 12  (nrow, ncol, nlyr)
@@ -927,7 +944,7 @@ max values  :   944.62292,   671.34375,  610.169739,  804.803101, 403.89791870, 
 </div>
 <p>you’ll find the meta data shows you have 12 nlyrs (layers) that have been loaded in and each layer is a month of rainfall. We can plot this to see what it looks like</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(rainfall_2022)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(rainfall_2022)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -938,15 +955,15 @@ max values  :   944.62292,   671.34375,  610.169739,  804.803101, 403.89791870, 
 </div>
 <p>The nice thing is it plots all 12 at the same time, but uses free scales. We can also use <code>ggplot</code> to do the same</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co">#let's maybe first clean up the names, turn them into dates</span></span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(rainfall_2022) <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">ym</span>(<span class="st">"2022-01"</span>), <span class="fu">ym</span>(<span class="st">"2022-12"</span>), <span class="at">by =</span> <span class="st">"months"</span>) <span class="sc">%&gt;%</span> <span class="fu">format</span>(<span class="st">"%b %Y"</span>)</span>
-<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>()<span class="sc">+</span></span>
-<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_spatraster</span>(<span class="at">data =</span> rainfall_2022)<span class="sc">+</span></span>
-<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a><span class="fu">facet_wrap</span>(<span class="sc">~</span>lyr, <span class="at">ncol =</span> <span class="dv">4</span>)<span class="sc">+</span></span>
-<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">palette =</span> <span class="st">"Blues"</span>, <span class="at">direction =</span> <span class="dv">1</span>, <span class="at">na.value =</span> <span class="st">"transparent"</span>, <span class="at">trans =</span> <span class="st">'sqrt'</span>)<span class="sc">+</span></span>
-<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()<span class="sc">+</span></span>
-<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">"mm"</span>, <span class="at">title =</span> <span class="st">"Rainfall"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co">#let's maybe first clean up the names, turn them into dates</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(rainfall_2022) <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">ym</span>(<span class="st">"2022-01"</span>), <span class="fu">ym</span>(<span class="st">"2022-12"</span>), <span class="at">by =</span> <span class="st">"months"</span>) <span class="sc">%&gt;%</span> <span class="fu">format</span>(<span class="st">"%b %Y"</span>)</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>()<span class="sc">+</span></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_spatraster</span>(<span class="at">data =</span> rainfall_2022)<span class="sc">+</span></span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a><span class="fu">facet_wrap</span>(<span class="sc">~</span>lyr, <span class="at">ncol =</span> <span class="dv">4</span>)<span class="sc">+</span></span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">palette =</span> <span class="st">"Blues"</span>, <span class="at">direction =</span> <span class="dv">1</span>, <span class="at">na.value =</span> <span class="st">"transparent"</span>, <span class="at">trans =</span> <span class="st">'sqrt'</span>)<span class="sc">+</span></span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()<span class="sc">+</span></span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">"mm"</span>, <span class="at">title =</span> <span class="st">"Rainfall"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -984,19 +1001,19 @@ Solution
 <div id="callout-11" class="callout-11-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>rainfall <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">extract</span>(rainfall_2022, tz_districts, sum, <span class="at">na.rm=</span><span class="cn">TRUE</span>, <span class="at">ID =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>tz_rainfall <span class="ot">&lt;-</span> tz_districts <span class="sc">%&gt;%</span> </span>
-<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_cols</span>(rainfall)</span>
-<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>tz_rainfall <span class="sc">%&gt;%</span> </span>
-<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="st">`</span><span class="at">Jan 2022</span><span class="st">`</span><span class="sc">:</span><span class="st">`</span><span class="at">Dec 2022</span><span class="st">`</span>, <span class="at">names_to =</span> <span class="st">"date"</span>, <span class="at">values_to =</span><span class="st">"rain"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>()<span class="sc">+</span></span>
-<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">fill =</span> rain<span class="sc">/</span><span class="dv">1000</span>))<span class="sc">+</span></span>
-<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>date)<span class="sc">+</span></span>
-<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">palette =</span> <span class="st">"Blues"</span>, <span class="at">direction =</span> <span class="dv">1</span>, <span class="at">na.value =</span> <span class="st">"transparent"</span>, <span class="at">trans =</span> <span class="st">'sqrt'</span>)<span class="sc">+</span></span>
-<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()<span class="sc">+</span></span>
-<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">"m"</span>, <span class="at">title =</span> <span class="st">"Rainfall"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>rainfall <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">extract</span>(rainfall_2022, tz_districts, sum, <span class="at">na.rm=</span><span class="cn">TRUE</span>, <span class="at">ID =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>tz_rainfall <span class="ot">&lt;-</span> tz_districts <span class="sc">%&gt;%</span> </span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_cols</span>(rainfall)</span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>tz_rainfall <span class="sc">%&gt;%</span> </span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="st">`</span><span class="at">Jan 2022</span><span class="st">`</span><span class="sc">:</span><span class="st">`</span><span class="at">Dec 2022</span><span class="st">`</span>, <span class="at">names_to =</span> <span class="st">"date"</span>, <span class="at">values_to =</span><span class="st">"rain"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>()<span class="sc">+</span></span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">fill =</span> rain<span class="sc">/</span><span class="dv">1000</span>))<span class="sc">+</span></span>
+<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>date)<span class="sc">+</span></span>
+<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">palette =</span> <span class="st">"Blues"</span>, <span class="at">direction =</span> <span class="dv">1</span>, <span class="at">na.value =</span> <span class="st">"transparent"</span>, <span class="at">trans =</span> <span class="st">'sqrt'</span>)<span class="sc">+</span></span>
+<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()<span class="sc">+</span></span>
+<span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">"m"</span>, <span class="at">title =</span> <span class="st">"Rainfall"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1013,8 +1030,8 @@ Solution
 <h2 class="anchored" data-anchor-id="rasterizing">Rasterizing</h2>
 <p>You might want to sometimes convert vector data into raster. This process is called rasterizing. For this function to work you need a template raster you want to use to provide it the resolution, crs and extents.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>rasterise_pop_risk <span class="ot">&lt;-</span> <span class="fu">rasterize</span>(tz_districts, <span class="at">field =</span> <span class="st">"population_at_risk"</span>, pop_at_risk)</span>
-<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(rasterise_pop_risk)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>rasterise_pop_risk <span class="ot">&lt;-</span> <span class="fu">rasterize</span>(tz_districts, <span class="at">field =</span> <span class="st">"population_at_risk"</span>, pop_at_risk)</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(rasterise_pop_risk)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1028,7 +1045,7 @@ Solution
 <h2 class="anchored" data-anchor-id="exporting-raster-data">Exporting raster data</h2>
 <p>Use <code>writeRaster</code> to write raster data. You must provide a SpatRaster and a filename. The file format will be guessed from the filename extension. If that does not work you can provide an argument like <code>format=GTiff</code>. Note the argument <code>overwrite=TRUE</code> and see <code>?writeRaster</code> for more arguments, such as <code>datatype=</code> to set the a specific datatype (e.g., integer).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">writeRaster</span>(pop_at_risk, <span class="st">"data/rasters/population_risk_2022.tif"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">writeRaster</span>(pop_at_risk, <span class="st">"data/rasters/population_risk_2022.tif"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="sources-for-raster-data-for-modelling" class="level2">
