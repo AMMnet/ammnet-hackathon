@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.54">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Justin Millar">
+<meta name="dcterms.date" content="2026-01-05">
+
+<title>Live Session 6: GitHub, R &amp; Quarto for Reproducible Public Health Data Science – AMMnet Hackathon</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-072Z4G50DN"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-072Z4G50DN', { 'anonymize_ip': true});
+</script>
+<link href="../../site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+
+<script src="../../site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+
+<script src="../../site_libs/plotly-binding-4.11.0/plotly.js"></script>
+
+<script src="../../site_libs/typedarray-0.1/typedarray.min.js"></script>
+
+<script src="../../site_libs/jquery-3.5.1/jquery.min.js"></script>
+
+<link href="../../site_libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet">
+
+<script src="../../site_libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
+
+<link href="../../site_libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet">
+
+<script src="../../site_libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
+
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">AMMnet Hackathon</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/AMMnet/ammnet-hackathon"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://x.com/AMMnetwork"> <i class="bi bi-twitter" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Live Session 6: GitHub, R &amp; Quarto for Reproducible Public Health Data Science</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">R</div>
+                <div class="quarto-category">Git</div>
+                <div class="quarto-category">GitHub</div>
+                <div class="quarto-category">Version Control</div>
+                <div class="quarto-category">Live session</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Justin Millar </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">January 5, 2026</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#who-this-is-for" id="toc-who-this-is-for" class="nav-link" data-scroll-target="#who-this-is-for">Who this is for</a></li>
+  <li><a href="#what-you-will-learn" id="toc-what-you-will-learn" class="nav-link" data-scroll-target="#what-you-will-learn">What you will learn</a></li>
+  <li><a href="#mini-case-example-for-the-session" id="toc-mini-case-example-for-the-session" class="nav-link" data-scroll-target="#mini-case-example-for-the-session">Mini-case example for the session</a>
+  <ul class="collapse">
+  <li><a href="#case-question" id="toc-case-question" class="nav-link" data-scroll-target="#case-question">Case question</a></li>
+  </ul></li>
+  <li><a href="#session-outline" id="toc-session-outline" class="nav-link" data-scroll-target="#session-outline">Session outline</a></li>
+  <li><a href="#before-the-session" id="toc-before-the-session" class="nav-link" data-scroll-target="#before-the-session">Before the session</a>
+  <ul class="collapse">
+  <li><a href="#install-and-verify-git" id="toc-install-and-verify-git" class="nav-link" data-scroll-target="#install-and-verify-git">Install and verify Git</a></li>
+  <li><a href="#authenticate-github-from-r" id="toc-authenticate-github-from-r" class="nav-link" data-scroll-target="#authenticate-github-from-r">Authenticate GitHub from R</a></li>
+  </ul></li>
+  <li><a href="#core-git-workflow-add-commit-push" id="toc-core-git-workflow-add-commit-push" class="nav-link" data-scroll-target="#core-git-workflow-add-commit-push">Core Git workflow (add, commit, push)</a>
+  <ul class="collapse">
+  <li><a href="#rstudio-git-tab-recommended" id="toc-rstudio-git-tab-recommended" class="nav-link" data-scroll-target="#rstudio-git-tab-recommended">RStudio Git tab (recommended)</a></li>
+  <li><a href="#command-line-equivalent" id="toc-command-line-equivalent" class="nav-link" data-scroll-target="#command-line-equivalent">Command line (equivalent)</a></li>
+  <li><a href="#common-commands-and-what-they-do" id="toc-common-commands-and-what-they-do" class="nav-link" data-scroll-target="#common-commands-and-what-they-do">Common commands and what they do</a></li>
+  <li><a href="#commit-message-tips" id="toc-commit-message-tips" class="nav-link" data-scroll-target="#commit-message-tips">Commit message tips</a></li>
+  <li><a href="#mini-exercise-recover-from-a-mistake" id="toc-mini-exercise-recover-from-a-mistake" class="nav-link" data-scroll-target="#mini-exercise-recover-from-a-mistake">Mini-exercise: recover from a mistake</a></li>
+  <li><a href="#mini-exercise-undo-a-staged-file" id="toc-mini-exercise-undo-a-staged-file" class="nav-link" data-scroll-target="#mini-exercise-undo-a-staged-file">Mini-exercise: undo a staged file</a></li>
+  <li><a href="#mini-exercise-review-a-diff-before-commit" id="toc-mini-exercise-review-a-diff-before-commit" class="nav-link" data-scroll-target="#mini-exercise-review-a-diff-before-commit">Mini-exercise: review a diff before commit</a></li>
+  </ul></li>
+  <li><a href="#during-the-session" id="toc-during-the-session" class="nav-link" data-scroll-target="#during-the-session">During the session</a>
+  <ul class="collapse">
+  <li><a href="#suggested-project-structure" id="toc-suggested-project-structure" class="nav-link" data-scroll-target="#suggested-project-structure">Suggested project structure</a></li>
+  <li><a href="#example-.gitignore" id="toc-example-.gitignore" class="nav-link" data-scroll-target="#example-.gitignore">Example .gitignore</a></li>
+  <li><a href="#collaborating-with-github-issues" id="toc-collaborating-with-github-issues" class="nav-link" data-scroll-target="#collaborating-with-github-issues">Collaborating with GitHub Issues</a>
+  <ul class="collapse">
+  <li><a href="#example-issue-template" id="toc-example-issue-template" class="nav-link" data-scroll-target="#example-issue-template">Example issue template</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#quarto-and-publishing" id="toc-quarto-and-publishing" class="nav-link" data-scroll-target="#quarto-and-publishing">Quarto and publishing</a>
+  <ul class="collapse">
+  <li><a href="#build-the-example-quarto-document" id="toc-build-the-example-quarto-document" class="nav-link" data-scroll-target="#build-the-example-quarto-document">Build the example Quarto document</a>
+  <ul class="collapse">
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
+  </ul></li>
+  <li><a href="#beyond-a-basic-report" id="toc-beyond-a-basic-report" class="nav-link" data-scroll-target="#beyond-a-basic-report">Beyond a basic report</a></li>
+  </ul></li>
+  <li><a href="#practice-exercises" id="toc-practice-exercises" class="nav-link" data-scroll-target="#practice-exercises">Practice exercises</a></li>
+  <li><a href="#resources" id="toc-resources" class="nav-link" data-scroll-target="#resources">Resources</a></li>
+  <li><a href="#questions-or-help" id="toc-questions-or-help" class="nav-link" data-scroll-target="#questions-or-help">Questions or help</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<p><img src="ammnet-github-infograph.png" class="img-fluid" alt="GitHub, R, and Quarto workflow infographic"></p>
+<section id="overview" class="level1">
+<h1>Overview</h1>
+<p>This live session introduces a practical workflow for version control and reproducible reporting using GitHub, R, and Quarto. We will move from local projects to publishable, shareable outputs with a minimal but robust setup.</p>
+</section>
+<section id="who-this-is-for" class="level1">
+<h1>Who this is for</h1>
+<ul>
+<li>R users who are new to Git and GitHub</li>
+<li>Analysts who want a clean, repeatable workflow for public health projects</li>
+<li>Anyone preparing to publish Quarto documents or GitHub Pages sites</li>
+</ul>
+</section>
+<section id="what-you-will-learn" class="level1">
+<h1>What you will learn</h1>
+<ul>
+<li>Why version control matters for public health data science</li>
+<li>How to connect RStudio to GitHub securely</li>
+<li>How to structure a project for collaboration and reproducibility</li>
+<li>How to use Quarto for reports and websites</li>
+<li>How to publish a project using GitHub Pages</li>
+</ul>
+</section>
+<section id="mini-case-example-for-the-session" class="level1">
+<h1>Mini-case example for the session</h1>
+<p>We will use a small, realistic dataset to practice a reproducible workflow from data import to a published report. The example mimics a monthly district summary often used in routine surveillance.</p>
+<p>In this mini-case, you are supporting a district review meeting where the program team wants to understand whether recent increases in suspected malaria cases reflect a true rise in transmission or shifts in testing effort. You will compare districts across a few months, calculate positivity, and prepare a short summary that could be shared with colleagues and decision makers.</p>
+<p>This is also a gentle introduction to Quarto. If you have not used Quarto before, think of it as a modern, easy way to combine R code, results, and narrative text in a single document. We will use Quarto to turn the analysis into a clean report that can be shared or published online, without copying and pasting output by hand.</p>
+<p>You can think of the Quarto workflow in three steps:</p>
+<ol type="1">
+<li>Write your analysis and narrative in a single <code>.qmd</code> file</li>
+<li>Render to HTML with one command</li>
+<li>Publish the output to GitHub Pages</li>
+</ol>
+<p>This blog post is being created using the same process, so you can use it as a real example of the workflow we will practice together.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="This post uses the same workflow">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+This post uses the same workflow
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This post is written in Quarto, rendered to HTML, and published with GitHub Pages. You can follow the exact same steps during the session.</p>
+</div>
+</div>
+<section id="case-question" class="level2">
+<h2 class="anchored" data-anchor-id="case-question">Case question</h2>
+<p>Which districts show a rise in suspected malaria cases over the last three months, and how do testing numbers affect interpretation?</p>
+<p>During the session, we will:</p>
+<ol type="1">
+<li>Commit the raw data import</li>
+<li>Commit the cleaned dataset with a clear message</li>
+<li>Add a Quarto report section with the figure</li>
+<li>Publish the report to GitHub Pages</li>
+</ol>
+</section>
+</section>
+<section id="session-outline" class="level1">
+<h1>Session outline</h1>
+<ol type="1">
+<li>Version control concepts in plain language</li>
+<li>Git setup and authentication</li>
+<li>Creating a new R project with Git</li>
+<li>Project structure and .gitignore best practices</li>
+<li>First commits and commit messages that tell a story</li>
+<li>Pushing to GitHub and working with issues</li>
+<li>Building a Quarto document and publishing</li>
+</ol>
+</section>
+<section id="before-the-session" class="level1">
+<h1>Before the session</h1>
+<p>Please complete the steps below so we can spend the session coding together.</p>
+<section id="install-and-verify-git" class="level2">
+<h2 class="anchored" data-anchor-id="install-and-verify-git">Install and verify Git</h2>
+<p>Install Git if needed:</p>
+<p><a href="https://git-scm.com/downloads" class="uri">https://git-scm.com/downloads</a></p>
+<p>Then, in RStudio:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">git_sitrep</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>If anything is missing, follow the instructions shown in the report.</p>
+</section>
+<section id="authenticate-github-from-r" class="level2">
+<h2 class="anchored" data-anchor-id="authenticate-github-from-r">Authenticate GitHub from R</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">gh_token_help</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Verify stored credentials:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>gitcreds<span class="sc">::</span><span class="fu">gitcreds_get</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Optional but recommended:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">use_git_config</span>(</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">user.name =</span> <span class="st">"Your Name"</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">user.email =</span> <span class="st">"your_email@example.com"</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="core-git-workflow-add-commit-push" class="level1">
+<h1>Core Git workflow (add, commit, push)</h1>
+<p>If this is your first time using Git, the basic cycle is:</p>
+<ol type="1">
+<li>Make changes to your files</li>
+<li>Add the files you want to track</li>
+<li>Commit with a clear message</li>
+<li>Push your commits to GitHub</li>
+</ol>
+<section id="rstudio-git-tab-recommended" class="level3">
+<h3 class="anchored" data-anchor-id="rstudio-git-tab-recommended">RStudio Git tab (recommended)</h3>
+<ol type="1">
+<li>Save your files</li>
+<li>Open the <strong>Git</strong> tab</li>
+<li>Check the files you want to include</li>
+<li>Click <strong>Commit</strong>, write a message, and commit</li>
+<li>Click <strong>Push</strong> to send changes to GitHub</li>
+</ol>
+</section>
+<section id="command-line-equivalent" class="level3">
+<h3 class="anchored" data-anchor-id="command-line-equivalent">Command line (equivalent)</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add README.md</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Add project overview"</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="common-commands-and-what-they-do" class="level3">
+<h3 class="anchored" data-anchor-id="common-commands-and-what-they-do">Common commands and what they do</h3>
+<ul>
+<li><code>git status</code> shows what changed</li>
+<li><code>git add</code> stages changes for a commit</li>
+<li><code>git commit -m "message"</code> saves a snapshot</li>
+<li><code>git push</code> sends commits to GitHub</li>
+<li><code>git pull</code> gets the latest changes from GitHub</li>
+<li><code>git log --oneline</code> shows your recent history</li>
+</ul>
+</section>
+<section id="commit-message-tips" class="level3">
+<h3 class="anchored" data-anchor-id="commit-message-tips">Commit message tips</h3>
+<ul>
+<li>Start with a verb (e.g., “Add”, “Fix”, “Update”)</li>
+<li>Keep it short but specific</li>
+<li>Mention the main change, not every detail</li>
+</ul>
+<p>Example:</p>
+<pre><code>Add summary plot for malaria case trends</code></pre>
+</section>
+<section id="mini-exercise-recover-from-a-mistake" class="level3">
+<h3 class="anchored" data-anchor-id="mini-exercise-recover-from-a-mistake">Mini-exercise: recover from a mistake</h3>
+<p>Use this if time allows. The goal is to see how Git helps you undo a change safely.</p>
+<ol type="1">
+<li>Open a script or Quarto file and make a small edit</li>
+<li>Check what changed:</li>
+</ol>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol start="3" type="1">
+<li>Discard the change:</li>
+</ol>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> restore path/to/file.qmd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol start="4" type="1">
+<li>Confirm the file is back to its original state:</li>
+</ol>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>If you prefer the RStudio interface, you can right-click a file in the <strong>Git</strong> tab and choose <strong>Revert</strong>.</p>
+</section>
+<section id="mini-exercise-undo-a-staged-file" class="level3">
+<h3 class="anchored" data-anchor-id="mini-exercise-undo-a-staged-file">Mini-exercise: undo a staged file</h3>
+<p>This helps if you accidentally staged the wrong file.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add path/to/file.qmd</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> restore <span class="at">--staged</span> path/to/file.qmd</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="mini-exercise-review-a-diff-before-commit" class="level3">
+<h3 class="anchored" data-anchor-id="mini-exercise-review-a-diff-before-commit">Mini-exercise: review a diff before commit</h3>
+<p>Use this to see exactly what will be committed.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> diff</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> diff <span class="at">--staged</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="during-the-session" class="level1">
+<h1>During the session</h1>
+<p>We will build a small example project together. If you want to follow along, open RStudio and have a folder ready where you can create a new project.</p>
+<section id="suggested-project-structure" class="level2">
+<h2 class="anchored" data-anchor-id="suggested-project-structure">Suggested project structure</h2>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>fs<span class="sc">::</span><span class="fu">dir_create</span>(<span class="fu">c</span>(<span class="st">"data"</span>, <span class="st">"scripts"</span>, <span class="st">"outputs"</span>, <span class="st">"local"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Creating a clear structure early saves time later. It keeps raw data, cleaning scripts, and outputs separated so collaborators can find what they need quickly. It also makes it easier to automate your workflow and reduces the chance of accidentally overwriting files or mixing raw and processed data.</p>
+<pre><code>project/
+  data/         # raw data files
+  scripts/      # R scripts
+  outputs/      # cleaned data, figures, models
+  local/        # private or sensitive files (ignored)
+  README.md
+  index.qmd     # Quarto document</code></pre>
+</section>
+<section id="example-.gitignore" class="level2">
+<h2 class="anchored" data-anchor-id="example-.gitignore">Example .gitignore</h2>
+<p>Use a <code>.gitignore</code> file to tell Git which files should never be tracked. Add it early in the project so you do not accidentally commit large datasets, temporary files, or anything sensitive. You can update <code>.gitignore</code> at any time, but it only affects new changes, so it is best to put it in place before you start adding files.</p>
+<pre><code>.Rhistory
+.RData
+/local/
+*.docx
+*.tmp</code></pre>
+</section>
+<section id="collaborating-with-github-issues" class="level2">
+<h2 class="anchored" data-anchor-id="collaborating-with-github-issues">Collaborating with GitHub Issues</h2>
+<p>Issues are a lightweight way to coordinate work and keep a clear record of decisions. They help teams capture tasks, bugs, and questions in one place so progress is visible to everyone.</p>
+<p>Key features to know:</p>
+<ul>
+<li>Labels to group work (e.g., <code>bug</code>, <code>data</code>, <code>documentation</code>)</li>
+<li>Assignees to show who is responsible for a task</li>
+<li>Checklists to break work into steps</li>
+<li>References that link issues to commits and pull requests</li>
+</ul>
+<p>Good issue hygiene:</p>
+<ul>
+<li>Write a clear title and short description</li>
+<li>Add context, links, or screenshots when useful</li>
+<li>Keep issues focused on one task or decision</li>
+</ul>
+<p>To collaborate with others, add them to your repository:</p>
+<ol type="1">
+<li>Open the repo on GitHub</li>
+<li>Go to <strong>Settings</strong> → <strong>Collaborators and teams</strong></li>
+<li>Invite a collaborator by GitHub username or email</li>
+</ol>
+<p>Once they accept, they can push changes, open issues, and submit pull requests (depending on permissions).</p>
+<section id="example-issue-template" class="level3">
+<h3 class="anchored" data-anchor-id="example-issue-template">Example issue template</h3>
+<pre><code>**Task:** Add data dictionary for malaria routine data
+
+**Why this matters**
+- Clarifies variable definitions for collaborators
+- Supports reproducibility and handover
+
+**Steps**
+- [ ] Draft variable list and descriptions
+- [ ] Add to `README.md`
+- [ ] Link the issue in the next commit
+
+**Assigned to:** @username</code></pre>
+</section>
+</section>
+</section>
+<section id="quarto-and-publishing" class="level1">
+<h1>Quarto and publishing</h1>
+<p>We will create a simple Quarto document and publish it with GitHub Pages.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">"My First Quarto Document"</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">format</span><span class="kw">:</span><span class="at"> html</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">editor</span><span class="kw">:</span><span class="at"> visual</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="build-the-example-quarto-document" class="level2">
+<h2 class="anchored" data-anchor-id="build-the-example-quarto-document">Build the example Quarto document</h2>
+<p>Create a file called <code>index.qmd</code> in your project root and add a short write-up plus the mini-case R code. Below is a minimal working example you can paste and adapt.</p>
+<section id="summary" class="level3">
+<h3 class="anchored" data-anchor-id="summary">Summary</h3>
+<p>This report checks recent suspected malaria cases and test positivity across districts.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'dplyr'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    filter, lag</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'ggplot2' was built under R version 4.5.1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(plotly)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'plotly' was built under R version 4.5.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'plotly'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:ggplot2':
+
+    last_plot</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:stats':
+
+    filter</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:graphics':
+
+    layout</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>case_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/malaria_routine_data.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 72 Columns: 8</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (1): district
+dbl  (6): population, under5_population, suspected_cases, tests_done, positi...
+date (1): month
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>case_summary <span class="ot">&lt;-</span> case_data <span class="sc">%&gt;%</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">positivity =</span> positive_tests <span class="sc">/</span> tests_done) <span class="sc">%&gt;%</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(district) <span class="sc">%&gt;%</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_cases =</span> <span class="fu">sum</span>(suspected_cases),</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_positivity =</span> <span class="fu">mean</span>(positivity)</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(total_cases))</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>case_summary</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 3
+  district total_cases mean_positivity
+  &lt;chr&gt;          &lt;dbl&gt;           &lt;dbl&gt;
+1 Mansa          11023           0.284
+2 Chipata         9011           0.243
+3 Mongu           8505           0.263
+4 Solwezi         7387           0.223
+5 Choma           6779           0.213
+6 Kasama          6123           0.203</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(case_data, <span class="fu">aes</span>(month, suspected_cases, <span class="at">color =</span> district)) <span class="sc">+</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Suspected malaria cases by district"</span>,</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Month"</span>,</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Suspected cases"</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>interactive_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(case_data, <span class="fu">aes</span>(month, suspected_cases, <span class="at">color =</span> district)) <span class="sc">+</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Suspected malaria cases by district (interactive)"</span>,</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Month"</span>,</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Suspected cases"</span></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>plotly<span class="sc">::</span><span class="fu">ggplotly</span>(interactive_plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-b6e1e8b54e817ac87b05" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-b6e1e8b54e817ac87b05">{"x":{"data":[{"x":[19723,19754,19783,19814,19844,19875,19905,19936,19967,19997,20028,20058],"y":[890,853,801,742,682,630,593,630,705,779,831,875],"text":["month: 2024-01-01<br />suspected_cases:  890<br />district: Chipata","month: 2024-02-01<br />suspected_cases:  853<br />district: Chipata","month: 2024-03-01<br />suspected_cases:  801<br />district: Chipata","month: 2024-04-01<br />suspected_cases:  742<br />district: Chipata","month: 2024-05-01<br />suspected_cases:  682<br />district: Chipata","month: 2024-06-01<br />suspected_cases:  630<br />district: Chipata","month: 2024-07-01<br />suspected_cases:  593<br />district: Chipata","month: 2024-08-01<br />suspected_cases:  630<br />district: Chipata","month: 2024-09-01<br />suspected_cases:  705<br />district: Chipata","month: 2024-10-01<br />suspected_cases:  779<br />district: Chipata","month: 2024-11-01<br />suspected_cases:  831<br />district: Chipata","month: 2024-12-01<br />suspected_cases:  875<br />district: Chipata"],"type":"scatter","mode":"lines+markers","line":{"width":3.7795275590551185,"color":"rgba(248,118,109,1)","dash":"solid"},"hoveron":"points","name":"Chipata","legendgroup":"Chipata","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","opacity":1,"size":5.6692913385826778,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(248,118,109,1)"}},"frame":null},{"x":[19723,19754,19783,19814,19844,19875,19905,19936,19967,19997,20028,20058],"y":[670,642,603,558,513,474,446,474,530,586,625,658],"text":["month: 2024-01-01<br />suspected_cases:  670<br />district: Choma","month: 2024-02-01<br />suspected_cases:  642<br />district: Choma","month: 2024-03-01<br />suspected_cases:  603<br />district: Choma","month: 2024-04-01<br />suspected_cases:  558<br />district: Choma","month: 2024-05-01<br />suspected_cases:  513<br />district: Choma","month: 2024-06-01<br />suspected_cases:  474<br />district: Choma","month: 2024-07-01<br />suspected_cases:  446<br />district: Choma","month: 2024-08-01<br />suspected_cases:  474<br />district: Choma","month: 2024-09-01<br />suspected_cases:  530<br />district: Choma","month: 2024-10-01<br />suspected_cases:  586<br />district: Choma","month: 2024-11-01<br />suspected_cases:  625<br />district: Choma","month: 2024-12-01<br />suspected_cases:  658<br />district: Choma"],"type":"scatter","mode":"lines+markers","line":{"width":3.7795275590551185,"color":"rgba(183,159,0,1)","dash":"solid"},"hoveron":"points","name":"Choma","legendgroup":"Choma","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","marker":{"autocolorscale":false,"color":"rgba(183,159,0,1)","opacity":1,"size":5.6692913385826778,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(183,159,0,1)"}},"frame":null},{"x":[19723,19754,19783,19814,19844,19875,19905,19936,19967,19997,20028,20058],"y":[605,580,544,504,464,428,403,428,479,529,564,595],"text":["month: 2024-01-01<br />suspected_cases:  605<br />district: Kasama","month: 2024-02-01<br />suspected_cases:  580<br />district: Kasama","month: 2024-03-01<br />suspected_cases:  544<br />district: Kasama","month: 2024-04-01<br />suspected_cases:  504<br />district: Kasama","month: 2024-05-01<br />suspected_cases:  464<br />district: Kasama","month: 2024-06-01<br />suspected_cases:  428<br />district: Kasama","month: 2024-07-01<br />suspected_cases:  403<br />district: Kasama","month: 2024-08-01<br />suspected_cases:  428<br />district: Kasama","month: 2024-09-01<br />suspected_cases:  479<br />district: Kasama","month: 2024-10-01<br />suspected_cases:  529<br />district: Kasama","month: 2024-11-01<br />suspected_cases:  564<br />district: Kasama","month: 2024-12-01<br />suspected_cases:  595<br />district: Kasama"],"type":"scatter","mode":"lines+markers","line":{"width":3.7795275590551185,"color":"rgba(0,186,56,1)","dash":"solid"},"hoveron":"points","name":"Kasama","legendgroup":"Kasama","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","marker":{"autocolorscale":false,"color":"rgba(0,186,56,1)","opacity":1,"size":5.6692913385826778,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(0,186,56,1)"}},"frame":null},{"x":[19723,19754,19783,19814,19844,19875,19905,19936,19967,19997,20028,20058],"y":[1089,1043,980,907,835,771,726,771,862,953,1016,1070],"text":["month: 2024-01-01<br />suspected_cases: 1089<br />district: Mansa","month: 2024-02-01<br />suspected_cases: 1043<br />district: Mansa","month: 2024-03-01<br />suspected_cases:  980<br />district: Mansa","month: 2024-04-01<br />suspected_cases:  907<br />district: Mansa","month: 2024-05-01<br />suspected_cases:  835<br />district: Mansa","month: 2024-06-01<br />suspected_cases:  771<br />district: Mansa","month: 2024-07-01<br />suspected_cases:  726<br />district: Mansa","month: 2024-08-01<br />suspected_cases:  771<br />district: Mansa","month: 2024-09-01<br />suspected_cases:  862<br />district: Mansa","month: 2024-10-01<br />suspected_cases:  953<br />district: Mansa","month: 2024-11-01<br />suspected_cases: 1016<br />district: Mansa","month: 2024-12-01<br />suspected_cases: 1070<br />district: Mansa"],"type":"scatter","mode":"lines+markers","line":{"width":3.7795275590551185,"color":"rgba(0,191,196,1)","dash":"solid"},"hoveron":"points","name":"Mansa","legendgroup":"Mansa","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":1,"size":5.6692913385826778,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(0,191,196,1)"}},"frame":null},{"x":[19723,19754,19783,19814,19844,19875,19905,19936,19967,19997,20028,20058],"y":[840,805,756,700,644,595,560,595,665,735,784,826],"text":["month: 2024-01-01<br />suspected_cases:  840<br />district: Mongu","month: 2024-02-01<br />suspected_cases:  805<br />district: Mongu","month: 2024-03-01<br />suspected_cases:  756<br />district: Mongu","month: 2024-04-01<br />suspected_cases:  700<br />district: Mongu","month: 2024-05-01<br />suspected_cases:  644<br />district: Mongu","month: 2024-06-01<br />suspected_cases:  595<br />district: Mongu","month: 2024-07-01<br />suspected_cases:  560<br />district: Mongu","month: 2024-08-01<br />suspected_cases:  595<br />district: Mongu","month: 2024-09-01<br />suspected_cases:  665<br />district: Mongu","month: 2024-10-01<br />suspected_cases:  735<br />district: Mongu","month: 2024-11-01<br />suspected_cases:  784<br />district: Mongu","month: 2024-12-01<br />suspected_cases:  826<br />district: Mongu"],"type":"scatter","mode":"lines+markers","line":{"width":3.7795275590551185,"color":"rgba(97,156,255,1)","dash":"solid"},"hoveron":"points","name":"Mongu","legendgroup":"Mongu","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","marker":{"autocolorscale":false,"color":"rgba(97,156,255,1)","opacity":1,"size":5.6692913385826778,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(97,156,255,1)"}},"frame":null},{"x":[19723,19754,19783,19814,19844,19875,19905,19936,19967,19997,20028,20058],"y":[730,699,657,608,559,517,486,517,578,638,681,717],"text":["month: 2024-01-01<br />suspected_cases:  730<br />district: Solwezi","month: 2024-02-01<br />suspected_cases:  699<br />district: Solwezi","month: 2024-03-01<br />suspected_cases:  657<br />district: Solwezi","month: 2024-04-01<br />suspected_cases:  608<br />district: Solwezi","month: 2024-05-01<br />suspected_cases:  559<br />district: Solwezi","month: 2024-06-01<br />suspected_cases:  517<br />district: Solwezi","month: 2024-07-01<br />suspected_cases:  486<br />district: Solwezi","month: 2024-08-01<br />suspected_cases:  517<br />district: Solwezi","month: 2024-09-01<br />suspected_cases:  578<br />district: Solwezi","month: 2024-10-01<br />suspected_cases:  638<br />district: Solwezi","month: 2024-11-01<br />suspected_cases:  681<br />district: Solwezi","month: 2024-12-01<br />suspected_cases:  717<br />district: Solwezi"],"type":"scatter","mode":"lines+markers","line":{"width":3.7795275590551185,"color":"rgba(245,100,227,1)","dash":"solid"},"hoveron":"points","name":"Solwezi","legendgroup":"Solwezi","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","marker":{"autocolorscale":false,"color":"rgba(245,100,227,1)","opacity":1,"size":5.6692913385826778,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(245,100,227,1)"}},"frame":null}],"layout":{"margin":{"t":40.840182648401829,"r":7.3059360730593621,"b":37.260273972602747,"l":48.949771689497723},"paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"title":{"text":"Suspected malaria cases by district (interactive)","font":{"color":"rgba(0,0,0,1)","family":"","size":17.534246575342465},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[19706.25,20074.75],"tickmode":"array","ticktext":["Jan 2024","Apr 2024","Jul 2024","Oct 2024"],"tickvals":[19723,19814,19905,19997],"categoryorder":"array","categoryarray":["Jan 2024","Apr 2024","Jul 2024","Oct 2024"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0,"zeroline":false,"anchor":"y","title":{"text":"Month","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[368.69999999999999,1123.3],"tickmode":"array","ticktext":["400","600","800","1000"],"tickvals":[400,600,800,1000],"categoryorder":"array","categoryarray":["400","600","800","1000"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0,"zeroline":false,"anchor":"x","title":{"text":"Suspected cases","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","layer":"below","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":true,"legend":{"bgcolor":null,"bordercolor":null,"borderwidth":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498},"title":{"text":"district","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"e85031d23f7c":{"x":{},"y":{},"colour":{},"type":"scatter"},"e850462a3b8e":{"x":{},"y":{},"colour":{}}},"cur_data":"e85031d23f7c","visdat":{"e85031d23f7c":["function (y) ","x"],"e850462a3b8e":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>Publishing workflow:</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">use_github_pages</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> preview</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> publish gh-pages</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>If you have not installed Plotly before:</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"plotly"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="beyond-a-basic-report" class="level2">
+<h2 class="anchored" data-anchor-id="beyond-a-basic-report">Beyond a basic report</h2>
+<p>Quarto and GitHub Pages can publish far more than a static report. Once you are comfortable with the basics, you can explore:</p>
+<ul>
+<li>Dashboards for routine monitoring and rapid summaries</li>
+<li>Interactive maps for spatial data and intervention targeting</li>
+<li>Slide decks for presentations and briefings</li>
+<li>Websites for documentation, data dictionaries, and project notes</li>
+</ul>
+<p>These options use the same workflow: build your content in Quarto, then publish it with GitHub Pages.</p>
+</section>
+</section>
+<section id="practice-exercises" class="level1">
+<h1>Practice exercises</h1>
+<ol type="1">
+<li>Create a new R project with Git enabled</li>
+<li>Make three commits with descriptive messages</li>
+<li>Push to GitHub</li>
+<li>Create a Quarto <code>index.qmd</code> and publish to GitHub Pages</li>
+<li>Open a GitHub Issue to track a next step</li>
+</ol>
+</section>
+<section id="resources" class="level1">
+<h1>Resources</h1>
+<ul>
+<li>Happy Git with R: <a href="https://happygitwithr.com/" class="uri">https://happygitwithr.com/</a></li>
+<li>Quarto documentation: <a href="https://quarto.org" class="uri">https://quarto.org</a></li>
+<li>GitHub Pages with Quarto: <a href="https://quarto.org/docs/publishing/github-pages.html" class="uri">https://quarto.org/docs/publishing/github-pages.html</a></li>
+<li>Git cheat sheet: <a href="https://git-scm.com/docs" class="uri">https://git-scm.com/docs</a></li>
+</ul>
+</section>
+<section id="questions-or-help" class="level1">
+<h1>Questions or help</h1>
+<p>If you run into setup issues before the session, share the output of <code>usethis::git_sitrep()</code> in the cohort channel so we can troubleshoot.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/AMMnet\.github\.io\/ammnet-hackathon\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="AMMnet/ammnet-hackathon" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

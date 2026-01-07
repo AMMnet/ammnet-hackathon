@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/github/index.html",
       "/posts/mapping-french/index.html",
       "/posts/geoname/index.html",
       "/posts/mapping-r-part2/mapping_rasters.html",
