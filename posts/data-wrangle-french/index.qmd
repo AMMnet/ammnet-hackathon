@@ -30,7 +30,7 @@ Nous utiliserons les packages `tidyverse` and `validate` dans ce tutoriel. Vous 
 Le code de la session en direct est disponible [sur  Github](https://github.com/AMMnet/ammnet-hackathon/tree/main/02_data-wrangle/R/live-session-code.R).
 :::
 
-{{< video https://www.youtube.com/embed/vC8yTnvm_XA?si=m0_u90keHdeOGHIR >}}
+![](https://www.youtube.com/watch?v=vC8uTnvm_XA)
 
 ## Introduction
 
