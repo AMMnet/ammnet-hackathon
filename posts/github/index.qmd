@@ -21,6 +21,16 @@ editor:
 
 ![](ammnet-github-infograph.png){fig-alt="GitHub, R, and Quarto workflow infographic"}
 
+::: {.callout-note title="Links for this session!"}
+- [AMMnet Hackathon Github repository](https://github.com/AMMnet/ammnet-hackathon)
+- [Materials for this session](https://github.com/AMMnet/ammnet-hackathon/tree/main/07_github)
+- [Download Git](https://git-scm.com/downloads)
+- [Github](https://github.com)
+- [Quarto installation guide](https://quarto.org/docs/get-started/)
+:::
+
+{{< video https://www.youtube.com/embed/IQRmDnErBlk?si=vxZqIeWaD8MzuzRR >}}
+
 # Overview
 
 This live session introduces a practical workflow for version control and
@@ -418,6 +428,29 @@ If you have not installed Plotly before:
 #| eval: false
 install.packages("plotly")
 ```
+
+## Create a _quarto.yml file
+
+Quarto projects can use a `_quarto.yml` file in the project root to set
+site-wide options like the title, theme, and output format. This is
+especially useful when you want consistent settings across multiple
+pages or plan to publish with GitHub Pages.
+
+Minimal example:
+
+``` yaml
+project:
+  type: website
+
+website:
+  title: "Malaria Mini-Case"
+
+format:
+  html:
+    theme: cosmo
+```
+
+When you create a Quarto Project in RStudio, this file is generated. However, you can also create it manually in any Quarto project by adding a new file named `_quarto.yml` to the project root.
 
 ## Beyond a basic report
 
