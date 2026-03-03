@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/ai-sir/index.html",
       "/posts/github/index.html",
       "/posts/mapping-french/index.html",
       "/posts/geoname/index.html",
