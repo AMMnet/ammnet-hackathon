@@ -28,7 +28,10 @@ execute:
 - [Source notebook](https://github.com/AMMnet/ammnet-hackathon/blob/main/08_ai-sir/notebooks/sir_llm_hackathon_skeleton.ipynb)
 - Local data file used in this post: `data/niamey.csv`
 - [Example of final output](https://colab.research.google.com/github/merlinvn/ai-guided-modeling-hackathon/blob/main/notebooks/sir_llm_hackathon_final.ipynb)
+- [PDF version of materials (with code and outputs)](https://github.com/AMMnet/ammnet-hackathon/blob/posts/ai-sir/sir_llm_hackathon_final.pdf)
 :::
+
+
 
 #  AI-Guided SIR Modeling Hackathon (2 Hours)
 
@@ -40,6 +43,12 @@ This notebook is the **workshop skeleton** for the **AI-Guided SIR Modeling Hack
 - Key modeling shortcut: infectious period ≈ **2 weeks** ⇒ **γ ≈ 1 per biweek**
 
 ---
+
+## Session Materials PDF
+
+<iframe src="AI-Guided%20SIR%20Modeling%20Hackathon-Final.pdf" title="AI-Guided SIR Modeling Hackathon PDF" width="100%" height="800"></iframe>
+
+[Download the slides as a PDF](AI-Guided%20SIR%20Modeling%20Hackathon-Final.pdf)
 
 ## Overview
 
