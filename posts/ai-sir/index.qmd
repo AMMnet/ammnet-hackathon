@@ -9,6 +9,8 @@ author:
   - Nani Metchanun
   - Justin Millar
 date: "2026-03-02"
+image: "air-sir-infographic.png"
+image-alt: "AI-Guided SIR Modeling Hackathon infographic"
 categories:
   - Python
   - Epidemiology
@@ -22,13 +24,15 @@ execute:
   enabled: false
 ---
 
+![AI-Guided SIR infographic](air-sir-infographic.png)
+
 ::: {.callout-note title="Links for this session"}
 - [Google Colab notebook](https://colab.research.google.com/github/merlinvn/ai-guided-modeling-hackathon/blob/main/notebooks/sir_llm_hackathon_skeleton.ipynb)
 - [Materials for this session](https://github.com/AMMnet/ammnet-hackathon/tree/main/08_ai-sir)
 - [Source notebook](https://github.com/AMMnet/ammnet-hackathon/blob/main/08_ai-sir/notebooks/sir_llm_hackathon_skeleton.ipynb)
 - Local data file used in this post: `data/niamey.csv`
 - [Example of final output](https://colab.research.google.com/github/merlinvn/ai-guided-modeling-hackathon/blob/main/notebooks/sir_llm_hackathon_final.ipynb)
-- [PDF version of materials (with code and outputs)](https://github.com/AMMnet/ammnet-hackathon/blob/posts/ai-sir/sir_llm_hackathon_final.pdf)
+- [PDF version of materials (with code and outputs)](sir_llm_hackathon_final.pdf)
 :::
 
 
@@ -44,7 +48,6 @@ This notebook is the **workshop skeleton** for the **AI-Guided SIR Modeling Hack
 
 ---
 
-## Session Materials PDF
 
 <iframe src="AI-Guided%20SIR%20Modeling%20Hackathon-Final.pdf" title="AI-Guided SIR Modeling Hackathon PDF" width="100%" height="800"></iframe>
 
