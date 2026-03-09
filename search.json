@@ -214,7 +214,7 @@
     "href": "posts/ai-sir/index.html",
     "title": "Live Session 8: AI-Guided SIR Modeling Hackathon",
     "section": "",
-    "text": "Links for this session\n\n\n\n\nGoogle Colab notebook\nMaterials for this session\nSource notebook\nLocal data file used in this post: data/niamey.csv\nExample of final output"
+    "text": "AI-Guided SIR infographic"
   },
   {
     "objectID": "posts/ai-sir/index.html#overview",
@@ -229,6 +229,13 @@
     "title": "Live Session 8: AI-Guided SIR Modeling Hackathon",
     "section": "Before the session",
     "text": "Before the session\n\nOpen the Colab notebook linked above.\nConfirm the dataset path is data/niamey.csv (relative path).\nMake sure Python can import numpy, pandas, scipy, and matplotlib.\nReview the workflow sections below so you know where each prompt fits."
+  },
+  {
+    "objectID": "posts/ai-sir/index.html#what-is-google-colab",
+    "href": "posts/ai-sir/index.html#what-is-google-colab",
+    "title": "Live Session 8: AI-Guided SIR Modeling Hackathon",
+    "section": "What is Google Colab?",
+    "text": "What is Google Colab?\nGoogle Colab (short for “Colaboratory”) is a free, browser-based notebook environment where you can run Python code without installing a local Python setup.\nFor this session, Colab helps you:\n\nRun the workshop notebook directly from a shared link\nExecute code in small cells and inspect outputs step-by-step\nCombine narrative text, prompts, code, and figures in one place\nSave your own copy in Google Drive for continued practice\n\nTips for first-time users:\n\nUse Runtime &gt; Run all to execute all cells in order\nIf a cell fails, read the error, fix the prompt/code, then rerun that cell\nIf the runtime disconnects, reconnect and rerun from the top"
   },
   {
     "objectID": "posts/ai-sir/index.html#troubleshooting",

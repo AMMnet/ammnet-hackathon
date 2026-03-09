@@ -171,6 +171,7 @@ gtag('config', 'G-072Z4G50DN', { 'anonymize_ip': true});
   <ul class="collapse">
   <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview">Overview</a></li>
   <li><a href="#before-the-session" id="toc-before-the-session" class="nav-link" data-scroll-target="#before-the-session">Before the session</a></li>
+  <li><a href="#what-is-google-colab" id="toc-what-is-google-colab" class="nav-link" data-scroll-target="#what-is-google-colab">What is Google Colab?</a></li>
   <li><a href="#troubleshooting" id="toc-troubleshooting" class="nav-link" data-scroll-target="#troubleshooting">Troubleshooting</a></li>
   <li><a href="#resources" id="toc-resources" class="nav-link" data-scroll-target="#resources">Resources</a></li>
   <li><a href="#how-to-use-this-notebook" id="toc-how-to-use-this-notebook" class="nav-link" data-scroll-target="#how-to-use-this-notebook">How to use this notebook</a></li>
@@ -224,6 +225,12 @@ gtag('config', 'G-072Z4G50DN', { 'anonymize_ip': true});
 
 
 
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="air-sir-infographic.png" class="img-fluid figure-img"></p>
+<figcaption>AI-Guided SIR infographic</figcaption>
+</figure>
+</div>
 <div class="callout callout-style-default callout-note callout-titled" title="Links for this session">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -240,6 +247,7 @@ Links for this session
 <li><a href="https://github.com/AMMnet/ammnet-hackathon/blob/main/08_ai-sir/notebooks/sir_llm_hackathon_skeleton.ipynb">Source notebook</a></li>
 <li>Local data file used in this post: <code>data/niamey.csv</code></li>
 <li><a href="https://colab.research.google.com/github/merlinvn/ai-guided-modeling-hackathon/blob/main/notebooks/sir_llm_hackathon_final.ipynb">Example of final output</a></li>
+<li><a href="sir_llm_hackathon_final.pdf">PDF version of materials (with code and outputs)</a></li>
 </ul>
 </div>
 </div>
@@ -253,6 +261,9 @@ Links for this session
 <li>Key modeling shortcut: infectious period ≈ <strong>2 weeks</strong> ⇒ <strong>γ ≈ 1 per biweek</strong></li>
 </ul>
 <hr>
+<iframe src="AI-Guided SIR Modeling Hackathon-Final.pdf" title="AI-Guided SIR Modeling Hackathon PDF" width="100%" height="800">
+</iframe>
+<p><a href="AI-Guided SIR Modeling Hackathon-Final.pdf">Download the slides as a PDF</a></p>
 <section id="overview" class="level2">
 <h2 class="anchored" data-anchor-id="overview">Overview</h2>
 <p>This live session uses prompt-driven analysis to move from raw biweekly measles counts to a calibrated SIR model for Community A.</p>
@@ -272,6 +283,23 @@ Links for this session
 <li>Confirm the dataset path is <code>data/niamey.csv</code> (relative path).</li>
 <li>Make sure Python can import <code>numpy</code>, <code>pandas</code>, <code>scipy</code>, and <code>matplotlib</code>.</li>
 <li>Review the workflow sections below so you know where each prompt fits.</li>
+</ol>
+</section>
+<section id="what-is-google-colab" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-google-colab">What is Google Colab?</h2>
+<p>Google Colab (short for “Colaboratory”) is a free, browser-based notebook environment where you can run Python code without installing a local Python setup.</p>
+<p>For this session, Colab helps you:</p>
+<ol type="1">
+<li>Run the workshop notebook directly from a shared link</li>
+<li>Execute code in small cells and inspect outputs step-by-step</li>
+<li>Combine narrative text, prompts, code, and figures in one place</li>
+<li>Save your own copy in Google Drive for continued practice</li>
+</ol>
+<p>Tips for first-time users:</p>
+<ol type="1">
+<li>Use <strong>Runtime &gt; Run all</strong> to execute all cells in order</li>
+<li>If a cell fails, read the error, fix the prompt/code, then rerun that cell</li>
+<li>If the runtime disconnects, reconnect and rerun from the top</li>
 </ol>
 </section>
 <section id="troubleshooting" class="level2">
