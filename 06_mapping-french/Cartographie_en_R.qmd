@@ -16,8 +16,6 @@ execute:
 
 # Introduction
 
-{{< video https://www.youtube.com/watch?v=ccJowS1Gzp8 >}}
-
 Ce document consiste a faire de la cartographie avec des commentaires **en français**.
 
 > **Pré-requis** : R ≥ 4.2, et les packages `sf`, `tmap`, `ggspatial`, `ggrepel`, `tidyverse`, `malariaAtlas`.
