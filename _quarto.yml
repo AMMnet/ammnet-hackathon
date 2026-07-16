@@ -1,5 +1,8 @@
 project:
   type: website
+  render:
+    - "*"
+    - "!CONTRIBUTING_POSTS.md"
 
 website:
   title: "AMMnet Hackathon"
@@ -23,5 +26,4 @@ format:
 
 execute:
   freeze: auto
-
 
