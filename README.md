@@ -48,3 +48,9 @@ Each Hackathon session will have it own folder in this Github repo that will con
 
 You can either download those files directly from the folder, or you can clone this entire respository (including the files used to make our [Hackathon Blog](https://ammnet.github.io/ammnet-hackathon/)).
 
+### Contribute a blog post
+
+To add a new Hackathon blog post, follow the step-by-step
+[blog post contribution guide](CONTRIBUTING_POSTS.md). It covers the Quarto
+post format, local preview and frozen code output, GitHub branches and pull
+requests, review, and automatic publication after a pull request is merged.
