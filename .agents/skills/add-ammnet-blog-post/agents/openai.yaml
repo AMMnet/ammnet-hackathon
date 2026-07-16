@@ -1,0 +1,4 @@
+interface:
+  display_name: "Add AMMnet Blog Post"
+  short_description: "Publish prepared materials to the AMMnet blog"
+  default_prompt: "Use $add-ammnet-blog-post to turn these prepared workshop materials into an AMMnet blog post and draft pull request."

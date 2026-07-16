@@ -1,0 +1,51 @@
+---
+title: "Live Session NN: SESSION TITLE"
+description: "ONE-SENTENCE DESCRIPTION"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+author:
+  - AUTHOR NAME
+date: "YYYY-MM-DD"
+categories:
+  - TOPIC
+  - Live session
+draft: true
+editor:
+  markdown:
+    wrap: 72
+execute:
+  enabled: false
+---
+
+Introduce the session, its purpose, and what participants will be able to do.
+
+::: {.callout-note title="Training materials"}
+- [Download the session materials](AMMNET-MATERIALS-URL)
+:::
+
+## Learning objectives
+
+By the end of the session, you will be able to:
+
+1. LEARNING OBJECTIVE
+2. LEARNING OBJECTIVE
+3. LEARNING OBJECTIVE
+
+## Before the session
+
+List required background, software, packages, and setup steps.
+
+## Session overview
+
+Summarize the prepared lesson. Use static code fences for examples that do not
+need to execute during the website build:
+
+```r
+# Prepared example code
+```
+
+## Resources
+
+- [Descriptive resource name](RESOURCE-URL)

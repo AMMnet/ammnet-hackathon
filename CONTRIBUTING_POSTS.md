@@ -4,6 +4,24 @@ This guide explains how to add a post to the
 [AMMnet Hackathon blog](https://ammnet.github.io/ammnet-hackathon/) using
 Quarto and GitHub.
 
+## Use an AI assistant
+
+This repository includes an
+[`add-ammnet-blog-post`](.agents/skills/add-ammnet-blog-post/SKILL.md) skill
+for turning already-prepared session materials into a blog contribution. In
+Codex, open this repository and ask:
+
+```text
+Use $add-ammnet-blog-post to publish the prepared materials at SOURCE.
+```
+
+Replace `SOURCE` with a local folder or repository URL. The assistant will
+inspect the materials, ask for missing publication facts, create only the key
+participant files, validate the site, and prepare a GitHub handoff. Review the
+post and selected materials before approving a commit or pull request. The
+skill is not intended to develop unfinished lessons or invent scientific
+content.
+
 ## How publishing works
 
 - The editable website source is on the `main` branch.
