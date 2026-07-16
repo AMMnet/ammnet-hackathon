@@ -95,7 +95,7 @@ post, with the full interactive lesson linked above.
 
 Run this once in the R console:
 
-```{r}
+```r
 packages <- c(
   "shiny", "bslib", "tidyverse", "leaflet", "sf", "plotly",
   "DT", "bsicons", "scales", "htmltools"
@@ -108,7 +108,7 @@ install.packages(
 
 The application loads these packages at the top of `app.R`:
 
-```{r}
+```r
 library(shiny)
 library(bslib)
 library(tidyverse)
@@ -136,7 +136,7 @@ comes from the Malaria Atlas Project.
 
 Load the files near the top of `app.R`:
 
-```{r}
+```r
 malaria_data <- readRDS("data/malaria_data.rds")
 annual_df    <- readRDS("data/annual_summary.rds")
 district_shp <- readRDS("data/bfa_districts.rds")
@@ -144,7 +144,7 @@ district_shp <- readRDS("data/bfa_districts.rds")
 
 Check that the data loaded correctly:
 
-```{r}
+```r
 glimpse(malaria_data)
 
 cat("Districts:", n_distinct(malaria_data$district), "\n")
@@ -206,7 +206,7 @@ The dashboard uses:
 
 A minimal skeleton looks like this:
 
-```{r}
+```r
 ui <- page_sidebar(
   title = "Malaria Burden Explorer",
 
@@ -256,7 +256,7 @@ Every input needs:
 Create one reactive expression that filters the data. All downstream
 outputs can reuse it:
 
-```{r}
+```r
 filtered_data <- reactive({
   data <- malaria_data |>
     filter(year == input$year)
@@ -346,7 +346,7 @@ are often consequences of the first one.
 Once your completed application is saved as `app.R`, it can be deployed
 to shinyapps.io with the `rsconnect` package:
 
-```{r}
+```r
 install.packages("rsconnect")
 ```
 
@@ -354,7 +354,7 @@ Create a shinyapps.io account, connect it to RStudio under
 **Tools → Global Options → Publishing**, and follow the account's token
 instructions. Then deploy from the project folder:
 
-```{r}
+```r
 rsconnect::deployApp(
   appDir = ".",
   appName = "malaria-burden-explorer-bfa"
