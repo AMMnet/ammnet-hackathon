@@ -1,0 +1,82 @@
+---
+title: "Relatório de Limpeza de Dados"
+author: "Arsénio Nhacolo"
+institute: "Centro de Investigação em Saúde de Manhiça"
+date: today
+format:
+  html:
+    embed-resources: true
+    self-contained-math: true
+    css: aux/styles.css
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-fold: true
+    theme: cosmo
+    code-link: false
+    citation-location: document
+bibliography: aux/references.bib
+csl: aux/plos.csl
+keep-md: false
+execute:
+  warning: false
+  message: false
+  echo: false
+  cache: false
+---
+
+# Introdução {#sec-intro}
+
+```{r}
+#| label: setup
+#| include: false
+library(here)
+library(readr)
+library(dplyr)
+library(knitr)
+
+# Carregar conjuntos de dados e registo de erros
+errors <- readr::read_rds(
+  here::here("reports", "output", "cleaning", "cleaning_errors.rds")
+)
+raw_data <- readr::read_csv(
+  here::here("data", "raw", "dat", "wsdd_data.csv"),
+  na = c("", "NA", ".", "N/A"),
+  show_col_types = FALSE
+)
+clean_data <- readr::read_rds(
+  here::here("data", "processed", "dat", "clean_data.rds")
+)
+
+raw_count <- nrow(raw_data)
+error_count <- nrow(errors)
+clean_count <- nrow(clean_data)
+```
+
+Este relatório aborda o processo de limpeza de dados e controlo de qualidade para o estudo epidemiológico.
+
+O conjunto de dados bruto contém `r raw_count` registos. Durante a fase de controlo de qualidade, foram identificados no total `r error_count` registos com inconsistências lógicas. Estes registos foram excluídos para garantir a integridade dos dados, restando uma coorte analítica limpa final de `r clean_count` registos.
+
+# Registo de Discrepâncias {#sec-discrepancy}
+
+Os erros identificados são detalhados na @tbl-cleaning-errors.
+
+```{r}
+#| label: tbl-cleaning-errors
+#| tbl-cap: "Resumo das inconsistências detectadas nos tempos de seguimento e eventos."
+#| echo: false
+errors |>
+  knitr::kable(
+    col.names = c("ID do Participante", "Variável", "Valor", "Descrição"),
+    align = "clll"
+  )
+```
+
+
+# Informação da Sessão de R
+
+```{r}
+#| label: session-info
+#| echo: false
+sessioninfo::session_info()
+```

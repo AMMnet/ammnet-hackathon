@@ -3,6 +3,7 @@ project:
   render:
     - "*"
     - "!CONTRIBUTING_POSTS.md"
+    - "!10_reproducible-analysis-r-quarto/**"
 
 website:
   title: "AMMnet Hackathon"

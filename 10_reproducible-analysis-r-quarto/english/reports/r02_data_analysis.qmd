@@ -1,0 +1,428 @@
+---
+title: "Epidemiological Data Analysis Report"
+subtitle: "Water Source and Diarrhoeal Disease: A Prospective Cohort Study in a Simulated District Population"
+author:
+  - name: "Arsénio Nhacolo"
+    affiliations:
+      - name: "Centro de Investigação em Saúde de Manhiça"
+        address: "Rua 12, Cambeve, Manhiça"
+        city: "Maputo"
+        country: "Mozambique"
+  - name: "Selen Appavoo"
+    affiliations:
+      - name: "Applied Malaria Modeling Network"
+        address: "23 Rue de la République"
+        city: "Port Louis"
+        country: "Mauritius"
+date: today
+format:
+  html:
+    embed-resources: true
+    self-contained-math: true
+    css: aux/styles.css
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-fold: true
+    theme: cosmo
+    code-link: false
+    citation-location: document
+bibliography: aux/references.bib
+csl: aux/plos.csl
+keep-md: false
+execute:
+  warning: false
+  message: false
+  echo: false
+  cache: false
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+library(here)
+library(readr)
+library(dplyr)
+library(knitr)
+library(gtsummary)
+library(broom)
+library(survival)
+library(survminer)
+library(ggplot2)
+
+# Load data and models
+cohort <- readr::read_rds(
+  here::here("data", "processed", "dat", "analysis_cohort.rds")
+)
+
+logistic_models <- readr::read_rds(
+  here::here("reports", "output", "analysis", "logistic_models.rds")
+)
+
+nb_models <- readr::read_rds(
+  here::here("reports", "output", "analysis", "nb_models.rds")
+)
+
+cox_models <- readr::read_rds(
+  here::here("reports", "output", "analysis", "cox_models.rds")
+)
+
+vif_results <- readr::read_rds(
+  here::here("reports", "output", "analysis", "vif_results.rds")
+)
+
+# Inline calculations
+total_obs <- nrow(cohort)
+tap_count <- sum(cohort$water_source == "Tap water")
+well_count <- sum(cohort$water_source == "Well water")
+tap_pct <- round(100 * tap_count / total_obs, 1)
+well_pct <- round(100 * well_count / total_obs, 1)
+
+total_episodes <- sum(cohort$num_episodes)
+diarrhoea_cases <- sum(cohort$diarrhoea_status == "Yes")
+diarrhoea_pct <- round(100 * diarrhoea_cases / total_obs, 1)
+
+# Survival data setup
+cohort_survival <- cohort |>
+  dplyr::mutate(
+    survival_time = ifelse(
+      is.na(time_to_first_episode),
+      follow_up_time,
+      time_to_first_episode
+    ),
+    event = ifelse(diarrhoea_status == "Yes", 1, 0)
+  )
+
+# Tidy models for display
+log_crude_t <- broom::tidy(logistic_models$crude, exponentiate = TRUE, conf.int = TRUE)
+log_adj_t <- broom::tidy(logistic_models$adj, exponentiate = TRUE, conf.int = TRUE)
+
+nb_crude_t <- broom::tidy(nb_models$crude, exponentiate = TRUE, conf.int = TRUE)
+nb_adj_t <- broom::tidy(nb_models$adj, exponentiate = TRUE, conf.int = TRUE)
+
+cox_crude_t <- broom::tidy(cox_models$crude, exponentiate = TRUE, conf.int = TRUE)
+cox_adj_t <- broom::tidy(cox_models$adj, exponentiate = TRUE, conf.int = TRUE)
+```
+
+# Introduction {#sec-intro}
+
+Diarrhoeal diseases are a major public health concern globally, representing a leading cause of childhood morbidity and mortality in rural Mozambique [@nhampossa2015]. This report presents findings from a simulated prospective cohort study comprising `r total_obs` participants, followed over a 12-month period.
+
+A summary of the baseline cohort demographics is detailed in @sec-baseline. The core statistical findings are presented in @sec-primary-analysis, which compares the risk, rate, and time-to-onset of diarrhoea among individuals using tap water (`r tap_count` or `r tap_pct`%) and groundwater wells (`r well_count` or `r well_pct`%) as their primary household water source using logistic regression (@sec-logistic; see model definition in @eq-logistic) and Negative Binomial rate models (@sec-negbin; see model definition in @eq-negbin). Furthermore, time-to-first-episode survival outcomes are explored in @sec-survival using a Cox proportional hazards model (@eq-cox), with model diagnostics detailed in @sec-diagnostics.
+
+---
+
+# Baseline Cohort Characteristics {#sec-baseline}
+
+Baseline characteristics stratified by water source are summarized in @tbl-demographics. Continuous variables are expressed as median (IQR) and categorical variables as $n$ (%).
+
+```{r}
+#| label: tbl-demographics
+#| tbl-cap: "Baseline characteristics of the study population stratified by primary water source."
+#| echo: false
+
+cohort |>
+  dplyr::select(
+    age, sex, sanitation, household_size,
+    socioeconomic_status, education_head, water_source
+  ) |>
+  gtsummary::tbl_summary(
+    by = water_source,
+    missing = "ifany",
+    label = list(
+      age ~ "Age (years)",
+      sex ~ "Sex",
+      sanitation ~ "Improved Sanitation Access",
+      household_size ~ "Household Size",
+      socioeconomic_status ~ "Socioeconomic Status",
+      education_head ~ "Education of Household Head"
+    )
+  ) |>
+  gtsummary::add_overall(last = FALSE) |>
+  gtsummary::bold_labels()
+```
+
+---
+
+# Primary Association Analyses {#sec-primary-analysis}
+
+Overall, `r diarrhoea_cases` participants (`r diarrhoea_pct`%) experienced at least one diarrhoea episode, with a total of `r total_episodes` episodes recorded over the follow-up period.
+
+## Diarrhoea Risk (Binary Outcome) {#sec-logistic}
+
+To compare the risk of experiencing at least one diarrhoea episode between well water and tap water users, we ran crude and multivariable-adjusted logistic regression models.
+
+The mathematical representation of the multivariable model is:
+
+$$
+\log\left(\frac{p_i}{1 - p_i}\right) = \beta_0 + \beta_1 \text{WS}_i + \beta_2 \text{Age}_i + \beta_3 \text{Sex}_i + \beta_4 \text{ISA}_i + \beta_5 \text{SES}_i + \beta_6 \text{EHH}_i
+$$ {#eq-logistic}
+
+where $p_i$ is the probability of experiencing at least one diarrhoea episode for participant $i$, $\text{WS}_i$ (water source) is the exposure (1 for well water, 0 for tap water), and the remaining terms represent the adjustment covariates (age, sex, improved sanitation access, socioeconomic status, and education of the household head). The adjusted Odds Ratio (aOR) comparing well water to tap water is given by $e^{\beta_1}$.
+
+The results are shown in @tbl-logistic.
+
+```{r}
+#| label: tbl-logistic
+#| tbl-cap: "Crude and adjusted odds ratios for the risk of diarrhoea (logistic regression)."
+#| echo: false
+
+logistic_res <- data.frame(
+  Model = c("Crude Model (Unadjusted)", "Multivariable Adjusted Model*"),
+  OR = c(log_crude_t$estimate[2], log_adj_t$estimate[2]),
+  `CI Lower` = c(log_crude_t$conf.low[2], log_adj_t$conf.low[2]),
+  `CI Upper` = c(log_crude_t$conf.high[2], log_adj_t$conf.high[2]),
+  `p-value` = c(log_crude_t$p.value[2], log_adj_t$p.value[2]),
+  check.names = FALSE
+)
+
+logistic_res |>
+  knitr::kable(
+    digits = 3,
+    align = "lcccc",
+    caption = "Odds Ratio (OR) comparing well water to tap water (reference)."
+  )
+```
+
+*\*Adjusted for age, sex, sanitation, socioeconomic status, and education of household head.*
+
+The full multivariable model output, showcasing coefficients for all covariates, is presented in @tbl-logistic-adj-full.
+
+```{r}
+#| label: tbl-logistic-adj-full
+#| tbl-cap: "Full multivariable logistic regression model output for diarrhoea risk."
+#| echo: false
+
+logistic_models$adj |>
+  gtsummary::tbl_regression(
+    exponentiate = TRUE,
+    label = list(
+      water_source ~ "Water Source",
+      age ~ "Age (years)",
+      sex ~ "Sex",
+      sanitation ~ "Improved Sanitation Access",
+      socioeconomic_status ~ "Socioeconomic Status",
+      education_head ~ "Education of Household Head"
+    )
+  ) |>
+  gtsummary::bold_labels()
+```
+
+## Recurrent Episode Rates (Count Outcome) {#sec-negbin}
+
+Since participants could experience multiple diarrhoea episodes, we evaluated the incidence rate ratios (IRR) using Negative Binomial regression to account for recurrent events and overdispersion, offsetting for net person-time at risk in years.
+
+The mathematical representation of the multivariable model is:
+
+$$
+\log\left(E(Y_i)\right) = \log(t_i) + \beta_0 + \beta_1 \text{WS}_i + \beta_2 \text{Age}_i + \beta_3 \text{Sex}_i + \beta_4 \text{ISA}_i + \beta_5 \text{SES}_i + \beta_6 \text{EHH}_i
+$$ {#eq-negbin}
+
+where $Y_i$ is the count of diarrhoea episodes for participant $i$, $t_i$ is the net person-time at risk (in years), $\log(t_i)$ is the offset term, and $\text{WS}_i$ (water source) is the exposure (1 for well water, 0 for tap water). The adjusted Incidence Rate Ratio (aIRR) comparing well water to tap water is given by $e^{\beta_1}$.
+
+The results are shown in @tbl-nb.
+
+```{r}
+#| label: tbl-nb
+#| tbl-cap: "Crude and adjusted incidence rate ratios for recurrent diarrhoea episodes (Negative Binomial regression)."
+#| echo: false
+
+nb_res <- data.frame(
+  Model = c("Crude Model (Unadjusted)", "Multivariable Adjusted Model*"),
+  IRR = c(nb_crude_t$estimate[2], nb_adj_t$estimate[2]),
+  `CI Lower` = c(nb_crude_t$conf.low[2], nb_adj_t$conf.low[2]),
+  `CI Upper` = c(nb_crude_t$conf.high[2], nb_adj_t$conf.high[2]),
+  `p-value` = c(nb_crude_t$p.value[2], nb_adj_t$p.value[2]),
+  check.names = FALSE
+)
+
+nb_res |>
+  knitr::kable(
+    digits = 3,
+    align = "lcccc",
+    caption = "Incidence Rate Ratio (IRR) comparing well water to tap water (reference)."
+  )
+```
+
+*\*Adjusted for age, sex, sanitation, socioeconomic status, and education of household head.*
+
+The full multivariable model output for recurrent episodes is detailed in @tbl-nb-adj-full.
+
+```{r}
+#| label: tbl-nb-adj-full
+#| tbl-cap: "Full multivariable Negative Binomial model output for recurrent diarrhoea rates."
+#| echo: false
+
+nb_models$adj |>
+  gtsummary::tbl_regression(
+    exponentiate = TRUE,
+    label = list(
+      water_source ~ "Water Source",
+      age ~ "Age (years)",
+      sex ~ "Sex",
+      sanitation ~ "Improved Sanitation Access",
+      socioeconomic_status ~ "Socioeconomic Status",
+      education_head ~ "Education of Household Head"
+    )
+  ) |>
+  gtsummary::bold_labels()
+```
+
+---
+
+# Survival Analysis (Time-to-First-Episode) {#sec-survival}
+
+The time from study enrolment to the first diarrhoea episode was modeled using survival analysis. Stratified Kaplan-Meier survival curves are shown in @fig-survival.
+
+The hazard of experiencing the first episode of diarrhoea at day $t$ for participant $i$ was modeled using a multivariable Cox proportional hazards model, represented mathematically as:
+
+$$
+h_i(t) = h_0(t) \exp\left(\beta_1 \text{WS}_i + \beta_2 \text{Age}_i + \beta_3 \text{Sex}_i + \beta_4 \text{ISA}_i + \beta_5 \text{SES}_i + \beta_6 \text{EHH}_i\right)
+$$ {#eq-cox}
+
+where $h_0(t)$ is the baseline hazard function, $\text{WS}_i$ (water source) is the exposure (1 for well water, 0 for tap water), and the other parameters represent the adjustment covariates. The adjusted Hazard Ratio (aHR) comparing well water to tap water is given by $e^{\beta_1}$.
+
+````{r}
+#| label: fig-survival
+#| fig-cap: "Kaplan-Meier survival curves showing the diarrhoea-free probability over follow-up days, stratified by primary water source."
+#| fig-width: 8
+#| fig-height: 6
+#| fig-dpi: 300
+#| fig-alt: "Kaplan-Meier survival plot showcasing lower survival probability for the well water cohort."
+#| out-width: "100%"
+#| echo: false
+
+fit_km <- survival::survfit(
+  survival::Surv(survival_time, event) ~ water_source,
+  data = cohort_survival
+)
+
+p_km <- survminer::ggsurvplot(
+  fit_km,
+  data = cohort_survival,
+  pval = TRUE,
+  conf.int = TRUE,
+  palette = c("#2c3e50", "#e74c3c"),
+  risk.table = TRUE,
+  ggtheme = ggplot2::theme_minimal(),
+  legend.labs = c("Tap water", "Well water"),
+  legend.title = "Water Source",
+  xlab = "Follow-up Time (Days)",
+  ylab = "Diarrhoea-Free Probability"
+)
+
+# Render ggsurvplot
+print(p_km)
+````
+
+The crude and adjusted hazard ratios (HR) for the first diarrhoeal episode are summarized in @tbl-cox.
+
+```{r}
+#| label: tbl-cox
+#| tbl-cap: "Crude and adjusted hazard ratios for time-to-first-episode of diarrhoea (Cox proportional hazards)."
+#| echo: false
+
+cox_res <- data.frame(
+  Model = c("Crude Model (Unadjusted)", "Multivariable Adjusted Model*"),
+  HR = c(cox_crude_t$estimate[1], cox_adj_t$estimate[1]),
+  `CI Lower` = c(cox_crude_t$conf.low[1], log_adj_t$conf.low[1]), # Note: correct conf bounds mapping
+  `CI Upper` = c(cox_crude_t$conf.high[1], log_adj_t$conf.high[1]),
+  `p-value` = c(cox_crude_t$p.value[1], cox_adj_t$p.value[1]),
+  check.names = FALSE
+)
+
+# Correct any indexing issues by resolving directly from tidy output
+cox_res$HR[2] <- cox_adj_t$estimate[cox_adj_t$term == "water_sourceWell water"]
+cox_res$`CI Lower`[2] <- cox_adj_t$conf.low[cox_adj_t$term == "water_sourceWell water"]
+cox_res$`CI Upper`[2] <- cox_adj_t$conf.high[cox_adj_t$term == "water_sourceWell water"]
+cox_res$`p-value`[2] <- cox_adj_t$p.value[cox_adj_t$term == "water_sourceWell water"]
+
+cox_res |>
+  knitr::kable(
+    digits = 3,
+    align = "lcccc",
+    caption = "Hazard Ratio (HR) comparing well water to tap water (reference)."
+  )
+```
+
+*\*Adjusted for age, sex, sanitation, socioeconomic status, and education of household head.*
+
+The full multivariable Cox model hazard ratios for all predictors are detailed in @tbl-cox-adj-full.
+
+```{r}
+#| label: tbl-cox-adj-full
+#| tbl-cap: "Full multivariable Cox proportional hazards model output for time-to-first-episode."
+#| echo: false
+
+cox_models$adj |>
+  gtsummary::tbl_regression(
+    exponentiate = TRUE,
+    label = list(
+      water_source ~ "Water Source",
+      age ~ "Age (years)",
+      sex ~ "Sex",
+      sanitation ~ "Improved Sanitation Access",
+      socioeconomic_status ~ "Socioeconomic Status",
+      education_head ~ "Education of Household Head"
+    )
+  ) |>
+  gtsummary::bold_labels()
+```
+
+---
+
+# Diagnostics {#sec-diagnostics}
+
+## Multicollinearity (VIF) {#sec-vif}
+
+Collinearity diagnostics for the adjusted model are summarized in @tbl-vif. All Variance Inflation Factors (VIF) are well below the threshold of 5, indicating no significant multicollinearity.
+
+```{r}
+#| label: tbl-vif
+#| tbl-cap: "Variance Inflation Factor (VIF) diagnostics for covariates in the adjusted model."
+#| echo: false
+
+vif_df <- data.frame(
+  Variable = names(vif_results),
+  VIF = vif_results,
+  row.names = NULL
+)
+
+vif_df |>
+  knitr::kable(
+    digits = 3,
+    align = "lc"
+  )
+```
+
+## Proportional Hazards Assumption {#sec-ph-test}
+
+Schoenfeld residual tests were computed to verify the proportional hazards assumption. As shown in @tbl-ph, the global test and all individual term tests are non-significant ($p > 0.05$), confirming that the assumption holds.
+
+```{r}
+#| label: tbl-ph
+#| tbl-cap: "Schoenfeld residuals test for the proportional hazards assumption."
+#| echo: false
+
+ph_table <- as.data.frame(cox_models$ph_test$table)
+ph_table$Variable <- rownames(ph_table)
+ph_table <- ph_table[, c("Variable", "chisq", "df", "p")]
+
+ph_table |>
+  knitr::kable(
+    digits = 3,
+    align = "lccc",
+    row.names = FALSE
+  )
+```
+
+---
+
+# R Session Info
+
+```{r}
+#| label: session-info
+#| echo: false
+sessioninfo::session_info()
+```

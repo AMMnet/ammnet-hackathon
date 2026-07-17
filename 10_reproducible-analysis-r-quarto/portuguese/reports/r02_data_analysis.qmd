@@ -1,0 +1,429 @@
+---
+title: "Relatório de Análise de Dados Epidemiológicos"
+subtitle: "Fonte de Água e Doença Diarreica: Um Estudo de Coorte Prospectivo numa População Distrital Simulada"
+author:
+  - name: "Arsénio Nhacolo"
+    affiliations:
+      - name: "Centro de Investigação em Saúde de Manhiça"
+        address: "Rua 12, Cambeve, Manhiça"
+        city: "Maputo"
+        country: "Moçambique"
+  - name: "Selen Appavoo"
+    affiliations:
+      - name: "Applied Malaria Modeling Network"
+        address: "23 Rue de la République"
+        city: "Port Louis"
+        country: "Maurícias"
+date: today
+format:
+  html:
+    embed-resources: true
+    self-contained-math: true
+    css: aux/styles.css
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-fold: true
+    theme: cosmo
+    code-link: false
+    citation-location: document
+bibliography: aux/references.bib
+csl: aux/plos.csl
+keep-md: false
+execute:
+  warning: false
+  message: false
+  echo: false
+  cache: false
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+library(here)
+library(readr)
+library(dplyr)
+library(knitr)
+library(gtsummary)
+library(broom)
+library(survival)
+library(survminer)
+library(ggplot2)
+
+# Carregar dados e modelos
+cohort <- readr::read_rds(
+  here::here("data", "processed", "dat", "analysis_cohort.rds")
+)
+
+logistic_models <- readr::read_rds(
+  here::here("reports", "output", "analysis", "logistic_models.rds")
+)
+
+nb_models <- readr::read_rds(
+  here::here("reports", "output", "analysis", "nb_models.rds")
+)
+
+cox_models <- readr::read_rds(
+  here::here("reports", "output", "analysis", "cox_models.rds")
+)
+
+vif_results <- readr::read_rds(
+  here::here("reports", "output", "analysis", "vif_results.rds")
+)
+
+# Cálculos dinâmicos inline
+total_obs <- nrow(cohort)
+tap_count <- sum(cohort$water_source == "Água de torneira")
+well_count <- sum(cohort$water_source == "Água de poço")
+tap_pct <- round(100 * tap_count / total_obs, 1)
+well_pct <- round(100 * well_count / total_obs, 1)
+
+total_episodes <- sum(cohort$num_episodes)
+diarrhoea_cases <- sum(cohort$diarrhoea_status == "Sim")
+diarrhoea_pct <- round(100 * diarrhoea_cases / total_obs, 1)
+
+# Configuração de sobrevivência
+cohort_survival <- cohort |>
+  dplyr::mutate(
+    survival_time = ifelse(
+      is.na(time_to_first_episode),
+      follow_up_time,
+      time_to_first_episode
+    ),
+    event = ifelse(diarrhoea_status == "Sim", 1, 0)
+  )
+
+# Modelos limpos para visualização
+log_crude_t <- broom::tidy(logistic_models$crude, exponentiate = TRUE, conf.int = TRUE)
+log_adj_t <- broom::tidy(logistic_models$adj, exponentiate = TRUE, conf.int = TRUE)
+
+nb_crude_t <- broom::tidy(nb_models$crude, exponentiate = TRUE, conf.int = TRUE)
+nb_adj_t <- broom::tidy(nb_models$adj, exponentiate = TRUE, conf.int = TRUE)
+
+cox_crude_t <- broom::tidy(cox_models$crude, exponentiate = TRUE, conf.int = TRUE)
+cox_adj_t <- broom::tidy(cox_models$adj, exponentiate = TRUE, conf.int = TRUE)
+```
+
+# Introdução {#sec-intro}
+
+As doenças diarreicas são uma grande preocupação de saúde pública a nível global, representando uma das principais causas de morbilidade e mortalidade infantil em Moçambique rural [@nhampossa2015]. Este relatório apresenta os resultados de um estudo de coorte prospectivo simulado compreendendo `r total_obs` participantes, seguidos ao longo de um período de 12 meses.
+
+Um resumo dos dados demográficos basais da coorte está detalhado na @sec-baseline. Os principais resultados estatísticos são apresentados na @sec-primary-analysis, que compara o risco, a taxa e o tempo até ao início da diarreia entre indivíduos que utilizam água de torneira (`r tap_count` ou `r tap_pct`%) e poços de água subterrânea (`r well_count` ou `r well_pct`%) como a sua principal fonte de água doméstica usando regressão logística (@sec-logistic; ver definição do modelo na @eq-logistic) e modelos de taxas Binomiais Negativas (@sec-negbin; ver definição do modelo na @eq-negbin). Além disso, os desfechos de sobrevivência do tempo até ao primeiro episódio são explorados na @sec-survival usando um modelo de riscos proporcionais de Cox (@eq-cox), com os diagnósticos do modelo detalhados na @sec-diagnostics.
+
+---
+
+# Características Basais da Coorte {#sec-baseline}
+
+As características basais estratificadas por fonte de água são resumidas na @tbl-demographics. As variáveis contínuas são expressas em mediana (IQR) e as categóricas em $n$ (%).
+
+```{r}
+#| label: tbl-demographics
+#| tbl-cap: "Características basais da população do estudo estratificadas pela fonte de água principal."
+#| echo: false
+
+cohort |>
+  dplyr::select(
+    age, sex, sanitation, household_size,
+    socioeconomic_status, education_head, water_source
+  ) |>
+  gtsummary::tbl_summary(
+    by = water_source,
+    missing = "ifany",
+    label = list(
+      age ~ "Idade (anos)",
+      sex ~ "Sexo",
+      sanitation ~ "Acesso a Saneamento Melhorado",
+      household_size ~ "Tamanho do Agregado Familiar",
+      socioeconomic_status ~ "Nível Socioeconómico",
+      education_head ~ "Escolaridade do Chefe do Agregado"
+    )
+  ) |>
+  gtsummary::add_overall(last = FALSE, col_label = "**Global**") |>
+  gtsummary::bold_labels()
+```
+
+---
+
+# Análises de Associação Primárias {#sec-primary-analysis}
+
+No total, `r diarrhoea_cases` participantes (`r diarrhoea_pct`%) registaram pelo menos um episódio de diarreia, tendo sido registados `r total_episodes` episódios ao longo do período de seguimento.
+
+## Risco de Diarreia (Desfecho Binário) {#sec-logistic}
+
+Para comparar o risco de registar pelo menos um episódio de diarreia entre utilizadores de água de poço e água de torneira, executámos modelos de regressão logística brutos e ajustados multivariáveis.
+
+A representação matemática do modelo multivariável é:
+
+$$
+\log\left(\frac{p_i}{1 - p_i}\right) = \beta_0 + \beta_1 \text{WS}_i + \beta_2 \text{Idade}_i + \beta_3 \text{Sexo}_i + \beta_4 \text{ASM}_i + \beta_5 \text{NSE}_i + \beta_6 \text{ECA}_i
+$$ {#eq-logistic}
+
+onde $p_i$ é a probabilidade de registar pelo menos um episódio de diarreia para o participante $i$, $\text{WS}_i$ (fonte de água) é a exposição (1 para água de poço, 0 para água de torneira), e os restantes termos representam as covariáveis de ajuste (idade, sexo, acesso a saneamento melhorado, nível socioeconómico e escolaridade do chefe do agregado). A Razão de Odds ajustada (aOR) comparando água de poço com água de torneira é dada por $e^{\beta_1}$.
+
+Os resultados são apresentados na @tbl-logistic.
+
+```{r}
+#| label: tbl-logistic
+#| tbl-cap: "Razões de Odds brutas e ajustadas para o risco de diarreia (regressão logística)."
+#| echo: false
+
+logistic_res <- data.frame(
+  Modelo = c("Modelo Bruto (Não Ajustado)", "Modelo Ajustado Multivariável*"),
+  OR = c(log_crude_t$estimate[2], log_adj_t$estimate[2]),
+  `IC Inferior` = c(log_crude_t$conf.low[2], log_adj_t$conf.low[2]),
+  `IC Superior` = c(log_crude_t$conf.high[2], log_adj_t$conf.high[2]),
+  `Valor-p` = c(log_crude_t$p.value[2], log_adj_t$p.value[2]),
+  check.names = FALSE
+)
+
+logistic_res |>
+  knitr::kable(
+    digits = 3,
+    align = "lcccc",
+    caption = "Razão de Odds (OR) comparando água de poço com água de torneira (referência)."
+  )
+```
+
+*\*Ajustado para idade, sexo, saneamento, nível socioeconómico e escolaridade do chefe do agregado.*
+
+O resultado completo do modelo multivariável, apresentando coeficientes para todas as covariáveis, é apresentado na @tbl-logistic-adj-full.
+
+```{r}
+#| label: tbl-logistic-adj-full
+#| tbl-cap: "Resultado completo do modelo de regressão logística multivariável para o risco de diarreia."
+#| echo: false
+
+logistic_models$adj |>
+  gtsummary::tbl_regression(
+    exponentiate = TRUE,
+    label = list(
+      water_source ~ "Fonte de Água",
+      age ~ "Idade (anos)",
+      sex ~ "Sexo",
+      sanitation ~ "Acesso a Saneamento Melhorado",
+      socioeconomic_status ~ "Nível Socioeconómico",
+      education_head ~ "Escolaridade do Chefe do Agregado"
+    )
+  ) |>
+  gtsummary::bold_labels()
+```
+
+## Taxas de Episódios Recorrentes (Desfecho de Contagem) {#sec-negbin}
+
+Dado que os participantes podiam apresentar múltiplos episódios de diarreia, avaliámos as razões de taxas de incidência (RTI) através de regressão Binomial Negativa para contabilizar os eventos recorrentes e a sobredispersão, utilizando como offset o tempo líquido de pessoa em risco em anos.
+
+A representação matemática do modelo multivariável é:
+
+$$
+\log\left(E(Y_i)\right) = \log(t_i) + \beta_0 + \beta_1 \text{WS}_i + \beta_2 \text{Idade}_i + \beta_3 \text{Sexo}_i + \beta_4 \text{ASM}_i + \beta_5 \text{NSE}_i + \beta_6 \text{ECA}_i
+$$ {#eq-negbin}
+
+onde $Y_i$ é a contagem de episódios de diarreia para o participante $i$, $t_i$ é o tempo de pessoa líquido em risco (em anos), $\log(t_i)$ é o termo de offset, e $\text{WS}_i$ (fonte de água) é a exposição (1 para água de poço, 0 para água de torneira). A Razão de Taxas de Incidência ajustada (aRTI) comparando água de poço com água de torneira é dada por $e^{\beta_1}$.
+
+Os resultados são apresentados na @tbl-nb.
+
+```{r}
+#| label: tbl-nb
+#| tbl-cap: "Razões de taxas de incidência brutas e ajustadas para episódios recorrentes de diarreia (regressão Binomial Negativa)."
+#| echo: false
+
+nb_res <- data.frame(
+  Modelo = c("Modelo Bruto (Não Ajustado)", "Modelo Ajustado Multivariável*"),
+  RTI = c(nb_crude_t$estimate[2], nb_adj_t$estimate[2]),
+  `IC Inferior` = c(nb_crude_t$conf.low[2], nb_adj_t$conf.low[2]),
+  `IC Superior` = c(nb_crude_t$conf.high[2], nb_adj_t$conf.high[2]),
+  `Valor-p` = c(nb_crude_t$p.value[2], nb_adj_t$p.value[2]),
+  check.names = FALSE
+)
+
+nb_res |>
+  knitr::kable(
+    digits = 3,
+    align = "lcccc",
+    caption = "Razão de Taxas de Incidência (RTI) comparando água de poço com água de torneira (referência)."
+  )
+```
+
+*\*Ajustado para idade, sexo, saneamento, nível socioeconómico e escolaridade do chefe do agregado.*
+
+O resultado completo do modelo multivariável Binomial Negativa para episódios recorrentes é detalhado na @tbl-nb-adj-full.
+
+```{r}
+#| label: tbl-nb-adj-full
+#| tbl-cap: "Resultado completo do modelo Binomial Negativa multivariável para as taxas de diarreia recorrente."
+#| echo: false
+
+nb_models$adj |>
+  gtsummary::tbl_regression(
+    exponentiate = TRUE,
+    label = list(
+      water_source ~ "Fonte de Água",
+      age ~ "Idade (anos)",
+      sex ~ "Sexo",
+      sanitation ~ "Acesso a Saneamento Melhorado",
+      socioeconomic_status ~ "Nível Socioeconómico",
+      education_head ~ "Escolaridade do Chefe do Agregado"
+    )
+  ) |>
+  gtsummary::bold_labels()
+```
+
+---
+
+# Análise de Sobrevivência (Tempo-até-ao-Primeiro-Episódio) {#sec-survival}
+
+O tempo desde o recrutamento no estudo até ao primeiro episódio de diarreia foi modelado usando análise de sobrevivência. As curvas de sobrevivência de Kaplan-Meier estratificadas por fonte de água são apresentadas na @fig-survival.
+
+O risco instantâneo (hazard) de registar o primeiro episódio de diarreia no dia $t$ para o participante $i$ foi modelado através de um modelo multivariável de riscos proporcionais de Cox, representado matematicamente como:
+
+$$
+h_i(t) = h_0(t) \exp\left(\beta_1 \text{WS}_i + \beta_2 \text{Idade}_i + \beta_3 \text{Sexo}_i + \beta_4 \text{ASM}_i + \beta_5 \text{NSE}_i + \beta_6 \text{ECA}_i\right)
+$$ {#eq-cox}
+
+onde $h_0(t)$ é a função de risco instantâneo de base (baseline hazard), $\text{WS}_i$ (fonte de água) é a exposição (1 para água de poço, 0 para água de torneira), e os restantes parâmetros representam as covariáveis de ajuste. A Razão de Risco Instantâneo ajustada (aHR) comparando água de poço com água de torneira é dada por $e^{\beta_1}$.
+
+````{r}
+#| label: fig-survival
+#| fig-cap: "Curvas de sobrevivência de Kaplan-Meier mostrando a probabilidade de permanecer livre de diarreia ao longo dos dias de seguimento, estratificadas por fonte de água principal."
+#| fig-width: 8
+#| fig-height: 6
+#| fig-dpi: 300
+#| fig-alt: "Gráfico de sobrevivência de Kaplan-Meier apresentando menor probabilidade de sobrevivência para a coorte de água de poço."
+#| out-width: "100%"
+#| echo: false
+
+fit_km <- survival::survfit(
+  survival::Surv(survival_time, event) ~ water_source,
+  data = cohort_survival
+)
+
+p_km <- survminer::ggsurvplot(
+  fit_km,
+  data = cohort_survival,
+  pval = TRUE,
+  conf.int = TRUE,
+  palette = c("#2c3e50", "#e74c3c"),
+  risk.table = TRUE,
+  ggtheme = ggplot2::theme_minimal(),
+  legend.labs = c("Água de torneira", "Água de poço"),
+  legend.title = "Fonte de Água",
+  xlab = "Tempo de Seguimento (Dias)",
+  ylab = "Probabilidade Livre de Diarreia"
+)
+
+# Renderizar ggsurvplot
+print(p_km)
+````
+
+As razões de risco instantâneo (HR) brutas e ajustadas para o primeiro episódio de diarreia são resumidas na @tbl-cox.
+
+```{r}
+#| label: tbl-cox
+#| tbl-cap: "Razões de risco instantâneo brutas e ajustadas para o tempo até ao primeiro episódio de diarreia (riscos proporcionais de Cox)."
+#| echo: false
+
+cox_res <- data.frame(
+  Modelo = c("Modelo Bruto (Não Ajustado)", "Modelo Ajustado Multivariável*"),
+  HR = c(cox_crude_t$estimate[1], cox_adj_t$estimate[1]),
+  `IC Inferior` = c(cox_crude_t$conf.low[1], log_adj_t$conf.low[1]),
+  `IC Superior` = c(cox_crude_t$conf.high[1], log_adj_t$conf.high[1]),
+  `Valor-p` = c(cox_crude_t$p.value[1], cox_adj_t$p.value[1]),
+  check.names = FALSE
+)
+
+# Ajustar os índices a partir da tabela tidy
+cox_res$HR[2] <- cox_adj_t$estimate[cox_adj_t$term == "water_sourceÁgua de poço"]
+cox_res$`IC Inferior`[2] <- cox_adj_t$conf.low[cox_adj_t$term == "water_sourceÁgua de poço"]
+cox_res$`IC Superior`[2] <- cox_adj_t$conf.high[cox_adj_t$term == "water_sourceÁgua de poço"]
+cox_res$`Valor-p`[2] <- cox_adj_t$p.value[cox_adj_t$term == "water_sourceÁgua de poço"]
+
+cox_res |>
+  knitr::kable(
+    digits = 3,
+    align = "lcccc",
+    caption = "Razão de Risco Instantâneo (HR) comparando água de poço com água de torneira (referência)."
+  )
+```
+
+*\*Ajustado para idade, sexo, saneamento, nível socioeconómico e escolaridade do chefe do agregado.*
+
+O resultado completo do modelo multivariável de Cox para todos os preditores é detalhado na @tbl-cox-adj-full.
+
+```{r}
+#| label: tbl-cox-adj-full
+#| tbl-cap: "Resultado completo do modelo de riscos proporcionais de Cox multivariável para o tempo até ao primeiro episódio."
+#| echo: false
+
+cox_models$adj |>
+  gtsummary::tbl_regression(
+    exponentiate = TRUE,
+    label = list(
+      water_source ~ "Fonte de Água",
+      age ~ "Idade (anos)",
+      sex ~ "Sexo",
+      sanitation ~ "Acesso a Saneamento Melhorado",
+      socioeconomic_status ~ "Nível Socioeconómico",
+      education_head ~ "Escolaridade do Chefe do Agregado"
+    )
+  ) |>
+  gtsummary::bold_labels()
+```
+
+---
+
+# Diagnósticos {#sec-diagnostics}
+
+## Multicolinearidade (VIF) {#sec-vif}
+
+Os diagnósticos de colinearidade para o modelo ajustado são resumidos na @tbl-vif. Todos os Factores de Inflação de Variância (VIF) estão significativamente abaixo do limite de 5, indicando ausência de multicolinearidade.
+
+```{r}
+#| label: tbl-vif
+#| tbl-cap: "Diagnósticos de Factor de Inflação de Variância (VIF) para as covariáveis no modelo ajustado."
+#| echo: false
+
+vif_df <- data.frame(
+  `Variável` = names(vif_results),
+  VIF = vif_results,
+  row.names = NULL
+)
+
+vif_df |>
+  knitr::kable(
+    digits = 3,
+    align = "lc"
+  )
+```
+
+## Pressuposto de Riscos Proporcionais {#sec-ph-test}
+
+Foram calculados testes baseados em resíduos de Schoenfeld para verificar o pressuposto de riscos proporcionais. Como se observa na @tbl-ph, o teste global e todos os testes individuais são não significativos ($p > 0,05$), confirmando que o pressuposto é válido.
+
+```{r}
+#| label: tbl-ph
+#| tbl-cap: "Teste de resíduos de Schoenfeld para o pressuposto de riscos proporcionais de Cox."
+#| echo: false
+
+ph_table <- as.data.frame(cox_models$ph_test$table)
+ph_table$Variable <- rownames(ph_table)
+ph_table <- ph_table[, c("Variable", "chisq", "df", "p")]
+
+ph_table |>
+  knitr::kable(
+    col.names = c("Variável", "Qui-quadrado", "gl", "Valor-p"),
+    digits = 3,
+    align = "lccc",
+    row.names = FALSE
+  )
+```
+
+---
+
+# Informação da Sessão de R
+
+```{r}
+#| label: session-info
+#| echo: false
+sessioninfo::session_info()
+```
