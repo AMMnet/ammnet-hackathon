@@ -1,0 +1,82 @@
+---
+title: "Data Cleaning Report"
+author: "Arsénio Nhacolo"
+institute: "Centro de Investigação em Saúde de Manhiça"
+date: today
+format:
+  html:
+    embed-resources: true
+    self-contained-math: true
+    css: aux/styles.css
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-fold: true
+    theme: cosmo
+    code-link: false
+    citation-location: document
+bibliography: aux/references.bib
+csl: aux/plos.csl
+keep-md: false
+execute:
+  warning: false
+  message: false
+  echo: false
+  cache: false
+---
+
+# Introduction {#sec-intro}
+
+```{r}
+#| label: setup
+#| include: false
+library(here)
+library(readr)
+library(dplyr)
+library(knitr)
+
+# Load datasets and error log
+errors <- readr::read_rds(
+    here::here("reports", "output", "cleaning", "cleaning_errors.rds")
+)
+raw_data <- readr::read_csv(
+    here::here("data", "raw", "dat", "wsdd_data.csv"),
+    na = c("", "NA", ".", "N/A"),
+    show_col_types = FALSE
+)
+clean_data <- readr::read_rds(
+    here::here("data", "processed", "dat", "clean_data.rds")
+)
+
+raw_count <- nrow(raw_data)
+error_count <- nrow(errors)
+clean_count <- nrow(clean_data)
+```
+
+This report covers the data cleaning and quality control process for the epidemiological study.
+
+The raw dataset contains `r raw_count` records. During the quality control phase, a total of `r error_count` records were identified with logical inconsistencies. These records were excluded to ensure data integrity, leaving a final clean analytical cohort of `r clean_count` records.
+
+# Discrepancy Log {#sec-discrepancy}
+
+The identified errors are detailed in @tbl-cleaning-errors.
+
+```{r}
+#| label: tbl-cleaning-errors
+#| tbl-cap: "Summary of detected inconsistencies in follow-up and event times."
+#| echo: false
+errors |>
+    knitr::kable(
+        col.names = c("Participant ID", "Variable", "Value", "Description"),
+        align = "clll"
+    )
+```
+
+
+# R Session Info
+
+```{r}
+#| label: session-info
+#| echo: false
+sessioninfo::session_info()
+```

@@ -1,0 +1,467 @@
+---
+title: "Sessão ao vivo 10: Análise de dados biomédicos reprodutível com R e Quarto"
+description: "Construa uma pipeline reprodutível, desde a limpeza de dados epidemiológicos simulados até relatórios e um manuscrito com R e Quarto."
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+author:
+  - Arsénio Nhacolo
+  - Selen Appavoo
+date: "2026-07-30"
+categories:
+  - R
+  - Data cleaning
+  - Epidemiology
+  - Quarto
+  - Live session
+editor:
+  markdown:
+    wrap: 72
+execute:
+  enabled: false
+---
+
+Nesta sessão, irá construir uma pipeline de análise biomédica
+reprodutível com R e Quarto. O exercício acompanha um estudo de coorte
+prospetivo simulado sobre fonte de água e doença diarreica, desde a
+validação dos dados brutos até à produção de relatórios de análise e de
+um rascunho de manuscrito em Word.
+
+O material principal está em português. Uma versão correspondente em
+inglês está disponível como referência.
+
+::: {.callout-note title="Materiais da formação"}
+- [Abrir os materiais da Sessão 10](https://github.com/AMMnet/ammnet-hackathon/tree/main/10_reproducible-analysis-r-quarto)
+- [Usar o projeto em português](https://github.com/AMMnet/ammnet-hackathon/tree/main/10_reproducible-analysis-r-quarto/portuguese)
+- [Ler o tutorial em português](https://github.com/AMMnet/ammnet-hackathon/blob/main/10_reproducible-analysis-r-quarto/portuguese/tutorial.md)
+- [Consultar a versão em inglês](https://github.com/AMMnet/ammnet-hackathon/tree/main/10_reproducible-analysis-r-quarto/english)
+:::
+
+::: {.callout-tip title="English-language materials"}
+Would you prefer to follow the lesson in English? The complete English
+project contains the equivalent tutorial, simulated data, R scripts,
+and Quarto report sources.
+
+- [Open the English training materials](https://github.com/AMMnet/ammnet-hackathon/tree/main/10_reproducible-analysis-r-quarto/english)
+- [Read the English tutorial](https://github.com/AMMnet/ammnet-hackathon/blob/main/10_reproducible-analysis-r-quarto/english/tutorial.md)
+:::
+
+## Objetivos de aprendizagem
+
+No final da sessão, será capaz de:
+
+1. Organizar um projeto de análise com caminhos relativos e uma
+   estrutura de diretórios reproduzível.
+2. Importar, validar e limpar dados epidemiológicos, mantendo um registo
+   das inconsistências encontradas.
+3. Preparar uma coorte analítica e documentar as variáveis derivadas.
+4. Ajustar modelos de regressão logística, binomial negativa e riscos
+   proporcionais de Cox de acordo com um plano de análise.
+5. Produzir relatórios de limpeza e análise e um rascunho de manuscrito
+   com R e Quarto.
+6. Verificar o estilo e a sintaxe dos scripts e registar as informações
+   da sessão de R.
+
+## Antes da sessão
+
+Instale:
+
+- [R 4.0 ou mais recente](https://cran.r-project.org/);
+- [RStudio Desktop](https://posit.co/download/rstudio-desktop/);
+- [Quarto CLI](https://quarto.org/docs/get-started/); e
+- Microsoft Word ou outra aplicação compatível com ficheiros `.docx`,
+  como LibreOffice Writer ou Google Docs.
+
+O tutorial fornece o comando de instalação dos pacotes de R utilizados,
+incluindo `here`, `readr`, `dplyr`, `tidyr`, `lubridate`, `gtsummary`,
+`survival`, `survminer`, `flextable`, `officer`, `styler` e `lintr`.
+
+Instale-os uma vez antes da formação:
+
+```r
+install.packages(c(
+  "here", "readr", "dplyr", "tidyr", "lubridate", "knitr",
+  "quarto", "gtsummary", "broom", "survival", "survminer",
+  "ggplot2", "flextable", "officer", "sessioninfo", "styler",
+  "lintr"
+))
+```
+
+### Obter o projeto
+
+Descarregue a pasta
+[`10_reproducible-analysis-r-quarto`](https://github.com/AMMnet/ammnet-hackathon/tree/main/10_reproducible-analysis-r-quarto)
+ou clone o repositório completo:
+
+```bash
+git clone https://github.com/AMMnet/ammnet-hackathon.git
+cd ammnet-hackathon/10_reproducible-analysis-r-quarto/portuguese
+```
+
+Abra a pasta do idioma pretendido no RStudio e siga o respetivo
+`tutorial.md`. Cada versão contém os dados brutos, o dicionário, o
+protocolo, o plano de análise, os scripts e as fontes dos relatórios.
+
+## 1. Organizar o projeto
+
+O projeto separa dados brutos, dados processados, scripts, documentos e
+relatórios. Esta estrutura torna explícito o que foi fornecido, o que é
+gerado pela análise e em que ordem os passos devem ser executados:
+
+```text
+portuguese/
+├── .Rprofile
+├── .here
+├── data/
+│   ├── raw/
+│   │   ├── dat/
+│   │   └── dic/
+│   └── processed/
+│       ├── dat/
+│       └── dic/
+├── docs/
+├── scripts/
+│   ├── s01_clean_data.r
+│   ├── s02_process_data.r
+│   └── s03_analise_data.r
+└── reports/
+    ├── aux/
+    └── output/
+        ├── cleaning/
+        └── analysis/
+```
+
+O ficheiro `.Rprofile` define opções consistentes para arredondamento,
+notação científica e valores em falta:
+
+```r
+options(
+  digits = 3,
+  scipen = 999,
+  dplyr.summarise.inform = FALSE,
+  knitr.kable.NA = "–",
+  pillar.bold = TRUE,
+  pillar.subtle_num = TRUE
+)
+```
+
+O ficheiro vazio `.here` marca a raiz. Assim, `here::here()` constrói
+caminhos relativos que funcionam no RStudio, na linha de comandos e ao
+compilar um relatório. Não utilize `setwd()` nem caminhos absolutos nos
+scripts.
+
+## 2. Limpar e validar os dados
+
+O primeiro script importa o ficheiro bruto e declara explicitamente os
+valores que representam dados em falta:
+
+```r
+library(here)
+library(readr)
+library(dplyr)
+library(tibble)
+
+raw_data <- readr::read_csv(
+  here::here("data", "raw", "dat", "wsdd_data.csv"),
+  na = c("", "NA", ".", "N/A"),
+  show_col_types = FALSE
+)
+```
+
+Em seguida, aplique verificações lógicas. Este exemplo identifica um
+primeiro episódio registado depois do fim do seguimento:
+
+```r
+err_time_after_followup <- raw_data |>
+  dplyr::filter(time_to_first_episode > follow_up_time) |>
+  dplyr::transmute(
+    id = id,
+    variable = "time_to_first_episode",
+    value = paste0(
+      "time_to_first_episode = ", time_to_first_episode,
+      ", follow_up_time = ", follow_up_time
+    ),
+    description = paste0(
+      "O tempo até ao primeiro episódio é maior do ",
+      "que o tempo de seguimento"
+    )
+  )
+```
+
+O script preparado também verifica valores incompatíveis com o número
+de episódios, duração de seguimento, idade e categorias permitidas.
+Combine os resultados numa tabela de auditoria antes de excluir os
+registos inválidos:
+
+```r
+error_log <- dplyr::bind_rows(
+  err_zero_episodes_time,
+  err_episodes_no_time,
+  err_time_after_followup,
+  err_followup_complete_time,
+  err_age_limit,
+  err_sex_range,
+  err_water_range,
+  err_sanitation_range,
+  err_ses_range,
+  err_education_range
+)
+
+readr::write_rds(
+  error_log,
+  here::here(
+    "reports", "output", "cleaning", "cleaning_errors.rds"
+  )
+)
+
+invalid_ids <- err_time_after_followup$id
+
+clean_data <- raw_data |>
+  dplyr::filter(!id %in% invalid_ids)
+
+readr::write_rds(
+  clean_data,
+  here::here("data", "processed", "dat", "clean_data.rds")
+)
+```
+
+Nos dados fornecidos, esta etapa encontra 10 registos inválidos entre
+1 200 e guarda 1 190 registos limpos. Estes valores foram confirmados
+executando o script incluído nos materiais.
+
+## 3. Preparar a coorte analítica
+
+O segundo script transforma os códigos brutos em fatores com grupos de
+referência explícitos e cria as variáveis necessárias para a análise.
+O excerto abaixo mostra a exposição, o desfecho binário e o cálculo do
+tempo-pessoa:
+
+```r
+analysis_cohort <- clean_data |>
+  dplyr::mutate(
+    water_source = factor(
+      water_source,
+      levels = c(0, 1),
+      labels = c("Água de torneira", "Água de poço")
+    ),
+    diarrhoea_status = factor(
+      ifelse(num_episodes > 0, "Sim", "Não"),
+      levels = c("Não", "Sim")
+    ),
+    net_person_time_days = follow_up_time - (num_episodes * 3),
+    person_time_years = net_person_time_days / 365.25
+  )
+
+readr::write_rds(
+  analysis_cohort,
+  here::here(
+    "data", "processed", "dat", "analysis_cohort.rds"
+  )
+)
+```
+
+O script completo também recodifica sexo, saneamento, nível
+socioeconómico, escolaridade e perda de seguimento. Além do ficheiro
+RDS, gera `analysis_cohort_dictionary.md`, que documenta as 16 variáveis
+da coorte final.
+
+## 4. Ajustar os modelos estatísticos
+
+O plano de análise é implementado no terceiro script. Os modelos
+ajustados utilizam as covariáveis definidas previamente, sem seleção
+automática *stepwise*.
+
+### Regressão logística
+
+Utilize regressão logística para modelar a ocorrência de pelo menos um
+episódio de diarreia:
+
+```r
+fit_logistic_adj <- glm(
+  diarrhoea_status ~ water_source + age + sex + sanitation +
+    socioeconomic_status + education_head,
+  data = analysis_cohort,
+  family = binomial(link = "logit")
+)
+```
+
+### Regressão binomial negativa
+
+Para modelar o número de episódios, utilize uma regressão binomial
+negativa com o logaritmo do tempo-pessoa como *offset*:
+
+```r
+fit_nb_adj <- MASS::glm.nb(
+  num_episodes ~ water_source + age + sex + sanitation +
+    socioeconomic_status + education_head +
+    offset(log(person_time_years)),
+  data = analysis_cohort
+)
+```
+
+### Tempo até ao primeiro episódio
+
+Prepare as variáveis de tempo e evento antes de ajustar o modelo de
+riscos proporcionais de Cox:
+
+```r
+cohort_survival <- analysis_cohort |>
+  dplyr::mutate(
+    survival_time = ifelse(
+      is.na(time_to_first_episode),
+      follow_up_time,
+      time_to_first_episode
+    ),
+    event = ifelse(diarrhoea_status == "Sim", 1, 0)
+  )
+
+fit_cox_adj <- survival::coxph(
+  survival::Surv(survival_time, event) ~
+    water_source + age + sex + sanitation +
+    socioeconomic_status + education_head,
+  data = cohort_survival
+)
+```
+
+Verifique o pressuposto de riscos proporcionais com os resíduos de
+Schoenfeld:
+
+```r
+cox_ph_test <- survival::cox.zph(fit_cox_adj)
+```
+
+O script calcula também fatores de inflação da variância e guarda os
+modelos e diagnósticos em `reports/output/analysis/` para que os
+relatórios possam reutilizá-los sem voltar a ajustar cada modelo.
+
+## 5. Criar os relatórios Quarto
+
+Os documentos em `reports/` leem os dados e objetos RDS produzidos pelos
+scripts. Um bloco de configuração típico fica imediatamente depois do
+cabeçalho YAML e antes do resumo, garantindo que os valores utilizados
+no texto já existem quando o documento é compilado:
+
+````markdown
+---
+title: "Fonte de Água e Doença Diarreica: Um Estudo de Coorte"
+author: "Arsénio Nhacolo"
+format: docx
+bibliography: aux/references.bib
+csl: aux/plos.csl
+---
+
+```r
+#| label: setup
+#| include: false
+
+library(here)
+library(readr)
+
+cohort <- readr::read_rds(
+  here::here("data", "processed", "dat", "analysis_cohort.rds")
+)
+```
+
+# Resumo
+````
+
+O projeto inclui duas versões do manuscrito:
+
+- `r03_manuscript.qmd` cria HTML e Word com referências cruzadas do
+  Quarto;
+- `r03_manuscript_no_crossref.qmd` cria um documento Word com títulos e
+  referências textuais de tabelas.
+
+Para a variante Word mais estável, use um título Markdown acima da
+tabela e uma etiqueta de bloco comum:
+
+````markdown
+**Tabela 1: Características basais da população do estudo.**
+
+```r
+#| label: demographics-table
+#| echo: false
+
+cohort |>
+  dplyr::select(water_source, age, sex, sanitation) |>
+  gtsummary::tbl_summary(by = water_source) |>
+  gtsummary::as_flex_table()
+```
+````
+
+::: {.callout-warning title="Limitação conhecida do documento Word"}
+A versão do manuscrito com referências cruzadas pode fazer o Microsoft
+Word apresentar um aviso de recuperação de XML ao abrir o ficheiro. O
+material inclui a variante sem referências cruzadas para produzir um
+documento Word mais estável.
+:::
+
+## 6. Executar a pipeline completa
+
+Execute os scripts e compile os relatórios pela ordem abaixo, porque
+cada etapa utiliza ficheiros produzidos pela anterior:
+
+```bash
+# 1. Limpar os dados e registar as anomalias
+Rscript scripts/s01_clean_data.r
+
+# 2. Criar a coorte analítica e o dicionário
+Rscript scripts/s02_process_data.r
+
+# 3. Ajustar os modelos e guardar os diagnósticos
+Rscript scripts/s03_analise_data.r
+
+# 4. Compilar os relatórios de limpeza e análise
+quarto render reports/r01_data_cleaning.qmd
+quarto render reports/r02_data_analysis.qmd
+
+# 5. Compilar os manuscritos
+quarto render reports/r03_manuscript.qmd
+quarto render reports/r03_manuscript_no_crossref.qmd
+```
+
+No RStudio, pode abrir cada script e selecionar **Run**, ou executar o
+ficheiro completo com `source()`. Para os documentos `.qmd`, selecione
+**Render**. Em Windows, `run_pipeline.bat` executa a sequência completa
+e interrompe se algum passo falhar.
+
+## 7. Verificar a qualidade do código
+
+Os materiais utilizam `<-` para atribuição, o *pipe* nativo `|>`, espaços
+em torno dos operadores e chamadas explícitas como `dplyr::select()`
+quando existe risco de conflito entre pacotes.
+
+Formate e audite os scripts com:
+
+```r
+styler::style_dir("scripts")
+lintr::lint_dir("scripts")
+```
+
+Também pode executar o utilitário preparado:
+
+```bash
+Rscript run_style_and_lint.r
+```
+
+Quando uma cadeia longa, como uma tabela Markdown criada dentro de R,
+não puder ser dividida sem alterar o resultado, limite a exclusão da
+regra apenas ao trecho necessário:
+
+```r
+# nolint start: line_length_linter
+dictionary_content <- "
+| Variável | Descrição |
+| :--- | :--- |
+| `water_source` | Fonte principal de água de beber |
+"
+# nolint end: line_length_linter
+```
+
+::: {.callout-important title="Dados de formação simulados"}
+O conjunto de dados e o estudo de coorte são simulados. Os resultados
+servem apenas para aprendizagem e demonstração; não representam
+estimativas observadas e não devem orientar decisões de saúde pública.
+:::

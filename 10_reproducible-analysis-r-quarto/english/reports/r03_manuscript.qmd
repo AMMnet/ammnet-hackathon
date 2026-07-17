@@ -1,0 +1,360 @@
+---
+title: "Water Source and Diarrhoeal Disease: A Prospective Cohort Study in a Simulated District Population"
+author:
+  - name: "Arsénio Nhacolo"
+    affiliations:
+      - name: "Centro de Investigação em Saúde de Manhiça"
+        address: "Rua 12, Cambeve, Manhiça"
+        city: "Maputo"
+        country: "Mozambique"
+  - name: "Selen Appavoo"
+    affiliations:
+      - name: "Applied Malaria Modeling Network"
+        address: "23 Rue de la République"
+        city: "Port Louis"
+        country: "Mauritius"
+date: today
+format:
+  html:
+    embed-resources: true
+    self-contained-math: true
+    css: aux/styles.css
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-fold: true
+    theme: cosmo
+    code-link: true
+    citation-location: document
+  docx:
+    toc: false
+    number-sections: false
+    highlight-style: github
+bibliography: aux/references.bib
+csl: aux/plos.csl
+keep-md: false
+execute:
+  warning: false
+  message: false
+  echo: false
+  cache: false
+---
+```{r}
+#| label: setup
+#| include: false
+
+library(here)
+library(readr)
+library(dplyr)
+library(knitr)
+library(gtsummary)
+library(broom)
+library(survival)
+library(survminer)
+library(ggplot2)
+
+# Load data and models
+cohort <- readr::read_rds(
+  here::here("data", "processed", "dat", "analysis_cohort.rds")
+)
+
+logistic_models <- readr::read_rds(
+  here::here("reports", "output", "analysis", "logistic_models.rds")
+)
+
+nb_models <- readr::read_rds(
+  here::here("reports", "output", "analysis", "nb_models.rds")
+)
+
+cox_models <- readr::read_rds(
+  here::here("reports", "output", "analysis", "cox_models.rds")
+)
+
+vif_results <- readr::read_rds(
+  here::here("reports", "output", "analysis", "vif_results.rds")
+)
+
+# Inline calculations
+total_obs <- nrow(cohort)
+tap_count <- sum(cohort$water_source == "Tap water")
+well_count <- sum(cohort$water_source == "Well water")
+tap_pct <- round(100 * tap_count / total_obs, 1)
+well_pct <- round(100 * well_count / total_obs, 1)
+
+total_episodes <- sum(cohort$num_episodes)
+diarrhoea_cases <- sum(cohort$diarrhoea_status == "Yes")
+diarrhoea_pct <- round(100 * diarrhoea_cases / total_obs, 1)
+
+# Survival data setup
+cohort_survival <- cohort |>
+  dplyr::mutate(
+    survival_time = ifelse(
+      is.na(time_to_first_episode),
+      follow_up_time,
+      time_to_first_episode
+    ),
+    event = ifelse(diarrhoea_status == "Yes", 1, 0)
+  )
+
+# Tidy models for display
+log_crude_t <- broom::tidy(logistic_models$crude, exponentiate = TRUE, conf.int = TRUE)
+log_adj_t <- broom::tidy(logistic_models$adj, exponentiate = TRUE, conf.int = TRUE)
+
+nb_crude_t <- broom::tidy(nb_models$crude, exponentiate = TRUE, conf.int = TRUE)
+nb_adj_t <- broom::tidy(nb_models$adj, exponentiate = TRUE, conf.int = TRUE)
+
+cox_crude_t <- broom::tidy(cox_models$crude, exponentiate = TRUE, conf.int = TRUE)
+cox_adj_t <- broom::tidy(cox_models$adj, exponentiate = TRUE, conf.int = TRUE)
+
+# Formatting helpers for inline R code
+fmt_est <- function(est) {
+  format(round(est, 2), nsmall = 2)
+}
+
+fmt_ci <- function(low, high) {
+  paste0(format(round(low, 2), nsmall = 2), "–", format(round(high, 2), nsmall = 2))
+}
+
+fmt_p <- function(p) {
+  if (p < 0.001) {
+    "p < 0.001"
+  } else {
+    paste0("p = ", format(round(p, 3), nsmall = 3))
+  }
+}
+
+num_to_word <- function(n) {
+  words <- c("Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten")
+  if (n >= 0 && n <= 10) {
+    words[n + 1]
+  } else {
+    as.character(n)
+  }
+}
+
+# Dynamic variables
+errors <- readr::read_rds(
+  here::here("reports", "output", "cleaning", "cleaning_errors.rds")
+)
+total_enrolled <- nrow(cohort) + nrow(errors)
+total_excluded <- nrow(errors)
+total_analysed <- nrow(cohort)
+
+log_term <- "water_sourceWell water"
+log_or <- log_adj_t$estimate[log_adj_t$term == log_term]
+log_ci_l <- log_adj_t$conf.low[log_adj_t$term == log_term]
+log_ci_h <- log_adj_t$conf.high[log_adj_t$term == log_term]
+log_p <- log_adj_t$p.value[log_adj_t$term == log_term]
+
+log_or_fmt <- fmt_est(log_or)
+log_ci_fmt <- fmt_ci(log_ci_l, log_ci_h)
+log_p_fmt <- fmt_p(log_p)
+
+nb_term <- "water_sourceWell water"
+nb_irr <- nb_adj_t$estimate[nb_adj_t$term == nb_term]
+nb_ci_l <- nb_adj_t$conf.low[nb_adj_t$term == nb_term]
+nb_ci_h <- nb_adj_t$conf.high[nb_adj_t$term == nb_term]
+nb_p <- nb_adj_t$p.value[nb_adj_t$term == nb_term]
+
+nb_irr_fmt <- fmt_est(nb_irr)
+nb_ci_fmt <- fmt_ci(nb_ci_l, nb_ci_h)
+nb_p_fmt <- fmt_p(nb_p)
+
+cox_term <- "water_sourceWell water"
+cox_hr <- cox_adj_t$estimate[cox_adj_t$term == cox_term]
+cox_ci_l <- cox_adj_t$conf.low[cox_adj_t$term == cox_term]
+cox_ci_h <- cox_adj_t$conf.high[cox_adj_t$term == cox_term]
+cox_p <- cox_adj_t$p.value[cox_adj_t$term == cox_term]
+
+cox_hr_fmt <- fmt_est(cox_hr)
+cox_ci_fmt <- fmt_ci(cox_ci_l, cox_ci_h)
+cox_p_fmt <- fmt_p(cox_p)
+```
+
+# Abstract
+
+**Background:** Diarrhoeal diseases remain a leading cause of morbidity and mortality globally, particularly in resource-limited settings. Access to safe drinking water is a critical determinant of health, yet the risk associated with untreated well water compared to piped tap water is often poorly quantified in local contexts.
+
+**Methods:** We conducted a simulated prospective cohort study following `r total_enrolled` residents aged $\ge 1$ year in a administrative district over 12 months. Enrolment occurred between January and March 2024. Water source exposure (tap water vs. well water) was fixed at baseline. Logical cleaning excluded `r total_excluded` participants lost to follow-up with post-censoring event entries, leaving `r total_analysed` participants for analytical modeling. We estimated risk using multivariable logistic regression, recurrent episode rates using Negative Binomial models, and time-to-first-episode using Cox proportional hazards regression, adjusting for age, sex, sanitation access, socioeconomic status, and education.
+
+**Results:** Over follow-up, `r diarrhoea_cases` cases of diarrhoea were observed. Well water users had significantly higher odds of diarrhoea compared to tap water users (adjusted Odds Ratio [aOR]: `r log_or_fmt`; 95% CI: `r log_ci_fmt`; `r log_p_fmt`). Well water was also associated with a higher rate of recurrent episodes (adjusted Incidence Rate Ratio [aIRR]: `r nb_irr_fmt`; 95% CI: `r nb_ci_fmt`; `r nb_p_fmt`) and a higher hazard of first onset (adjusted Hazard Ratio [aHR]: `r cox_hr_fmt`; 95% CI: `r cox_ci_fmt`; `r cox_p_fmt`). Covariates like improved sanitation were protective.
+
+**Conclusions:** Well water consumption is strongly associated with elevated diarrhoea risk, rates, and hazard. WASH interventions targeting drinking water treatment and sanitation infrastructure are critical to reducing diarrhoeal burden.
+
+---
+
+# Introduction
+
+Diarrhoeal diseases are a major public health concern globally, representing a leading cause of childhood morbidity and mortality in rural Mozambique [@nhampossa2015]. Global meta-analyses show that safe drinking water, proper sanitation, and hygiene (WASH) interventions are key pillars of public health infrastructure, with piped water connections and water treatment significantly reducing diarrhoeal risk [@wolf2018]. In sub-Saharan Africa, piped tap water supplies represent an improved and treated water source, whereas untreated groundwater wells remain common. Quantifying the relative risk of diarrhoeal outcomes between these sources is essential for regional health planning and resource allocation.
+
+This manuscript describes a prospective cohort study conducted in a simulated district population. Our primary objective is to compare diarrhoeal risk, episode rates, and time-to-first-event between individuals using well water versus tap water.
+
+# Materials and Methods
+
+## Study Design and Population
+We conducted a prospective cohort study simulating 12 months of follow-up in a district population. Residents were eligible if they were $\ge 1$ year of age, lived in the study district, and primarily used tap or well water for household consumption. Enrolment took place between 1 January 2024 and 31 March 2024. A total of `r total_enrolled` participants were enrolled.
+
+## Exposure and Outcome Definitions
+Primary exposure was household water source at enrolment, coded as tap water (reference) or well water. The outcomes were:
+
+1. **Diarrhoea Risk:** Binary indicator of experiencing at least one episode of diarrhoea.
+2. **Diarrhoea Episode Rate:** Count of episodes during follow-up, adjusting for net person-time at risk in years (illness duration assumed to be 3 days per episode).
+3. **Time-to-Event:** Days to the first diarrhoeal episode.
+
+## Data Cleaning and Statistical Analysis
+Prior to analysis, logical validation of follow-up times and censoring was performed. `r num_to_word(total_excluded)` participants lost to follow-up with post-censoring event dates were excluded, resulting in a final cohort of `r total_analysed` participants.
+
+Baseline characteristics were compared using Chi-squared tests for categorical variables and Wilcoxon rank-sum tests for skewed continuous variables. Multivariable regression adjusted for age, sex, sanitation access, socioeconomic status (SES), and education of household head. Diarrhoea risk was modeled using logistic regression. Recurrent episode rates were modeled using Negative Binomial regression with an offset of log-person-time. Time-to-first-episode was analyzed using Kaplan-Meier curves (log-rank test) and Cox proportional hazards models. Proportional hazards assumptions were tested using Schoenfeld residuals, and multicollinearity assessed via Variance Inflation Factors (VIF).
+
+# Results
+
+## Baseline Cohort Characteristics
+Baseline characteristics stratified by water source are summarized in @tbl-demographics. Well water users had a significantly lower proportion of improved sanitation access compared to tap water users.
+
+```{r}
+#| label: tbl-demographics
+#| tbl-cap: "Baseline characteristics of the study population."
+#| echo: false
+
+cohort |>
+  dplyr::select(
+    age, sex, sanitation, household_size,
+    socioeconomic_status, education_head, water_source
+  ) |>
+  gtsummary::tbl_summary(
+    by = water_source,
+    missing = "ifany",
+    label = list(
+      age ~ "Age (years)",
+      sex ~ "Sex",
+      sanitation ~ "Improved Sanitation Access",
+      household_size ~ "Household Size",
+      socioeconomic_status ~ "Socioeconomic Status",
+      education_head ~ "Education of Household Head"
+    )
+  ) |>
+  gtsummary::add_overall(last = FALSE) |>
+  gtsummary::bold_labels() |>
+  gtsummary::as_flex_table()
+```
+
+## Primary Association Analysis
+Overall, `r diarrhoea_cases` participants (`r diarrhoea_pct`%) experienced at least one diarrhoea episode, with a total of `r total_episodes` episodes recorded over the follow-up period.
+
+In the unadjusted analysis, well water users had a significantly higher risk of diarrhoea compared to tap water users. After adjusting for confounders, this association remained strong. Well water users had `r log_or_fmt` times the odds of diarrhoea compared to tap water users (aOR: `r log_or_fmt`; 95% CI: `r log_ci_fmt`; `r log_p_fmt`, @tbl-logistic-full).
+
+```{r}
+#| label: tbl-logistic-full
+#| tbl-cap: "Multivariable logistic regression output for diarrhoea risk."
+#| echo: false
+
+logistic_models$adj |>
+  gtsummary::tbl_regression(
+    exponentiate = TRUE,
+    label = list(
+      water_source ~ "Water Source",
+      age ~ "Age (years)",
+      sex ~ "Sex",
+      sanitation ~ "Improved Sanitation Access",
+      socioeconomic_status ~ "Socioeconomic Status",
+      education_head ~ "Education of Household Head"
+    )
+  ) |>
+  gtsummary::bold_labels() |>
+  gtsummary::as_flex_table()
+```
+
+The Negative Binomial rate regression demonstrated a significantly higher rate of recurrent diarrhoea episodes in the well water cohort (aIRR: `r nb_irr_fmt`; 95% CI: `r nb_ci_fmt`; `r nb_p_fmt`, @tbl-nb-full). Improved sanitation was protective against recurrent diarrhoea.
+
+```{r}
+#| label: tbl-nb-full
+#| tbl-cap: "Multivariable Negative Binomial rate regression for recurrent episodes."
+#| echo: false
+
+nb_models$adj |>
+  gtsummary::tbl_regression(
+    exponentiate = TRUE,
+    label = list(
+      water_source ~ "Water Source",
+      age ~ "Age (years)",
+      sex ~ "Sex",
+      sanitation ~ "Improved Sanitation Access",
+      socioeconomic_status ~ "Socioeconomic Status",
+      education_head ~ "Education of Household Head"
+    )
+  ) |>
+  gtsummary::bold_labels() |>
+  gtsummary::as_flex_table()
+```
+
+## Survival Analysis
+Well water users had a significantly shorter time-to-first-episode compared to tap water users (adjusted Hazard Ratio [aHR]: `r cox_hr_fmt`; 95% CI: `r cox_ci_fmt`; `r cox_p_fmt`, @tbl-cox-full). Stratified Kaplan-Meier survival curves are shown in @fig-survival.
+
+```{r}
+#| label: tbl-cox-full
+#| tbl-cap: "Multivariable Cox proportional hazards model for time-to-first-episode."
+#| echo: false
+
+cox_models$adj |>
+  gtsummary::tbl_regression(
+    exponentiate = TRUE,
+    label = list(
+      water_source ~ "Water Source",
+      age ~ "Age (years)",
+      sex ~ "Sex",
+      sanitation ~ "Improved Sanitation Access",
+      socioeconomic_status ~ "Socioeconomic Status",
+      education_head ~ "Education of Household Head"
+    )
+  ) |>
+  gtsummary::bold_labels() |>
+  gtsummary::as_flex_table()
+```
+
+````{r}
+#| label: fig-survival
+#| fig-cap: "Kaplan-Meier survival curves showing the diarrhoea-free probability over follow-up days, stratified by primary water source."
+#| fig-width: 8
+#| fig-height: 6
+#| fig-dpi: 300
+#| fig-alt: "Kaplan-Meier survival plot showcasing lower survival probability for the well water cohort."
+#| out-width: "100%"
+#| echo: false
+
+fit_km <- survival::survfit(
+  survival::Surv(survival_time, event) ~ water_source,
+  data = cohort_survival
+)
+
+p_km <- survminer::ggsurvplot(
+  fit_km,
+  data = cohort_survival,
+  pval = TRUE,
+  conf.int = TRUE,
+  palette = c("#2c3e50", "#e74c3c"),
+  risk.table = FALSE,
+  ggtheme = ggplot2::theme_minimal(),
+  legend.labs = c("Tap water", "Well water"),
+  legend.title = "Water Source",
+  xlab = "Follow-up Time (Days)",
+  ylab = "Diarrhoea-Free Probability"
+)
+
+# Render ggsurvplot
+print(p_km$plot)
+````
+
+# Discussion
+
+Our prospective cohort study demonstrates a strong, independent association between groundwater well water consumption and elevated diarrhoea risk, rates, and hazard in a simulated district setting. These results mirror findings from rural Mozambique, which have repeatedly highlighted that unimproved water sources and poor water storage practices are critical vectors for diarrhoeal pathogen transmission [@nhampossa2015]. Recent surveillance work in Niassa Province, Mozambique, also underscores the substantial diarrhoeal burden associated with limited access to potable water and the prevalence of bacterial pathogens like *Escherichia coli* [@baltazar2024]. Furthermore, microbiological assessments of water sources in Mozambique have shown that even "improved" water sources frequently experience fecal contamination, emphasizing that the categorization of a water source as improved does not guarantee safety [@aiga2022]. Indeed, intervention studies like the Maputo Sanitation (MapSan) trial demonstrate that onsite sanitation upgrades alone may not be sufficient to eliminate enteric pathogen transmission in challenging environments, highlighting the need for combined water and sanitation improvements [@knee2021].
+
+The inclusion of adjusted multivariable regression models allowed us to control for measured baseline socioeconomic and household confounders. Diagnostic tests confirmed the validity of the proportional hazards assumption and showed no significant multicollinearity.
+
+## Limitations
+This study is based on simulated data. In a real-world setting, self-reported diarrhoeal outcomes can be prone to recall bias, and exposure switching (changing water sources during follow-up) would need to be accounted for. Additionally, residual confounding due to unmeasured hygiene behaviors cannot be ruled out.
+
+# Conclusions
+
+We found that well water consumption is associated with around `r format(round(log_or, 1), nsmall = 1)`- and `r format(round(nb_irr, 1), nsmall = 1)`-fold increase in diarrhoea risk and rates, respectively, compared to piped tap water. Public health interventions in rural communities should prioritize transition to piped water networks, domestic water treatment programs, and hygiene promotion to decrease diarrhoeal disease burden.
+
+# References

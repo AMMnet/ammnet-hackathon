@@ -1,0 +1,360 @@
+---
+title: "Fonte de Água e Doença Diarreica: Um Estudo de Coorte Prospectivo numa População Distrital Simulada"
+author:
+  - name: "Arsénio Nhacolo"
+    affiliations:
+      - name: "Centro de Investigação em Saúde de Manhiça"
+        address: "Rua 12, Cambeve, Manhiça"
+        city: "Maputo"
+        country: "Moçambique"
+  - name: "Selen Appavoo"
+    affiliations:
+      - name: "Applied Malaria Modeling Network"
+        address: "23 Rue de la République"
+        city: "Port Louis"
+        country: "Maurícias"
+date: today
+format:
+  html:
+    embed-resources: true
+    self-contained-math: true
+    css: aux/styles.css
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-fold: true
+    theme: cosmo
+    code-link: true
+    citation-location: document
+  docx:
+    toc: false
+    number-sections: false
+    highlight-style: github
+bibliography: aux/references.bib
+csl: aux/plos.csl
+keep-md: false
+execute:
+  warning: false
+  message: false
+  echo: false
+  cache: false
+---
+```{r}
+#| label: setup
+#| include: false
+
+library(here)
+library(readr)
+library(dplyr)
+library(knitr)
+library(gtsummary)
+library(broom)
+library(survival)
+library(survminer)
+library(ggplot2)
+
+# Carregar dados e modelos
+cohort <- readr::read_rds(
+  here::here("data", "processed", "dat", "analysis_cohort.rds")
+)
+
+logistic_models <- readr::read_rds(
+  here::here("reports", "output", "analysis", "logistic_models.rds")
+)
+
+nb_models <- readr::read_rds(
+  here::here("reports", "output", "analysis", "nb_models.rds")
+)
+
+cox_models <- readr::read_rds(
+  here::here("reports", "output", "analysis", "cox_models.rds")
+)
+
+vif_results <- readr::read_rds(
+  here::here("reports", "output", "analysis", "vif_results.rds")
+)
+
+# Cálculos dinâmicos inline
+total_obs <- nrow(cohort)
+tap_count <- sum(cohort$water_source == "Água de torneira")
+well_count <- sum(cohort$water_source == "Água de poço")
+tap_pct <- round(100 * tap_count / total_obs, 1)
+well_pct <- round(100 * well_count / total_obs, 1)
+
+total_episodes <- sum(cohort$num_episodes)
+diarrhoea_cases <- sum(cohort$diarrhoea_status == "Sim")
+diarrhoea_pct <- round(100 * diarrhoea_cases / total_obs, 1)
+
+# Configuração de sobrevivência
+cohort_survival <- cohort |>
+  dplyr::mutate(
+    survival_time = ifelse(
+      is.na(time_to_first_episode),
+      follow_up_time,
+      time_to_first_episode
+    ),
+    event = ifelse(diarrhoea_status == "Sim", 1, 0)
+  )
+
+# Modelos limpos para visualização
+log_crude_t <- broom::tidy(logistic_models$crude, exponentiate = TRUE, conf.int = TRUE)
+log_adj_t <- broom::tidy(logistic_models$adj, exponentiate = TRUE, conf.int = TRUE)
+
+nb_crude_t <- broom::tidy(nb_models$crude, exponentiate = TRUE, conf.int = TRUE)
+nb_adj_t <- broom::tidy(nb_models$adj, exponentiate = TRUE, conf.int = TRUE)
+
+cox_crude_t <- broom::tidy(cox_models$crude, exponentiate = TRUE, conf.int = TRUE)
+cox_adj_t <- broom::tidy(cox_models$adj, exponentiate = TRUE, conf.int = TRUE)
+
+# Funções auxiliares de formatação para código R inline
+fmt_est <- function(est) {
+  format(round(est, 2), nsmall = 2)
+}
+
+fmt_ci <- function(low, high) {
+  paste0(format(round(low, 2), nsmall = 2), "–", format(round(high, 2), nsmall = 2))
+}
+
+fmt_p <- function(p) {
+  if (p < 0.001) {
+    "p < 0,001"
+  } else {
+    paste0("p = ", format(round(p, 3), nsmall = 3))
+  }
+}
+
+num_to_word <- function(n) {
+  words <- c("Zero", "Um", "Dois", "Três", "Quatro", "Cinco", "Seis", "Sete", "Oito", "Nove", "Dez")
+  if (n >= 0 && n <= 10) {
+    words[n + 1]
+  } else {
+    as.character(n)
+  }
+}
+
+# Variáveis dinâmicas
+errors <- readr::read_rds(
+  here::here("reports", "output", "cleaning", "cleaning_errors.rds")
+)
+total_enrolled <- nrow(cohort) + nrow(errors)
+total_excluded <- nrow(errors)
+total_analysed <- nrow(cohort)
+
+log_term <- "water_sourceÁgua de poço"
+log_or <- log_adj_t$estimate[log_adj_t$term == log_term]
+log_ci_l <- log_adj_t$conf.low[log_adj_t$term == log_term]
+log_ci_h <- log_adj_t$conf.high[log_adj_t$term == log_term]
+log_p <- log_adj_t$p.value[log_adj_t$term == log_term]
+
+log_or_fmt <- fmt_est(log_or)
+log_ci_fmt <- fmt_ci(log_ci_l, log_ci_h)
+log_p_fmt <- fmt_p(log_p)
+
+nb_term <- "water_sourceÁgua de poço"
+nb_irr <- nb_adj_t$estimate[nb_adj_t$term == nb_term]
+nb_ci_l <- nb_adj_t$conf.low[nb_adj_t$term == nb_term]
+nb_ci_h <- nb_adj_t$conf.high[nb_adj_t$term == nb_term]
+nb_p <- nb_adj_t$p.value[nb_adj_t$term == nb_term]
+
+nb_irr_fmt <- fmt_est(nb_irr)
+nb_ci_fmt <- fmt_ci(nb_ci_l, nb_ci_h)
+nb_p_fmt <- fmt_p(nb_p)
+
+cox_term <- "water_sourceÁgua de poço"
+cox_hr <- cox_adj_t$estimate[cox_adj_t$term == cox_term]
+cox_ci_l <- cox_adj_t$conf.low[cox_adj_t$term == cox_term]
+cox_ci_h <- cox_adj_t$conf.high[cox_adj_t$term == cox_term]
+cox_p <- cox_adj_t$p.value[cox_adj_t$term == cox_term]
+
+cox_hr_fmt <- fmt_est(cox_hr)
+cox_ci_fmt <- fmt_ci(cox_ci_l, cox_ci_h)
+cox_p_fmt <- fmt_p(cox_p)
+```
+
+# Resumo
+
+**Contexto:** As doenças diarreicas continuam a ser uma das principais causas de morbilidade e de mortalidade a nível mundial, especialmente em cenários com recursos limitados. O acesso a água potável segura é um determinante crítico da saúde, contudo, o risco associado à água de poço não tratada em comparação com a água canalizada de torneira é muitas vezes insuficientemente quantificado em contextos locais.
+
+**Métodos:** Realizámos um estudo de coorte prospectivo simulado seguindo `r total_enrolled` residentes com idade $\ge 1$ ano num distrito administrativo ao longo de 12 meses. O recrutamento ocorreu entre Janeiro e Março de 2024. A exposição à fonte de água (água de torneira vs. água de poço) foi fixa no baseline. A limpeza lógica excluiu `r total_excluded` participantes perdidos de seguimento com registos de eventos pós-censura, restando `r total_analysed` participantes para a modelação analítica. Estimámos o risco através de regressão logística multivariável, as taxas de episódios recorrentes através de modelos Binomiais Negativas, e o tempo até ao primeiro episódio utilizando regressão de riscos proporcionais de Cox, ajustando para idade, sexo, acesso a saneamento, nível socioeconómico e escolaridade.
+
+**Resultados:** Durante o seguimento, foram observados `r diarrhoea_cases` casos de diarreia. Os utilizadores de água de poço apresentaram odds significativamente mais elevadas de diarreia em comparação com os de água de torneira (Razão de Odds ajustada [aOR]: `r log_or_fmt`; IC 95%: `r log_ci_fmt`; `r log_p_fmt`). A água de poço também se associou a uma taxa mais elevada de episódios recorrentes (Razão de Taxas de Incidência ajustada [aRTI]: `r nb_irr_fmt`; IC 95%: `r nb_ci_fmt`; `r nb_p_fmt`) e a um risco instantâneo mais elevado de primeiro episódio (Razão de Risco Instantâneo ajustada [aHR]: `r cox_hr_fmt`; IC 95%: `r cox_ci_fmt`; `r cox_p_fmt`). Covariáveis como saneamento melhorado mostraram-se protectoras.
+
+**Conclusões:** O consumo de água de poço está fortemente associado a um risco, taxa e risco instantâneo elevados de diarreia. As intervenções de WASH destinadas ao tratamento da água de beber e a infra-estruturas de saneamento são críticas para reduzir o fardo da diarreia.
+
+---
+
+# Introdução
+
+As doenças diarreicas são uma grande preocupação de saúde pública a nível global, representando uma das principais causas de morbilidade e mortalidade infantil em Moçambique rural [@nhampossa2015]. Metanálises globais mostram que as intervenções de água segura, saneamento adequado e higiene (WASH) são pilares fundamentais da infra-estrutura de saúde pública, sendo que as ligações de água canalizada e o tratamento da água reduzem significativamente o risco de diarreia [@wolf2018]. Na África Subsariana, o fornecimento de água canalizada de torneira representa uma fonte de água melhorada e tratada, enquanto os poços de água subterrânea não tratados continuam a ser comuns. Quantificar o risco relativo de ocorrência de diarreia entre estas fontes é essencial para o planeamento de saúde regional e alocação de recursos.
+
+Este manuscrito descreve um estudo de coorte prospectivo realizado numa população distrital simulada. O nosso objectivo principal é comparar o risco de diarreia, as taxas de episódios e o tempo até ao primeiro evento entre indivíduos que utilizam água de poço versus água de torneira.
+
+# Materiais e Métodos
+
+## Desenho do Estudo e População
+Realizámos um estudo de coorte prospectivo que simula 12 meses de seguimento numa população distrital. Os residentes eram elegíveis se tivessem idade $\ge 1$ ano, vivessem no distrito do estudo e utilizassem principalmente água de torneira ou de poço para consumo doméstico. O recrutamento ocorreu entre 1 de Janeiro de 2024 e 31 de Março de 2024. No total, foram recrutados `r total_enrolled` participantes.
+
+## Definições de Exposição e Desfechos
+A exposição primária foi a fonte de água doméstica no recrutamento, codificada como água de torneira (referência) ou água de poço. Os desfechos foram:
+
+1. **Risco de Diarreia:** Indicador binário de ter registado pelo menos um episódio de diarreia.
+2. **Taxa de Episódios de Diarreia:** Contagem de episódios durante o seguimento, ajustando para o tempo líquido de pessoa em risco em anos (assumindo-se que a duração da doença é de 3 dias por episódio).
+3. **Tempo-até-ao-Evento:** Dias até ao primeiro episódio de diarreia.
+
+## Limpeza de Dados e Análise Estatística
+Antes da análise, foi realizada a validação lógica dos tempos de seguimento e censura. Foram excluídos `r num_to_word(total_excluded)` participantes perdidos de seguimento com datas de eventos pós-censura, resultando numa coorte final de `r total_analysed` participantes.
+
+As características basais foram comparadas através do teste do Qui-quadrado para variáveis categóricas e do teste de soma de postos de Wilcoxon para variáveis contínuas com distribuição assimétrica. A regressão multivariável ajustou para idade, sexo, acesso a saneamento, nível socioeconómico (NSE) e escolaridade do chefe do agregado familiar. O risco de diarreia foi modelado usando regressão logística. As taxas de episódios recorrentes foram modeladas através de regressão Binomial Negativa com offset do logaritmo do tempo de pessoa. O tempo até ao primeiro episódio foi analisado através de curvas de Kaplan-Meier (teste log-rank) e modelos de riscos proporcionais de Cox. Os pressupostos de riscos proporcionais foram testados usando resíduos de Schoenfeld, e a multicolinearidade avaliada através dos Factores de Inflação de Variância (VIF).
+
+# Resultados
+
+## Características Basais da Coorte
+As características basais estratificadas por fonte de água são resumidas na @tbl-demographics. Os utilizadores de água de poço apresentaram uma proporção significativamente menor de acesso a saneamento melhorado em comparação com os utilizadores de água de torneira.
+
+```{r}
+#| label: tbl-demographics
+#| tbl-cap: "Características basais da população do estudo."
+#| echo: false
+
+cohort |>
+  dplyr::select(
+    age, sex, sanitation, household_size,
+    socioeconomic_status, education_head, water_source
+  ) |>
+  gtsummary::tbl_summary(
+    by = water_source,
+    missing = "ifany",
+    label = list(
+      age ~ "Idade (anos)",
+      sex ~ "Sexo",
+      sanitation ~ "Acesso a Saneamento Melhorado",
+      household_size ~ "Tamanho do Agregado Familiar",
+      socioeconomic_status ~ "Nível Socioeconómico",
+      education_head ~ "Escolaridade do Chefe do Agregado"
+    )
+  ) |>
+  gtsummary::add_overall(last = FALSE, col_label = "**Global**") |>
+  gtsummary::bold_labels() |>
+  gtsummary::as_flex_table()
+```
+
+## Análise de Associação Primária
+Globalmente, `r diarrhoea_cases` participantes (`r diarrhoea_pct`%) registaram pelo menos um episódio de diarreia, com um total de `r total_episodes` episódios registados ao longo do período de seguimento.
+
+Na análise não ajustada, os utilizadores de água de poço apresentaram um risco significativamente maior de diarreia em comparação com os utilizadores de água de torneira. Após o ajuste para factores de confusão, esta associação permaneceu forte. Os utilizadores de água de poço apresentaram odds `r log_or_fmt` vezes maiores de ter diarreia em comparação com os utilizadores de água de torneira (aOR: `r log_or_fmt`; IC 95%: `r log_ci_fmt`; `r log_p_fmt`, @tbl-logistic-full).
+
+```{r}
+#| label: tbl-logistic-full
+#| tbl-cap: "Resultado da regressão logística multivariável para o risco de diarreia."
+#| echo: false
+
+logistic_models$adj |>
+  gtsummary::tbl_regression(
+    exponentiate = TRUE,
+    label = list(
+      water_source ~ "Fonte de Água",
+      age ~ "Idade (anos)",
+      sex ~ "Sexo",
+      sanitation ~ "Acesso a Saneamento Melhorado",
+      socioeconomic_status ~ "Nível Socioeconómico",
+      education_head ~ "Escolaridade do Chefe do Agregado"
+    )
+  ) |>
+  gtsummary::bold_labels() |>
+  gtsummary::as_flex_table()
+```
+
+A regressão de taxa Binomial Negativa demonstrou uma taxa significativamente mais elevada de episódios recorrentes de diarreia na coorte de água de poço (aRTI: `r nb_irr_fmt`; IC 95%: `r nb_ci_fmt`; `r nb_p_fmt`, @tbl-nb-full). O saneamento melhorado mostrou-se protector contra a diarreia recorrente.
+
+```{r}
+#| label: tbl-nb-full
+#| tbl-cap: "Regressão de taxa Binomial Negativa multivariável para episódios recorrentes."
+#| echo: false
+
+nb_models$adj |>
+  gtsummary::tbl_regression(
+    exponentiate = TRUE,
+    label = list(
+      water_source ~ "Fonte de Água",
+      age ~ "Idade (anos)",
+      sex ~ "Sexo",
+      sanitation ~ "Acesso a Saneamento Melhorado",
+      socioeconomic_status ~ "Nível Socioeconómico",
+      education_head ~ "Escolaridade do Chefe do Agregado"
+    )
+  ) |>
+  gtsummary::bold_labels() |>
+  gtsummary::as_flex_table()
+```
+
+## Análise de Sobrevivência
+Os utilizadores de água de poço apresentaram um tempo até ao primeiro episódio significativamente menor em comparação com os utilizadores de água de torneira (Razão de Risco Instantâneo ajustada [aHR]: `r cox_hr_fmt`; IC 95%: `r cox_ci_fmt`; `r cox_p_fmt`, @tbl-cox-full). As curvas de sobrevivência de Kaplan-Meier estratificadas estão apresentadas na @fig-survival.
+
+```{r}
+#| label: tbl-cox-full
+#| tbl-cap: "Modelo de riscos proporcionais de Cox multivariável para o tempo até ao primeiro episódio."
+#| echo: false
+
+cox_models$adj |>
+  gtsummary::tbl_regression(
+    exponentiate = TRUE,
+    label = list(
+      water_source ~ "Fonte de Água",
+      age ~ "Idade (anos)",
+      sex ~ "Sexo",
+      sanitation ~ "Acesso a Saneamento Melhorado",
+      socioeconomic_status ~ "Nível Socioeconómico",
+      education_head ~ "Escolaridade do Chefe do Agregado"
+    )
+  ) |>
+  gtsummary::bold_labels() |>
+  gtsummary::as_flex_table()
+```
+
+````{r}
+#| label: fig-survival
+#| fig-cap: "Curvas de sobrevivência de Kaplan-Meier mostrando a probabilidade de permanecer livre de diarreia ao longo dos dias de seguimento, estratificadas por fonte de água principal."
+#| fig-width: 8
+#| fig-height: 6
+#| fig-dpi: 300
+#| fig-alt: "Gráfico de sobrevivência de Kaplan-Meier apresentando menor probabilidade de sobrevivência para a coorte de água de poço."
+#| out-width: "100%"
+#| echo: false
+
+fit_km <- survival::survfit(
+  survival::Surv(survival_time, event) ~ water_source,
+  data = cohort_survival
+)
+
+p_km <- survminer::ggsurvplot(
+  fit_km,
+  data = cohort_survival,
+  pval = TRUE,
+  conf.int = TRUE,
+  palette = c("#2c3e50", "#e74c3c"),
+  risk.table = FALSE,
+  ggtheme = ggplot2::theme_minimal(),
+  legend.labs = c("Água de torneira", "Água de poço"),
+  legend.title = "Fonte de Água",
+  xlab = "Tempo de Seguimento (Dias)",
+  ylab = "Probabilidade Livre de Diarreia"
+)
+
+# Renderizar ggsurvplot
+print(p_km$plot)
+````
+
+# Discussão
+
+O nosso estudo de coorte prospectivo demonstra uma associação forte e independente entre o consumo de água de poço subterrâneo e o risco, taxa e risco instantâneo elevados de diarreia num cenário distrital simulado. Estes resultados reflectem os achados obtidos em Moçambique rural, que repetidamente destacaram que as fontes de água não melhoradas e as práticas inadequadas de armazenamento de água são vectores críticos para a transmissão de agentes patogénicos causadores de diarreia [@nhampossa2015]. Estudos recentes de vigilância na Província do Niassa, Moçambique, também sublinham a carga substancial de diarreia associada ao acesso limitado a água potável e a prevalência de patógenos bacterianos como a *Escherichia coli* [@baltazar2024]. Adicionalmente, avaliações microbiológicas de fontes de água em Moçambique mostraram que mesmo as fontes de água consideradas "melhoradas" sofrem frequentemente contaminação fecal, enfatizando que a classificação de uma fonte de água como melhorada não garante a sua segurança [@aiga2022]. De facto, estudos de intervenção como o ensaio de Saneamento de Maputo (MapSan) demonstram que as melhorias no saneamento local isoladas podem não ser suficientes para eliminar a transmissão de patógenos entéricos em ambientes desafiantes, destacando a necessidade de melhorias integradas tanto na água como no saneamento [@knee2021].
+
+A inclusão de modelos de regressão multivariável ajustados permitiu-nos controlar os factores de confusão basais medidos ao nível do agregado familiar e socioeconómico. Os testes de diagnóstico confirmaram a validade do pressuposto de riscos proporcionais e não mostraram multicolinearidade significativa.
+
+## Limitações
+Este estudo baseia-se em dados simulados. Num cenário real, os desfechos de diarreia auto-relatados podem estar sujeitos a viés de memória, e a mudança de exposição (alteração da fonte de água durante o seguimento) precisaria de ser contabilizada. Adicionalmente, não se pode excluir a existência de confusão residual devido a comportamentos de higiene não medidos.
+
+# Conclusões
+
+Constatámos que o consumo de água de poço está associado a um aumento de cerca de `r format(round(log_or, 1), nsmall = 1)` e `r format(round(nb_irr, 1), nsmall = 1)` vezes no risco e nas taxas de diarreia, respectivamente, em comparação com a água de torneira canalizada. As intervenções de saúde pública nas comunidades rurais devem priorizar a transição para redes de água canalizada, programas de tratamento de água ao nível doméstico e a promoção de hábitos de higiene para reduzir a carga das doenças diarreicas.
+
+# Referências
