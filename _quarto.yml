@@ -9,6 +9,7 @@ website:
   navbar:
     right:
       - about.qmd
+      - contribute.qmd
       - icon: github
         href: https://github.com/AMMnet/ammnet-hackathon
       - icon: twitter
@@ -26,4 +27,3 @@ format:
 
 execute:
   freeze: auto
-
