@@ -1,0 +1,53 @@
+---
+title: "Contribute a post"
+description: "Share prepared AMMnet Hackathon session materials on the blog."
+---
+
+AMMnet Hackathon blog posts turn completed workshops, training sessions, and
+other learning materials into resources that the wider community can reuse.
+Contributions are welcome from session facilitators, organizers, and
+participants working with the session team.
+
+## First, coordinate with the Task Force
+
+Before preparing a post, contact the Hackathon Task Force through the AMMnet
+Slack workspace or by email. Share the proposed topic, likely publication
+timing, lead contributors, and any expected software, data, or hosting needs.
+This helps the Task Force coordinate the schedule and confirm that support and
+resources are available.
+
+## Before you begin
+
+Please make sure that:
+
+- the lesson or session materials are complete;
+- the authors have agreed to publish them;
+- private, sensitive, or copyrighted files have been removed; and
+- you know the post title, authors, session date, and a short description.
+
+## Choose a contribution route
+
+### Use an AI assistant
+
+This repository includes a Codex workflow that can turn prepared materials
+into a draft post. Open the repository in Codex and ask:
+
+```text
+Use $add-ammnet-blog-post to publish the prepared materials at SOURCE.
+```
+
+Replace `SOURCE` with the local folder or repository URL containing the
+materials. You will review the selected files and finished post before they
+are submitted.
+
+### Create the post manually
+
+Follow the [step-by-step contribution guide](https://github.com/AMMnet/ammnet-hackathon/blob/main/CONTRIBUTING_POSTS.md)
+to create a Quarto post, preview it locally, and submit a pull request.
+
+## Review and publication
+
+A maintainer will review the pull request and may suggest changes. After it
+is approved and merged, the website is rebuilt automatically and the post
+appears on the blog. Contributors should check the published page once the
+deployment finishes.

@@ -12,4 +12,5 @@ title-block-banner: true
 comments: false
 ---
 
+Have prepared materials from an AMMnet Hackathon session? [Contribute a post](contribute.qmd) so others can learn from them.
 
