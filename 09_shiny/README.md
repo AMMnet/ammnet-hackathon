@@ -10,6 +10,8 @@ interactive malaria dashboard with R Shiny.
 - `data/malaria_data.rds`: simulated monthly district indicators
 - `data/annual_summary.rds`: simulated annual summary indicators
 - `data/bfa_districts.rds`: Burkina Faso district boundaries
+- `09_rshiny_dashboard.qmd`: complete workshop lesson
+- `images/`: figures used by the lesson
 
 The indicator values are simulated for training and must not be used for
 programme decisions.
@@ -33,6 +35,7 @@ install.packages(
 Open `app.R` and select **Run App** to work through the exercises. Open
 `app_teacher.R` and select **Run App** to view the completed dashboard.
 
-See the
-[Session 9 blog post](https://ammnet.github.io/ammnet-hackathon/posts/shiny-dashboard/)
-for the workshop instructions and links to the complete lesson.
+Read the local [complete workshop lesson](09_rshiny_dashboard.qmd), or use
+the [rendered lesson](https://myalla-christina.github.io/ammnet-shiny-training/).
+The [Session 9 blog post](https://ammnet.github.io/ammnet-hackathon/posts/shiny-dashboard/)
+provides an overview and links to the materials.
