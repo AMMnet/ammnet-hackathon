@@ -20,8 +20,7 @@ format:
     code-tools: true
     highlight-style: github
 execute:
-  echo: true
-  eval: false
+  enabled: false
 editor:
   markdown:
     wrap: 72
