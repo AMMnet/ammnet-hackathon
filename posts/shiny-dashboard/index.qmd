@@ -27,7 +27,7 @@ execute:
 
 ![The completed Malaria Burden Explorer dashboard for Burkina
 Faso](malaria-burden-explorer.png){fig-alt="Malaria Burden Explorer dashboard showing indicators, a district map, a ranked bar chart, and seasonal trends for Burkina Faso"}
-
+{{< video https://www.youtube.com/embed/vm4C4aoA-fQ >}}
 In this session, you will build an interactive malaria dashboard from
 scratch with R Shiny. The finished **Malaria Burden Explorer** lets a
 user filter district-level data, inspect key indicators, explore a map,
