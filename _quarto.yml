@@ -3,7 +3,6 @@ project:
   render:
     - "*"
     - "!CONTRIBUTING_POSTS.md"
-    - "!09_shiny/09_rshiny_dashboard.qmd"
     - "!10_reproducible-analysis-r-quarto/**"
 
 website:
