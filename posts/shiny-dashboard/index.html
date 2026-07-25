@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -17,10 +17,13 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -79,10 +82,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-d12348bdc7b90cd456844690f561fa2c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-684175cbbd3f891c43cce0b37bf8e884.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -243,13 +246,7 @@ gtag('config', 'G-072Z4G50DN', { 'anonymize_ip': true});
 
 
 
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="malaria-burden-explorer.png" class="img-fluid figure-img" alt="Malaria Burden Explorer dashboard showing indicators, a district map, a ranked bar chart, and seasonal trends for Burkina Faso"></p>
-<figcaption>The completed Malaria Burden Explorer dashboard for Burkina Faso</figcaption>
-</figure>
-</div>
-<p>In this session, you will build an interactive malaria dashboard from scratch with R Shiny. The finished <strong>Malaria Burden Explorer</strong> lets a user filter district-level data, inspect key indicators, explore a map, compare high-burden districts, examine seasonal trends, and download the filtered data.</p>
+<p><img src="malaria-burden-explorer.png" class="img-fluid" alt="Malaria Burden Explorer dashboard showing indicators, a district map, a ranked bar chart, and seasonal trends for Burkina Faso"> </p><div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/vm4C4aoA-fQ" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div> In this session, you will build an interactive malaria dashboard from scratch with R Shiny. The finished <strong>Malaria Burden Explorer</strong> lets a user filter district-level data, inspect key indicators, explore a map, compare high-burden districts, examine seasonal trends, and download the filtered data.<p></p>
 <p>The workshop uses a real Burkina Faso district boundary file and simulated epidemiological indicators. It is designed for learning: the patterns are realistic, but the indicator values must not be used for programme decisions.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Training materials">
 <div class="callout-header d-flex align-content-center">
