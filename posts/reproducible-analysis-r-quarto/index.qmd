@@ -8,7 +8,7 @@ format:
     toc-depth: 3
 author:
   - Arsénio Nhacolo
-  - Selen Appavoo
+  - Arlindo Malheia
 date: "2026-07-30"
 categories:
   - R
@@ -47,7 +47,7 @@ and Quarto report sources.
 - [Open the English training materials](https://github.com/AMMnet/ammnet-hackathon/tree/main/10_reproducible-analysis-r-quarto/english)
 - [Read the English tutorial](https://github.com/AMMnet/ammnet-hackathon/blob/main/10_reproducible-analysis-r-quarto/english/tutorial.md)
 :::
-
+{{< video https://www.youtube.com/embed/i4VVd7nxTWM >}}
 ## Objetivos de aprendizagem
 
 No final da sessão, será capaz de:
