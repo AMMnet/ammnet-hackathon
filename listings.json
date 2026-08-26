@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/mapping-r-part2-french/index.html",
       "/posts/reproducible-analysis-r-quarto/index.html",
       "/posts/shiny-dashboard/index.html",
       "/posts/ai-sir/index.html",

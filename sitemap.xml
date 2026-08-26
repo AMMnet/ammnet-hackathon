@@ -1,87 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://AMMnet.github.io/ammnet-hackathon/posts/mapping-french/index.html</loc>
-    <lastmod>2026-08-11T12:29:22.096Z</lastmod>
-  </url>
-  <url>
-    <loc>https://AMMnet.github.io/ammnet-hackathon/posts/mapping-r-part2/mapping_rasters.html</loc>
-    <lastmod>2026-08-11T12:29:22.294Z</lastmod>
-  </url>
-  <url>
-    <loc>https://AMMnet.github.io/ammnet-hackathon/posts/geoname/index.html</loc>
-    <lastmod>2026-08-11T12:29:22.021Z</lastmod>
-  </url>
-  <url>
-    <loc>https://AMMnet.github.io/ammnet-hackathon/posts/data-vis/index.html</loc>
-    <lastmod>2026-08-11T12:29:21.994Z</lastmod>
-  </url>
-  <url>
-    <loc>https://AMMnet.github.io/ammnet-hackathon/posts/shiny-dashboard/index.html</loc>
-    <lastmod>2026-08-11T12:29:22.352Z</lastmod>
-  </url>
-  <url>
     <loc>https://AMMnet.github.io/ammnet-hackathon/posts/ai-sir/index.html</loc>
-    <lastmod>2026-08-11T12:29:21.991Z</lastmod>
+    <lastmod>2026-08-26T19:51:32.770Z</lastmod>
   </url>
   <url>
-    <loc>https://AMMnet.github.io/ammnet-hackathon/contribute.html</loc>
-    <lastmod>2026-08-11T12:29:21.964Z</lastmod>
+    <loc>https://AMMnet.github.io/ammnet-hackathon/posts/mapping-french/index.html</loc>
+    <lastmod>2026-08-26T19:51:32.897Z</lastmod>
   </url>
   <url>
-    <loc>https://AMMnet.github.io/ammnet-hackathon/08_ai-sir/docs/participants.html</loc>
-    <lastmod>2026-08-11T12:29:21.827Z</lastmod>
-  </url>
-  <url>
-    <loc>https://AMMnet.github.io/ammnet-hackathon/08_ai-sir/prompts/chatgpt_prompts.html</loc>
-    <lastmod>2026-08-11T12:29:21.830Z</lastmod>
-  </url>
-  <url>
-    <loc>https://AMMnet.github.io/ammnet-hackathon/08_ai-sir/notebooks/sir_llm_hackathon_skeleton.html</loc>
-    <lastmod>2026-08-11T12:29:21.830Z</lastmod>
-  </url>
-  <url>
-    <loc>https://AMMnet.github.io/ammnet-hackathon/06_mapping-french/Cartographie_en_R.html</loc>
-    <lastmod>2026-08-11T12:29:21.768Z</lastmod>
-  </url>
-  <url>
-    <loc>https://AMMnet.github.io/ammnet-hackathon/07_github/d1_github.html</loc>
-    <lastmod>2026-08-11T12:29:21.825Z</lastmod>
-  </url>
-  <url>
-    <loc>https://AMMnet.github.io/ammnet-hackathon/08_ai-sir/notebooks/sir_llm_hackathon_final.html</loc>
-    <lastmod>2026-08-11T12:29:21.830Z</lastmod>
-  </url>
-  <url>
-    <loc>https://AMMnet.github.io/ammnet-hackathon/08_ai-sir/docs/organizers.html</loc>
-    <lastmod>2026-08-11T12:29:21.827Z</lastmod>
-  </url>
-  <url>
-    <loc>https://AMMnet.github.io/ammnet-hackathon/about.html</loc>
-    <lastmod>2026-08-11T12:29:21.964Z</lastmod>
-  </url>
-  <url>
-    <loc>https://AMMnet.github.io/ammnet-hackathon/index.html</loc>
-    <lastmod>2026-08-11T12:29:21.964Z</lastmod>
-  </url>
-  <url>
-    <loc>https://AMMnet.github.io/ammnet-hackathon/posts/reproducible-analysis-r-quarto/index.html</loc>
-    <lastmod>2026-08-11T12:29:22.352Z</lastmod>
+    <loc>https://AMMnet.github.io/ammnet-hackathon/posts/mapping-r-part2-french/index.html</loc>
+    <lastmod>2026-08-26T19:51:32.897Z</lastmod>
   </url>
   <url>
     <loc>https://AMMnet.github.io/ammnet-hackathon/posts/github/index.html</loc>
-    <lastmod>2026-08-11T12:29:22.035Z</lastmod>
+    <lastmod>2026-08-26T19:51:32.825Z</lastmod>
   </url>
   <url>
-    <loc>https://AMMnet.github.io/ammnet-hackathon/posts/mapping-r/index.html</loc>
-    <lastmod>2026-08-11T12:29:22.352Z</lastmod>
+    <loc>https://AMMnet.github.io/ammnet-hackathon/posts/data-vis/index.html</loc>
+    <lastmod>2026-08-26T19:51:32.774Z</lastmod>
   </url>
   <url>
     <loc>https://AMMnet.github.io/ammnet-hackathon/posts/data-wrangle/index.html</loc>
-    <lastmod>2026-08-11T12:29:21.995Z</lastmod>
+    <lastmod>2026-08-26T19:51:32.774Z</lastmod>
+  </url>
+  <url>
+    <loc>https://AMMnet.github.io/ammnet-hackathon/index.html</loc>
+    <lastmod>2026-08-26T19:51:32.733Z</lastmod>
+  </url>
+  <url>
+    <loc>https://AMMnet.github.io/ammnet-hackathon/about.html</loc>
+    <lastmod>2026-08-26T19:51:32.733Z</lastmod>
+  </url>
+  <url>
+    <loc>https://AMMnet.github.io/ammnet-hackathon/08_ai-sir/notebooks/sir_llm_hackathon_final.html</loc>
+    <lastmod>2026-08-26T19:51:32.539Z</lastmod>
+  </url>
+  <url>
+    <loc>https://AMMnet.github.io/ammnet-hackathon/08_ai-sir/docs/participants.html</loc>
+    <lastmod>2026-08-26T19:51:32.535Z</lastmod>
+  </url>
+  <url>
+    <loc>https://AMMnet.github.io/ammnet-hackathon/07_github/d1_github.html</loc>
+    <lastmod>2026-08-26T19:51:32.533Z</lastmod>
+  </url>
+  <url>
+    <loc>https://AMMnet.github.io/ammnet-hackathon/04_mapping_r_part2/cartographie-sous-r-2e-partie.html</loc>
+    <lastmod>2026-08-26T19:51:32.165Z</lastmod>
+  </url>
+  <url>
+    <loc>https://AMMnet.github.io/ammnet-hackathon/06_mapping-french/Cartographie_en_R.html</loc>
+    <lastmod>2026-08-26T19:51:32.461Z</lastmod>
+  </url>
+  <url>
+    <loc>https://AMMnet.github.io/ammnet-hackathon/08_ai-sir/docs/organizers.html</loc>
+    <lastmod>2026-08-26T19:51:32.535Z</lastmod>
+  </url>
+  <url>
+    <loc>https://AMMnet.github.io/ammnet-hackathon/08_ai-sir/notebooks/sir_llm_hackathon_skeleton.html</loc>
+    <lastmod>2026-08-26T19:51:32.539Z</lastmod>
+  </url>
+  <url>
+    <loc>https://AMMnet.github.io/ammnet-hackathon/08_ai-sir/prompts/chatgpt_prompts.html</loc>
+    <lastmod>2026-08-26T19:51:32.539Z</lastmod>
+  </url>
+  <url>
+    <loc>https://AMMnet.github.io/ammnet-hackathon/contribute.html</loc>
+    <lastmod>2026-08-26T19:51:32.733Z</lastmod>
+  </url>
+  <url>
+    <loc>https://AMMnet.github.io/ammnet-hackathon/posts/mapping-r/index.html</loc>
+    <lastmod>2026-08-26T19:51:33.246Z</lastmod>
+  </url>
+  <url>
+    <loc>https://AMMnet.github.io/ammnet-hackathon/posts/geoname/index.html</loc>
+    <lastmod>2026-08-26T19:51:32.807Z</lastmod>
+  </url>
+  <url>
+    <loc>https://AMMnet.github.io/ammnet-hackathon/posts/mapping-r-part2/mapping_rasters.html</loc>
+    <lastmod>2026-08-26T19:51:33.172Z</lastmod>
+  </url>
+  <url>
+    <loc>https://AMMnet.github.io/ammnet-hackathon/posts/shiny-dashboard/index.html</loc>
+    <lastmod>2026-08-26T19:51:33.247Z</lastmod>
   </url>
   <url>
     <loc>https://AMMnet.github.io/ammnet-hackathon/posts/data-wrangle-french/index.html</loc>
-    <lastmod>2026-08-11T12:29:21.995Z</lastmod>
+    <lastmod>2026-08-26T19:51:32.774Z</lastmod>
+  </url>
+  <url>
+    <loc>https://AMMnet.github.io/ammnet-hackathon/posts/reproducible-analysis-r-quarto/index.html</loc>
+    <lastmod>2026-08-26T19:51:33.247Z</lastmod>
   </url>
 </urlset>

@@ -1,0 +1,1546 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Gabriel Monteiro">
+<meta name="description" content="Une session pratique en français consacrée au chargement, à la transformation, à l’analyse et à la visualisation de données raster sous R.">
+
+<title>Cartographie sous R, 2e partie – AMMnet Hackathon</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-b401667fd92d28d00b005922c3628f99.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Pas de résultats",
+    "search-matching-documents-text": "documents trouvés",
+    "search-copy-link-title": "Copier le lien vers la recherche",
+    "search-hide-matches-text": "Cacher les correspondances additionnelles",
+    "search-more-match-text": "correspondance de plus dans ce document",
+    "search-more-matches-text": "correspondances de plus dans ce document",
+    "search-clear-button-title": "Effacer",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Annuler",
+    "search-submit-button-title": "Envoyer",
+    "search-label": "Recherche"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-072Z4G50DN"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-072Z4G50DN', { 'anonymize_ip': true});
+</script>
+
+
+</head>
+
+<body class="floating nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">AMMnet Hackathon</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Recherche"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Basculer la navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../contribute.html"> 
+<span class="menu-text">Contribute a post</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/AMMnet/ammnet-hackathon"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://x.com/AMMnetwork"> <i class="bi bi-twitter" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Cartographie sous R, 2e partie</h1>
+                  <div>
+        <div class="description">
+          Une session pratique en français consacrée au chargement, à la transformation, à l’analyse et à la visualisation de données raster sous R.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">R</div>
+                <div class="quarto-category">Spatial data</div>
+                <div class="quarto-category">Data visualization</div>
+                <div class="quarto-category">GIS</div>
+                <div class="quarto-category">Français</div>
+                <div class="quarto-category">Live session</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Auteur·rice</div>
+      <div class="quarto-title-meta-contents">
+               <p>Gabriel Monteiro </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Date de publication</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">21 août 2026</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Sommaire</h2>
+   
+  <ul>
+  <li><a href="#aperçu" id="toc-aperçu" class="nav-link active" data-scroll-target="#aperçu">Aperçu</a>
+  <ul class="collapse">
+  <li><a href="#objectifs-pédagogiques" id="toc-objectifs-pédagogiques" class="nav-link" data-scroll-target="#objectifs-pédagogiques">Objectifs pédagogiques</a></li>
+  </ul></li>
+  <li><a href="#quest-ce-quune-donnée-raster" id="toc-quest-ce-quune-donnée-raster" class="nav-link" data-scroll-target="#quest-ce-quune-donnée-raster">Qu’est-ce qu’une donnée raster ?</a>
+  <ul class="collapse">
+  <li><a href="#caractéristiques-des-données-raster" id="toc-caractéristiques-des-données-raster" class="nav-link" data-scroll-target="#caractéristiques-des-données-raster">Caractéristiques des données raster</a></li>
+  </ul></li>
+  <li><a href="#les-données-raster-sous-r-à-laide-de-terra" id="toc-les-données-raster-sous-r-à-laide-de-terra" class="nav-link" data-scroll-target="#les-données-raster-sous-r-à-laide-de-terra">Les données raster sous R à l’aide de <code>terra</code></a>
+  <ul class="collapse">
+  <li><a href="#spatraster" id="toc-spatraster" class="nav-link" data-scroll-target="#spatraster">SpatRaster</a></li>
+  </ul></li>
+  <li><a href="#chargement-des-données-raster" id="toc-chargement-des-données-raster" class="nav-link" data-scroll-target="#chargement-des-données-raster">Chargement des données raster</a></li>
+  <li><a href="#projectionreprojection" id="toc-projectionreprojection" class="nav-link" data-scroll-target="#projectionreprojection">Projection/Reprojection</a></li>
+  <li><a href="#représentation-graphique-de-données-raster" id="toc-représentation-graphique-de-données-raster" class="nav-link" data-scroll-target="#représentation-graphique-de-données-raster">Représentation graphique de données raster</a></li>
+  <li><a href="#manipulation-des-rasters" id="toc-manipulation-des-rasters" class="nav-link" data-scroll-target="#manipulation-des-rasters">Manipulation des rasters</a></li>
+  <li><a href="#agrégationrééchantillonnage" id="toc-agrégationrééchantillonnage" class="nav-link" data-scroll-target="#agrégationrééchantillonnage">Agrégation/Rééchantillonnage</a></li>
+  <li><a href="#calculs-sur-les-rasters" id="toc-calculs-sur-les-rasters" class="nav-link" data-scroll-target="#calculs-sur-les-rasters">Calculs sur les rasters</a></li>
+  <li><a href="#extraction-dinformations" id="toc-extraction-dinformations" class="nav-link" data-scroll-target="#extraction-dinformations">Extraction d’informations</a>
+  <ul class="collapse">
+  <li><a href="#pour-aller-plus-loin-dautres-opérations-sur-les-rasters" id="toc-pour-aller-plus-loin-dautres-opérations-sur-les-rasters" class="nav-link" data-scroll-target="#pour-aller-plus-loin-dautres-opérations-sur-les-rasters">Pour aller plus loin : d’autres opérations sur les rasters</a></li>
+  </ul></li>
+  <li><a href="#données-multibandes" id="toc-données-multibandes" class="nav-link" data-scroll-target="#données-multibandes">Données multibandes</a></li>
+  <li><a href="#rastérisation" id="toc-rastérisation" class="nav-link" data-scroll-target="#rastérisation">Rastérisation</a></li>
+  <li><a href="#exportation-de-données-raster" id="toc-exportation-de-données-raster" class="nav-link" data-scroll-target="#exportation-de-données-raster">Exportation de données raster</a></li>
+  <li><a href="#sources-de-données-raster-pour-la-modélisation" id="toc-sources-de-données-raster-pour-la-modélisation" class="nav-link" data-scroll-target="#sources-de-données-raster-pour-la-modélisation">Sources de données raster pour la modélisation</a>
+  <ul class="collapse">
+  <li><a href="#télécharger-ces-données-directement-depuis-r" id="toc-télécharger-ces-données-directement-depuis-r" class="nav-link" data-scroll-target="#télécharger-ces-données-directement-depuis-r">Télécharger ces données directement depuis R</a></li>
+  </ul></li>
+  <li><a href="#ressources-supplémentaires" id="toc-ressources-supplémentaires" class="nav-link" data-scroll-target="#ressources-supplémentaires">Ressources supplémentaires</a>
+  <ul class="collapse">
+  <li><a href="#assistants-ia-accélérateur-utile-pour-lutilisation-des-données-rasters-sous-r" id="toc-assistants-ia-accélérateur-utile-pour-lutilisation-des-données-rasters-sous-r" class="nav-link" data-scroll-target="#assistants-ia-accélérateur-utile-pour-lutilisation-des-données-rasters-sous-r">Assistants IA : accélérateur utile pour l’utilisation des données rasters sous R</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<p><strong>AMMNET HACKATHON</strong></p>
+<p><strong>Adapté à partir de :</strong></p>
+<ul>
+<li><p><a href="https://ammnet.github.io/ammnet-hackathon/posts/mapping-r-part2/mapping_rasters.html">Live Session 5: Mapping in R part 2 – AMMnet Hackathon (traduction)</a></p></li>
+<li><p><a href="https://ammnet.github.io/ammnet-hackathon/posts/mapping-french/">Cartographie sous R – AMMnet Hackathon</a></p></li>
+</ul>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>IMPORTANT
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Avant de commencer, nous attendons des participants qu’ils possèdent des connaissances de base en R. Si vous débutez avec R ou si vous souhaitez rafraîchir vos connaissances, nous vous recommandons de revoir au préalable les deux premières sessions en direct consacrées à la visualisation des données et au traitement des données.</p>
+<p>Une expérience préalable des données SIG n’est pas requise, mais elle peut s’avérer utile. Cette session s’appuie sur la précédente session consacrée à la cartographie sous R, qui présentait les données vectorielles (par exemple, les fichiers Shapefile). Au cours de cette session, nous nous concentrerons principalement sur les données raster sous R.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Astuce</span>CONSEIL : AVANT DE COMMENCER
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Toutes les ressources, y compris ce document et les données, sont disponibles dans le dossier <a href="https://github.com/AMMnet/ammnet-hackathon/tree/main/04_mapping_r_part2"><code>04_mapping_r_part2</code></a> du dépôt GitHub du hackathon. Téléchargez le dossier complet ou clonez le dépôt afin de conserver la structure <code>data/rasters/</code> attendue par le code.</p>
+<p>Nous utiliserons les packages <code>tidyverse</code>, <code>terra</code>, <code>tidyterra</code>, <code>sf</code>, <code>malariaAtlas</code>, et <code>RColorBrewer</code> dans ce tutoriel. Vous devrez peut-être les installer si vous ne les possédez pas déjà.</p>
+<p>Le package <code>tidyverse</code> est volumineux et son installation peut prendre quelques minutes.</p>
+<p>Installez-les une fois avant la session :</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"tidyverse"</span>, <span class="st">"terra"</span>, <span class="st">"tidyterra"</span>, <span class="st">"sf"</span>, <span class="st">"malariaAtlas"</span>,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"RColorBrewer"</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Les rasters sont inclus dans le dossier <code>data/rasters/</code>. Ils sont également archivés sur <a href="https://figshare.com/articles/figure/AMMnet_Hackathon_-_rasters/28839191">Figshare</a> sous licence CC BY 4.0.</p>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="fu">file.exists</span>(<span class="st">"../../04_mapping_r_part2/data/rasters/tza_pop_2022_constrained.tif"</span>))</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="aperçu" class="level2">
+<h2 class="anchored" data-anchor-id="aperçu">Aperçu</h2>
+<p>Bienvenue à nouveau ! Nous espérons que vous avez apprécié la première partie de notre série « Cartographie sous R », consacrée aux données vectorielles. Dans la présente session, nous allons nous plonger dans l’utilisation des données raster sous R. Nous commencerons par une brève introduction aux concepts et aux attributs des données raster, suivie d’un guide pratique s’appuyant sur des exemples concrets.</p>
+<p>À l’issue de cette session, vous serez en mesure de charger et d’exporter en toute confiance des données raster, de découper et de reprojeter des rasters, de classer et d’effectuer des calculs sur des couches raster, d’extraire des statistiques récapitulatives et de produire des visualisations prêtes à être publiées dans R. Nous utiliserons principalement les packages <code>terra</code>, <code>tidyterra</code> et <code>tidyverse</code> pour mener à bien notre travail.</p>
+<section id="objectifs-pédagogiques" class="level3">
+<h3 class="anchored" data-anchor-id="objectifs-pédagogiques">Objectifs pédagogiques</h3>
+<ul>
+<li><p>Comprendre la structure et les caractéristiques des données raster</p></li>
+<li><p>Charger, exporter et explorer des ensembles de données raster dans R</p></li>
+<li><p>Reprojeter des données raster vers différents systèmes de coordonnées</p></li>
+<li><p>Créer des données raster à l’aide des approches « base » et « ggplot2 »</p></li>
+<li><p>Découper et masquer des rasters en fonction de limites vectorielles</p></li>
+<li><p>Agréger ou rééchantillonner des rasters à différentes résolutions</p></li>
+<li><p>Effectuer des calculs sur des rasters et extraire des valeurs récapitulatives</p></li>
+<li><p>Convertir des données vectorielles au format raster (rastérisation)</p></li>
+</ul>
+</section>
+</section>
+<section id="quest-ce-quune-donnée-raster" class="level2">
+<h2 class="anchored" data-anchor-id="quest-ce-quune-donnée-raster">Qu’est-ce qu’une donnée raster ?</h2>
+<p>Une donnée raster est un type de donnée spatiale représentée sous la forme d’une grille de cellules encore appelées pixels, chaque cellule possédant une valeur spécifique représentant des informations sur la zone qu’elle couvre. Elle est couramment utilisée dans les systèmes d’information géographique (SIG) et la télédétection pour représenter des phénomènes continus tels que :</p>
+<ul>
+<li><p>L’altitude (modèles numériques de terrain – MNT)</p></li>
+<li><p>La température</p></li>
+<li><p>Les précipitations</p></li>
+<li><p>La couverture du sol</p></li>
+<li><p>Autres images satellitaires</p></li>
+</ul>
+<section id="caractéristiques-des-données-raster" class="level3">
+<h3 class="anchored" data-anchor-id="caractéristiques-des-données-raster">Caractéristiques des données raster</h3>
+<p>Les données raster sont constituées de lignes et de colonnes formant une matrice ou une grille.</p>
+<ul>
+<li><p>Valeur de cellule ou de pixel : chaque cellule de la grille possède une valeur représentant un attribut donné (par exemple, la température, l’indice de végétation).</p></li>
+<li><p>Résolution spatiale : la taille de chaque cellule détermine la résolution : des cellules plus petites fournissent davantage de détails (résolution plus élevée), tandis que des cellules plus grandes fournissent moins de détails (résolution plus faible).</p></li>
+<li><p>Système de coordonnées : les données raster sont souvent géoréférencées, ce qui signifie qu’elles sont associées à des emplacements spécifiques à la surface de la Terre à l’aide d’un système de coordonnées (par exemple, latitude/longitude, UTM).</p></li>
+<li><p>Formats de fichiers : les formats courants comprennent GeoTIFF, NetCDF, ASCII Grid et IMG.</p></li>
+</ul>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Avantages</th>
+<th>Inconvénients</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Convient bien à la représentation de données continues (par exemple, l’altitude, les niveaux de pollution).</td>
+<td>Peut nécessiter un espace de stockage important, en particulier à haute résolution.</td>
+</tr>
+<tr class="even">
+<td>Plus facile à manipuler et à analyser à l’aide de fonctions mathématiques (par exemple, calcul de la moyenne, sommation).</td>
+<td>Peut perdre des détails lors d’un rééchantillonnage ou d’une reprojection.</td>
+</tr>
+<tr class="odd">
+<td>Compatible avec les données de télédétection, qui sont intrinsèquement de type raster.</td>
+<td>Moins adapté à la représentation d’objets discrets (par exemple, les bâtiments, les routes).</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="les-données-raster-sous-r-à-laide-de-terra" class="level2">
+<h2 class="anchored" data-anchor-id="les-données-raster-sous-r-à-laide-de-terra">Les données raster sous R à l’aide de <code>terra</code></h2>
+<p>Il existe deux packages principaux permettant de traiter les données raster sous R : <code>terra</code> et <code>raster</code>. Le package <code>terra</code> est l’alternative la plus récente, la plus rapide et la plus efficace au package <code>raster</code>, plus ancien. Ces deux packages sont couramment utilisés pour l’analyse des données spatiales, mais ils présentent quelques différences importantes : <code>terra</code> est notamment optimisé pour les performances, en particulier lors du traitement de grands jeux de données raster ; de nouvelles fonctionnalités y sont régulièrement ajoutées, avec une meilleure compatibilité avec le package <code>sf</code> ; et enfin, ses fonctions sont plus épurées, plus cohérentes et plus faciles à mémoriser.</p>
+<p>Pour ce tutoriel, nous utiliserons le package <code>terra</code> pour lire, manipuler et écrire des données raster.</p>
+<section id="spatraster" class="level3">
+<h3 class="anchored" data-anchor-id="spatraster">SpatRaster</h3>
+<p>Un <code>SpatRaster</code> représente des données raster multicouches (multivariables). Un <code>SpatRaster</code> stocke toujours un certain nombre de paramètres fondamentaux décrivant sa géométrie : le nombre de colonnes et de lignes, l’étendue spatiale et le système de coordonnées de référence. De plus, un <code>SpatRaster</code> peut stocker des informations sur le fichier dans lequel sont enregistrées les valeurs des cellules raster, ou bien conserver les valeurs des cellules en mémoire s’il n’existe pas de fichier de ce type.</p>
+<p>Nous allons commencer par charger certains packages essentiels que nous utiliserons au cours de cette partie du tutoriel :</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>({</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(sf)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(terra)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(tidyterra)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(tidyverse)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(malariaAtlas)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(RColorBrewer)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
+<section id="chargement-des-données-raster" class="level2">
+<h2 class="anchored" data-anchor-id="chargement-des-données-raster">Chargement des données raster</h2>
+<p>Pour ce tutoriel, nous allons nous en tenir à l’exemple de la Tanzanie. Le dossier <code>data/rasters/</code> contient des rasters de population pré-téléchargés depuis WorldPop.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Chargeons un raster de population dans R</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>population <span class="ot">&lt;-</span> <span class="fu">rast</span>(<span class="st">"../../04_mapping_r_part2/data/rasters/tza_pop_2022_constrained.tif"</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>population</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class       : SpatRaster
+size        : 12916, 13342, 1  (nrow, ncol, nlyr)
+resolution  : 0.0008333333, 0.0008333333  (x, y)
+extent      : 29.32708, 40.44542, -11.74542, -0.9820831  (xmin, xmax, ymin, ymax)
+coord. ref. : lon/lat WGS 84 (EPSG:4326)
+source      : tza_pop_2022_constrained.tif
+name        : tza_ppp_2020_constrained
+min value   :                        0
+max value   :              2387.388428</code></pre>
+</div>
+</div>
+<p>Lorsque vous chargez le raster, vous verrez apparaître des métadonnées qui indiquent l’étendue spatiale <code>extent</code> (c’est-à-dire le cadre de délimitation autour du raster), le système de coordonnées de référence <code>coord. ref.</code> et la résolution <code>resolution</code> (c’est-à-dire la taille du pixel). Ce raster est ce que l’on appelle un raster à couche unique.</p>
+<p>Notez que <code>population</code> est un <code>SpatRaster</code> à bande unique. L’avantage du package <code>terra</code> est qu’il vous permet également de traiter plusieurs rasters, de créer plusieurs bandes ou d’utiliser des images satellites déjà multibandes. Il prend également en charge d’autres formats de fichiers raster, notamment GeoTIFF, NetCDF, Imagine et les formats ESRI Grid.</p>
+<p>En général, à ce stade, vous pouvez utiliser la fonction <code>terra::plot()</code> pour tracer simplement le raster de population que vous avez chargé :</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(population)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-population" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Carte raster de la population de la Tanzanie en 2022">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-population-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-population-1.png" class="img-fluid figure-img" alt="Carte raster de la population de la Tanzanie en 2022" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-population-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Raster de population de la Tanzanie (WorldPop, 2022) tracé avec plot()
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>C’est un moyen rapide et pratique de visualiser l’image que vous avez importée. Outre le chargement de rasters dans R à partir d’un téléchargement, certains rasters sont disponibles dans des packages susceptibles d’intéresser les modélisateurs du paludisme.</p>
+<p>Nous allons télécharger, à titre d’exemple, une surface représentant le taux de prévalence de <em>Plasmodium falciparum</em> à partir du package <code>malariaAtlas</code> :</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Nous allons d'abord charger le fichier Shapefile de la Tanzanie à partir du package</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>tz_admin1 <span class="ot">&lt;-</span> <span class="fu">getShp</span>(</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Tanzania"</span>, <span class="at">admin_level =</span> <span class="st">"admin1"</span>, <span class="at">version =</span> <span class="st">"202403"</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Ensuite, nous allons charger l'ensemble de données PfPR. Cet identifiant</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># figé se termine en 2022 ; omettre year évite une incompatibilité connue</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co"># entre certaines versions récentes de R et lubridate.</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>pfpr_2022 <span class="ot">&lt;-</span> <span class="fu">getRaster</span>(</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">dataset_id =</span> <span class="st">"Malaria__202406_Global_Pf_Parasite_Rate"</span>,</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">shp =</span> tz_admin1</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Dans la fonction <code>getRaster</code>, l’argument <code>shp</code> permet d’extraire seulement les cellules du raster qui sont à l’intérieur des polygones constituant les délimitations de région de la Tanzanie.</p>
+<p>La même fonction permet d’extraire les données à n’importe quel niveau administratif. La Tanzanie compte 31 régions (<em>mikoa</em>, niveau admin1), elles-mêmes subdivisées en districts (<em>wilaya</em>, niveau admin2). Voyons maintenant comment extraire les données au niveau des districts d’une seule région :</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Téléchargeons les districts (admin2) de la seule région de Mtwara</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>mtwara_districts <span class="ot">&lt;-</span> <span class="fu">getShp</span>(</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Tanzania"</span>, <span class="at">admin_level =</span> <span class="st">"admin2"</span>, <span class="at">version =</span> <span class="st">"202403"</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(name_1 <span class="sc">==</span> <span class="st">"Mtwara"</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Réutilisons le raster déjà téléchargé et limitons-le aux districts.</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>pfpr_2022_mtwara <span class="ot">&lt;-</span> <span class="fu">crop</span>(pfpr_2022, mtwara_districts) <span class="sc">%&gt;%</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mask</span>(mtwara_districts)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>pfpr_2022_mtwara</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class       : SpatRaster
+size        : 31, 58, 4  (nrow, ncol, nlyr)
+resolution  : 0.04166667, 0.04166667  (x, y)
+extent      : 38, 40.41667, -11.41667, -10.125  (xmin, xmax, ymin, ymax)
+coord. ref. : lon/lat WGS 84 (EPSG:4326)
+source(s)   : memory
+varname     : Malaria__202406_Global_Pf_Parasite_Rate_2022-01-01T00_00_00_-11.7612,29.3414,-0.9844,40.4432
+names       : Proport~00-2022, Mask: S~pulated,      LCI,      UCI
+min values  :        0.100101,             NaN, 0.023942, 0.162449
+max values  :        0.383459,             NaN,  0.18761, 0.649625</code></pre>
+</div>
+</div>
+<p>Voilà une autre méthode pour télécharger des rasters. Nous pouvons également visualiser rapidement ces données à l’aide de <code>malariaAtlas</code> ou de <code>terra</code> :</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(pfpr_2022)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-pfpr-autoplot" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Carte raster de la prévalence PfPR en Tanzanie en 2022">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-pfpr-autoplot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-pfpr-autoplot-1.png" class="img-fluid figure-img" alt="Carte raster de la prévalence PfPR en Tanzanie en 2022" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-pfpr-autoplot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: PfPR 2022 tracé avec autoplot() (malariaAtlas)
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pfpr_2022, <span class="at">main =</span> <span class="st">"PfPR 2-10 en 2022"</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-pfpr-plot" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Carte de la prévalence de Plasmodium falciparum chez les enfants de 2 à 10 ans en 2022">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-pfpr-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-pfpr-plot-1.png" class="img-fluid figure-img" alt="Carte de la prévalence de Plasmodium falciparum chez les enfants de 2 à 10 ans en 2022" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-pfpr-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: PfPR 2022 tracé avec plot() et titre personnalisé
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Pour en revenir au raster proprement dit, vous remarquerez que les données comportent plusieurs couches : la prévalence, un masque de population et des intervalles d’incertitude. Nous conserverons ici uniquement la première couche afin de traiter la prévalence comme un raster à bande unique.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>pfpr_2022</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class       : SpatRaster
+size        : 258, 266, 4  (nrow, ncol, nlyr)
+resolution  : 0.04166667, 0.04166667  (x, y)
+extent      : 29.33333, 40.41667, -11.75, -0.9999987  (xmin, xmax, ymin, ymax)
+coord. ref. : lon/lat WGS 84 (EPSG:4326)
+source(s)   : memory
+varname     : Malaria__202406_Global_Pf_Parasite_Rate_2022-01-01T00_00_00_-11.7612,29.3414,-0.9844,40.4432
+names       : Proport~00-2022, Mask: S~pulated,      LCI,      UCI
+min values  :        0.014429,             NaN,  0.00386,  0.03052
+max values  :        0.383459,             NaN, 0.194421, 0.649625</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>pfpr_2022 <span class="ot">&lt;-</span> pfpr_2022[[<span class="dv">1</span>]]</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co"># le nom du raster est extrêmement long, nous allons donc y remédier</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(pfpr_2022) <span class="ot">&lt;-</span> <span class="st">"pfpr_2022"</span></span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="projectionreprojection" class="level2">
+<h2 class="anchored" data-anchor-id="projectionreprojection">Projection/Reprojection</h2>
+<p>Les données raster, tout comme les données vectorielles, disposent d’un système de coordonnées de référence (SCR). Dans ce tutoriel, tous les rasters sont projetés en WGS 84 (EPSG:4326) qui est notre SCR de référence, et c’est pour cela que nous pouvons les combiner sans reprojection. Il est parfois nécessaire de reprojeter un raster afin de l’aligner sur le SCR d’autres couches spatiales.</p>
+<p>Cependant, contrairement aux données vectorielles, les données raster sont constituées d’une grille fixe de cellules. Reprojeter n’est pas une simple transformation affine de cette grille : une projection cartographique est non linéaire, une cellule carrée ne reste généralement pas carrée dans le système de coordonnées cible. Comme un raster doit rester une grille rectangulaire, la reprojection doit construire une nouvelle dans le SCR cible et estimer ses valeurs à partir des anciennes. Cela peut altérer les données, et c’est pourquoi il est préférable d’éviter de reprojeter les rasters sauf en cas de nécessité.</p>
+<p>Cela peut cependant s’avérer nécessaire lorsqu’on doit faire des opérations sur un raster et un vecteur qui ne sont pas dans le même SCR (<code>crop</code>, <code>mask</code> et <code>extract</code> échoueraient sans reprojection d’une des couches) ; ou lorsque l’analyse exige des unités métriques (pour une densité en habitants/km², par exemple), il faut un SCR projeté comme l’UTM 35S (EPSG:32735).</p>
+<p>Parmi les méthodes de rééchantillonnage courantes lors de la reprojection d’un raster, on trouve la méthode du « plus proche voisin » pour les données catégorielles (par exemple, la couverture du sol) et la méthode « bilinéaire » pour les données continues (par exemple, l’altitude, la température).</p>
+<p>Étant donné que la projection d’un raster affecte les valeurs de ses cellules, il est généralement préférable d’éviter de reprojeter des données raster et de privilégier la reprojection des données vectorielles, qui ne subissent aucune distorsion. Voici tout de même comment procéder pour reprojeter un raster.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">rast</span>(<span class="at">xmin =</span> <span class="sc">-</span><span class="dv">110</span>, <span class="at">xmax =</span> <span class="sc">-</span><span class="dv">90</span>, <span class="at">ymin =</span> <span class="dv">40</span>, <span class="at">ymax =</span> <span class="dv">60</span>, <span class="at">ncols =</span> <span class="dv">40</span>, <span class="at">nrows =</span> <span class="dv">40</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">values</span>(r) <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncell</span>(r)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>r</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class       : SpatRaster
+size        : 40, 40, 1  (nrow, ncol, nlyr)
+resolution  : 0.5, 0.5  (x, y)
+extent      : -110, -90, 40, 60  (xmin, xmax, ymin, ymax)
+coord. ref. : lon/lat WGS 84 (CRS84) (OGC:CRS84)
+source(s)   : memory
+name        : lyr.1
+min value   :     1
+max value   :  1600</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(r)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-raster-synthetique" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Grille raster synthétique composée de valeurs croissantes">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-raster-synthetique-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-raster-synthetique-1.png" class="img-fluid figure-img" alt="Grille raster synthétique composée de valeurs croissantes" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-raster-synthetique-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Raster synthétique r avant reprojection
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>newcrs <span class="ot">&lt;-</span> <span class="st">"+proj=robin +datum=WGS84"</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>pr1 <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">project</span>(r, newcrs)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">crs</span>(pr1)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "PROJCRS[\"unknown\",\n    BASEGEOGCRS[\"unknown\",\n        DATUM[\"World Geodetic System 1984\",\n            ELLIPSOID[\"WGS 84\",6378137,298.257223563,\n                LENGTHUNIT[\"metre\",1]],\n            ID[\"EPSG\",6326]],\n        PRIMEM[\"Greenwich\",0,\n            ANGLEUNIT[\"degree\",0.0174532925199433],\n            ID[\"EPSG\",8901]]],\n    CONVERSION[\"unknown\",\n        METHOD[\"Robinson\"],\n        PARAMETER[\"Longitude of natural origin\",0,\n            ANGLEUNIT[\"degree\",0.0174532925199433],\n            ID[\"EPSG\",8802]],\n        PARAMETER[\"False easting\",0,\n            LENGTHUNIT[\"metre\",1],\n            ID[\"EPSG\",8806]],\n        PARAMETER[\"False northing\",0,\n            LENGTHUNIT[\"metre\",1],\n            ID[\"EPSG\",8807]]],\n    CS[Cartesian,2],\n        AXIS[\"(E)\",east,\n            ORDER[1],\n            LENGTHUNIT[\"metre\",1,\n                ID[\"EPSG\",9001]]],\n        AXIS[\"(N)\",north,\n            ORDER[2],\n            LENGTHUNIT[\"metre\",1,\n                ID[\"EPSG\",9001]]]]"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pr1)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-robinson" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Grille raster synthétique déformée par la projection de Robinson">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-robinson-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-robinson-1.png" class="img-fluid figure-img" alt="Grille raster synthétique déformée par la projection de Robinson" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-robinson-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: Raster r reprojeté en projection de Robinson
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Définition du SCR cible</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Nous allons utiliser le Web Mercator (WGS 84 / Pseudo-Mercator), standard de la cartographie web</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>target_crs <span class="ot">&lt;-</span> <span class="st">"EPSG:3857"</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Reprojection du raster</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>projected_population <span class="ot">&lt;-</span> <span class="fu">project</span>(population, target_crs, <span class="at">method =</span> <span class="st">"bilinear"</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+|---------|---------|---------|---------|
+=========================================
+                                          </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># bilinéaire car nous considérons la population comme une donnée continue</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(projected_population)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-population-mercator" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Carte raster de la population tanzanienne reprojetée en Web Mercator">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-population-mercator-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-population-mercator-1.png" class="img-fluid figure-img" alt="Carte raster de la population tanzanienne reprojetée en Web Mercator" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-population-mercator-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: Raster de population reprojeté en Web Mercator (EPSG:3857)
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="représentation-graphique-de-données-raster" class="level2">
+<h2 class="anchored" data-anchor-id="représentation-graphique-de-données-raster">Représentation graphique de données raster</h2>
+<p>Jusqu’à présent, nous avons vu que nous pouvions représenter graphiquement des données raster à l’aide de la fonction <code>plot</code> issue du package <code>terra</code>. Mais vous voudrez peut-être modifier l’apparence du raster (les couleurs, par exemple) ou regrouper les valeurs en classes. Dans ce cas, mieux vaut représenter les données avec <code>ggplot</code>. C’est ce que nous allons faire avec notre surface de prévalence parasitaire :</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_raster</span>(<span class="at">data =</span> pfpr_2022, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">fill =</span> pfpr_2022)) <span class="sc">+</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_equal</span>()</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-geom-raster" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Carte raster par défaut de la prévalence PfPR en Tanzanie">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-geom-raster-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-geom-raster-1.png" class="img-fluid figure-img" alt="Carte raster par défaut de la prévalence PfPR en Tanzanie" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-geom-raster-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7: Carte de prévalence PfPR avec geom_raster() (rendu par défaut)
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><code>geom_raster</code> ou <code>geom_tile</code> sont les deux principales fonctions de <code>ggplot</code> permettant de visualiser des données raster ou quadrillées. En règle générale, avec l’une ou l’autre de ces fonctions, vous devrez fournir les coordonnées x et y ainsi que la valeur à attribuer à chaque cellule pour que le tracé s’effectue correctement. Vous devrez également inclure la couche supplémentaire permettant de gérer les coordonnées, appelée <code>coord_equal</code>. Lorsque vous ajoutez des fichiers Shapefile au format <code>sf</code>, vous pouvez opter pour <code>coord_sf</code> afin que le logiciel sache comment traiter correctement les coordonnées. Essayez de voir à quoi ressemble l’image lorsque vous ne l’indiquez pas.</p>
+<p>D’autre part, la fonction <code>geom_spatraster</code> provenant du package <code>tidyterra</code> constitue le moyen le plus rapide et le plus simple de tracer un raster dans ggplot ; nous utiliserons principalement <code>geom_spatraster</code> à partir de maintenant, car avec cette dernière nous n’aurons alors plus besoin d’inclure d’informations supplémentaires sur les coordonnées x et y. D’après le graphique ci-dessus, vous pouvez constater que le rendu par défaut n’est pas particulièrement esthétique ; rendons-le donc plus agréable à l’œil :</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(tz_admin1) <span class="sc">+</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>() <span class="sc">+</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_spatraster</span>(<span class="at">data =</span> pfpr_2022, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">fill =</span> pfpr_2022)) <span class="sc">+</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">fill =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">palette =</span> <span class="st">"RdYlGn"</span>, <span class="at">na.value =</span> <span class="st">"transparent"</span>) <span class="sc">+</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Plasmodium falciparum 2-10 pour 2022"</span>, <span class="at">fill =</span> <span class="st">"PfPR"</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-geom-spatraster" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Carte de la prévalence PfPR en Tanzanie avec une palette allant du vert au rouge">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-geom-spatraster-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-geom-spatraster-1.png" class="img-fluid figure-img" alt="Carte de la prévalence PfPR en Tanzanie avec une palette allant du vert au rouge" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-geom-spatraster-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8: Carte PfPR stylisée avec geom_spatraster() et palette RdYlGn
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Définition de la palette de couleurs (5 classes = 5 couleurs)</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>pfpr_pal <span class="ot">&lt;-</span> <span class="fu">brewer.pal</span>(<span class="at">n =</span> <span class="dv">5</span>, <span class="at">name =</span> <span class="st">"RdYlGn"</span>)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>pfpr_pal <span class="ot">&lt;-</span> <span class="fu">rev</span>(pfpr_pal) <span class="co"># inverser pour que les valeurs faibles soient en vert</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Définir les seuils</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>pfpr_breaks <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.05</span>, <span class="fl">0.1</span>, <span class="fl">0.2</span>, <span class="fl">0.3</span>, <span class="dv">1</span>)</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_spatraster</span>(<span class="at">data =</span> pfpr_2022, <span class="fu">aes</span>(<span class="at">fill =</span> pfpr_2022)) <span class="sc">+</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> tz_admin1, <span class="at">fill =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_stepsn</span>(</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">colours =</span> pfpr_pal, <span class="at">breaks =</span> pfpr_breaks, <span class="at">na.value =</span> <span class="st">"transparent"</span></span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Plasmodium falciparum 2-10 pour 2022"</span>, <span class="at">fill =</span> <span class="st">"PfPR"</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-pfpr-classes" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Carte de la prévalence PfPR en Tanzanie répartie en cinq classes">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-pfpr-classes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-pfpr-classes-1.png" class="img-fluid figure-img" alt="Carte de la prévalence PfPR en Tanzanie répartie en cinq classes" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-pfpr-classes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9: Carte PfPR classifiée en 5 classes avec seuils personnalisés
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Mise en garde</span>ASTUCE : DÉFI N° 1 : créez un graphique représentant la population
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Essayez de créer la même carte que ci-dessus, mais en utilisant le raster <code>population</code> à la place.</p>
+<p>Quelle palette de couleurs permettrait de rendre ce graphique plus représentatif ?</p>
+<p>Pourriez-vous éventuellement modifier l’échelle des valeurs pour passer à une échelle logarithmique de base 10 ?</p>
+<p>⚠ Solution non incluse ici, voir le dépôt GitHub du hackathon.</p>
+</div>
+</div>
+</section>
+<section id="manipulation-des-rasters" class="level2">
+<h2 class="anchored" data-anchor-id="manipulation-des-rasters">Manipulation des rasters</h2>
+<p>Nous pouvons déterminer l’étendue spatiale d’un raster à l’aide de la fonction <code>ext</code>, et découper facilement le raster à d’autres étendues à l’aide de <code>crop</code>. Nous pouvons spécifier les coordonnées auxquelles nous souhaitons découper le raster, ou bien récupérer l’étendue d’un objet spatial et découper le raster en fonction de celle-ci.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ext</span>(pfpr_2022)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>SpatExtent : 29.3333333333333, 40.4166666666666, -11.7499987284343, -0.999998728434268 (xmin, xmax, ymin, ymax)</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>pfpr1 <span class="ot">&lt;-</span> <span class="fu">crop</span>(pfpr_2022, <span class="fu">c</span>(<span class="dv">35</span>, <span class="dv">40</span>, <span class="sc">-</span><span class="dv">8</span>, <span class="sc">-</span><span class="dv">6</span>)) <span class="co"># c(xmin, xmax, ymin, ymax)</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pfpr1)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-crop-extent" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Extrait du raster PfPR entre 35 et 40 degrés est et 8 et 6 degrés sud">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-crop-extent-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-crop-extent-1.png" class="img-fluid figure-img" alt="Extrait du raster PfPR entre 35 et 40 degrés est et 8 et 6 degrés sud" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-crop-extent-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;10: Raster PfPR découpé (crop) sur une étendue spécifique
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># découper la prévalence du paludisme pour ne conserver que Mtwara</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>mtwara <span class="ot">&lt;-</span> <span class="fu">filter</span>(tz_admin1, name_1 <span class="sc">==</span> <span class="st">"Mtwara"</span>)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>mtwara_pfpr <span class="ot">&lt;-</span> <span class="fu">crop</span>(pfpr_2022, mtwara)</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mtwara_pfpr)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-crop-mtwara" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Extrait rectangulaire du raster PfPR autour de la région de Mtwara">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-crop-mtwara-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-crop-mtwara-1.png" class="img-fluid figure-img" alt="Extrait rectangulaire du raster PfPR autour de la région de Mtwara" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-crop-mtwara-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;11: Raster PfPR découpé sur la région de Mtwara
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Vous souhaiterez peut-être ensuite attribuer la valeur NA à toutes les cellules raster situées en dehors du polygone correspondant à la région de Mtwara. Pour ce faire, vous pouvez utiliser la fonction <code>mask</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># masquer la prévalence du paludisme pour ne conserver que Mtwara</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>mtwara <span class="ot">&lt;-</span> <span class="fu">filter</span>(tz_admin1, name_1 <span class="sc">==</span> <span class="st">"Mtwara"</span>)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>mtwara_pfpr <span class="ot">&lt;-</span> <span class="fu">crop</span>(pfpr_2022, mtwara) <span class="sc">%&gt;%</span> <span class="fu">mask</span>(mtwara)</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="co"># il est recommandé de découper au préalable pour définir de nouvelles limites</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mtwara_pfpr)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-mask-mtwara" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Raster PfPR limité au contour de la région de Mtwara">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-mask-mtwara-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-mask-mtwara-1.png" class="img-fluid figure-img" alt="Raster PfPR limité au contour de la région de Mtwara" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mask-mtwara-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;12: Raster PfPR découpé ET masqué sur la région de Mtwara
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Lors du masquage, il convient de garder à l’esprit que la fonction <code>mask</code> ne permet pas de définir les limites ; il est donc préférable de commencer par découper puis d’appliquer le masque.</p>
+</section>
+<section id="agrégationrééchantillonnage" class="level2">
+<h2 class="anchored" data-anchor-id="agrégationrééchantillonnage">Agrégation/Rééchantillonnage</h2>
+<p>Comme vous l’avez remarqué, le raster de population présente une très haute résolution (100 m), ce qui peut compliquer sa visualisation ; il peut donc être judicieux d’agréger les rasters.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>population_1km <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(population, <span class="at">fact =</span> <span class="dv">10</span>, <span class="at">fun =</span> <span class="st">"sum"</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+|---------|---------|---------|---------|
+=========================================
+                                          </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(population_1km)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-aggregate" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Carte raster de la population tanzanienne agrégée à une résolution de 1 kilomètre">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-aggregate-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-aggregate-1.png" class="img-fluid figure-img" alt="Carte raster de la population tanzanienne agrégée à une résolution de 1 kilomètre" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-aggregate-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;13: Raster de population agrégé à une résolution de 1 km
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Vous pouvez désagréger à l’aide de la fonction <code>disagg</code>, mais vous devrez faire preuve de prudence, car il vous faudra utiliser les méthodes « near » ou « bilinear » pour interpoler dans des cellules plus petites. Cela pourrait fausser les informations du raster à votre insu.</p>
+</section>
+<section id="calculs-sur-les-rasters" class="level2">
+<h2 class="anchored" data-anchor-id="calculs-sur-les-rasters">Calculs sur les rasters</h2>
+<p>Avec plusieurs rasters, vous pouvez également effectuer des calculs simples. L’un d’entre eux pourrait s’avérer utile si vous souhaitez calculer la population exposée au risque de paludisme. Il convient de garder à l’esprit que les rasters doivent avoir la même étendue. Nous pouvons utiliser la fonction <code>resample</code> pour les aligner :</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># vérifier que les étendues correspondent</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ext</span>(population_1km) <span class="sc">==</span> <span class="fu">ext</span>(pfpr_2022)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># si elles ne correspondent pas, utilisez "resample" pour les harmoniser</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>population_1km_resamp <span class="ot">&lt;-</span> <span class="fu">resample</span>(population_1km, pfpr_2022)</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="co"># nous pouvons désormais multiplier les données de population et de</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="co"># prévalence pour obtenir la population exposée au risque</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>pop_at_risk <span class="ot">&lt;-</span> population_1km_resamp <span class="sc">*</span> pfpr_2022</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(pop_at_risk) <span class="ot">&lt;-</span> <span class="st">"population_at_risk"</span></span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a><span class="co"># La transformation logarithmique ne peut pas représenter les cellules nulles.</span></span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>pop_at_risk <span class="ot">&lt;-</span> <span class="fu">ifel</span>(pop_at_risk <span class="sc">==</span> <span class="dv">0</span>, <span class="cn">NA</span>, pop_at_risk)</span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(pop_at_risk) <span class="ot">&lt;-</span> <span class="st">"population_at_risk"</span></span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_raster</span>(pop_at_risk, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">fill =</span> population_at_risk)) <span class="sc">+</span></span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(tz_admin1, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">geometry =</span> geometry), <span class="at">fill =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>(<span class="at">option =</span> <span class="st">"B"</span>, <span class="at">trans =</span> <span class="st">"log10"</span>, <span class="at">na.value =</span> <span class="st">"transparent"</span>) <span class="sc">+</span></span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
+<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_sf</span>() <span class="sc">+</span></span>
+<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Population à risque en 2022"</span>, <span class="at">fill =</span> <span class="st">"Population"</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-pop-at-risk" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Carte de la population exposée au risque de paludisme en Tanzanie en 2022">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-pop-at-risk-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-pop-at-risk-1.png" class="img-fluid figure-img" alt="Carte de la population exposée au risque de paludisme en Tanzanie en 2022" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-pop-at-risk-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;14: Carte de la population exposée au risque de paludisme en 2022
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Avant de tracer la carte, nous avons remplacé les cellules nulles par <code>NA</code>, car le logarithme décimal de zéro vaut moins l’infini. Ces cellules restent transparentes et n’affectent pas les sommes calculées ensuite.</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Mise en garde</span>ASTUCE : DÉFI N° 2 : convertir la prévalence en pourcentage
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Pouvez-vous essayer de manipuler le raster <code>pfpr_2022</code> pour le présenter sous forme de pourcentage ?</p>
+<p>Créez un graphique du nouveau raster <code>pfpr_2022</code> sous forme de pourcentage.</p>
+<p>Pouvez-vous essayer de le classer par catégories ?</p>
+<p>⚠ Solution non incluse ici, voir le dépôt GitHub du hackathon.</p>
+</div>
+</div>
+</section>
+<section id="extraction-dinformations" class="level2">
+<h2 class="anchored" data-anchor-id="extraction-dinformations">Extraction d’informations</h2>
+<p>Nous pourrions vouloir résumer les rasters au niveau des régions, c’est-à-dire nous calculons la somme des valeurs dans les cellules à l’intérieur de chaque région avec <code>sum</code>. Nous pouvons le faire à l’aide de la fonction <code>extract</code> :</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>pop_risk <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">extract</span>(pop_at_risk, <span class="fu">vect</span>(tz_admin1), sum, <span class="at">na.rm =</span> <span class="cn">TRUE</span>, <span class="at">ID =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>tz_admin1 <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(tz_admin1, pop_risk)</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(tz_admin1) <span class="sc">+</span></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">fill =</span> population_at_risk)) <span class="sc">+</span></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">palette =</span> <span class="st">"Reds"</span>, <span class="at">direction =</span> <span class="dv">1</span>, <span class="at">trans =</span> <span class="st">"log10"</span>, <span class="at">na.value =</span> <span class="st">"lightblue"</span>) <span class="sc">+</span></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-extract" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Carte de la population exposée au risque de paludisme agrégée par région tanzanienne">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-extract-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-extract-1.png" class="img-fluid figure-img" alt="Carte de la population exposée au risque de paludisme agrégée par région tanzanienne" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-extract-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;15: Population à risque agrégée par région (extract + bind_cols)
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Mise en garde</span>ASTUCE : DÉFI N° 3 : extraire davantage d’informations
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Pouvez-vous extraire les valeurs de <code>pfpr_2022</code> seules et de <code>population</code> séparément ?</p>
+<p>Obtenez-vous une valeur différente si vous utilisez <code>population</code> à 100 m par rapport à <code>population_1km</code> à 1 km ?</p>
+<p>Pouvez-vous expliquer pourquoi ?</p>
+<p>⚠ Solution non incluse ici, voir le dépôt GitHub du hackathon.</p>
+</div>
+</div>
+<section id="pour-aller-plus-loin-dautres-opérations-sur-les-rasters" class="level3">
+<h3 class="anchored" data-anchor-id="pour-aller-plus-loin-dautres-opérations-sur-les-rasters">Pour aller plus loin : d’autres opérations sur les rasters</h3>
+<p>La fonction <code>extract</code> résume les cellules situées à l’intérieur de polygones fournis de l’extérieur. Le package <code>terra</code> propose d’autres opérations qui, elles, travaillent directement sur la grille et renvoient un nouveau raster :</p>
+<p><strong><code>focal()</code></strong> : calcule une statistique sur le voisinage de chaque cellule. Avec <code>w = 3</code>, la fenêtre couvre la cellule centrale et ses 8 voisines ; on peut notamment l’utiliser pour lisser une surface avant de l’utiliser comme covariable.</p>
+<p>Cas pratique : lisser la surface de prévalence pour atténuer le bruit cellule à cellule avant de l’utiliser comme covariable. <code>na.policy = "omit"</code> laisse les cellules NA (hors du pays) inchangées au lieu de les remplir, et <code>na.rm = TRUE</code> ignore les voisines manquantes en bordure de côte.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>pfpr_lisse <span class="ot">&lt;-</span> <span class="fu">focal</span>(pfpr_2022, <span class="at">w =</span> <span class="dv">3</span>, <span class="at">fun =</span> <span class="st">"mean"</span>, <span class="at">na.policy =</span> <span class="st">"omit"</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(pfpr_lisse) <span class="ot">&lt;-</span> <span class="st">"pfpr_lisse"</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">c</span>(pfpr_2022, pfpr_lisse), <span class="at">main =</span> <span class="fu">c</span>(<span class="st">"PfPR brut"</span>, <span class="st">"PfPR lissé (3 × 3)"</span>))</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-pfpr-lisse" class="quarto-float quarto-figure quarto-figure-center anchored" width="672" alt="Comparaison de la prévalence PfPR brute et lissée sur une fenêtre de trois cellules sur trois">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-pfpr-lisse-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-pfpr-lisse-1.png" id="fig-pfpr-lisse" class="img-fluid figure-img" alt="Comparaison de la prévalence PfPR brute et lissée sur une fenêtre de trois cellules sur trois" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-pfpr-lisse-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><strong><code>terrain()</code></strong> : dérive la pente, l’exposition ou la rugosité à partir d’un modèle numérique de terrain.</p>
+<p>Cas pratique : dériver la pente et la rugosité du relief, deux covariables classiques pour l’écologie des vecteurs. Les données du tutoriel ne contiennent pas d’altitude, nous utilisons donc le MNT d’exemple livré avec <code>terra</code>. Pour la Tanzanie, <code>geodata::elevation_30s(country = "TZA")</code> fournit l’équivalent.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>mnt <span class="ot">&lt;-</span> <span class="fu">rast</span>(<span class="fu">system.file</span>(<span class="st">"ex/elev.tif"</span>, <span class="at">package =</span> <span class="st">"terra"</span>))</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>pente <span class="ot">&lt;-</span> <span class="fu">terrain</span>(mnt, <span class="at">v =</span> <span class="st">"slope"</span>, <span class="at">unit =</span> <span class="st">"degrees"</span>)</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>rugosite <span class="ot">&lt;-</span> <span class="fu">terrain</span>(mnt, <span class="at">v =</span> <span class="st">"TRI"</span>)</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">c</span>(pente, rugosite), <span class="at">main =</span> <span class="fu">c</span>(<span class="st">"Pente (degrés)"</span>, <span class="st">"Rugosité (TRI)"</span>))</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-terrain" class="quarto-float quarto-figure quarto-figure-center anchored" width="672" alt="Cartes de la pente et de la rugosité dérivées d'un modèle numérique de terrain">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-terrain-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-terrain-1.png" id="fig-terrain" class="img-fluid figure-img" alt="Cartes de la pente et de la rugosité dérivées d'un modèle numérique de terrain" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-terrain-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;17
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Attention à l’unité : sur un raster en longitude/latitude, <code>terrain()</code> suppose que les altitudes sont en mètres.</p>
+<p><strong><code>distance()</code></strong> : calcule, pour chaque cellule, la distance jusqu’à la cellule non-NA la plus proche. Pratique pour construire une covariable « distance au plan d’eau le plus proche », par exemple.</p>
+<p>Cas pratique : construire une covariable « distance à la zone de forte prévalence la plus proche ». On isole d’abord les cellules dépassant 30 % de prévalence, tout le reste passant à NA ; <code>distance()</code> renseigne alors ces cellules NA. Le résultat couvre toute l’emprise rectangulaire, y compris l’océan, d’où le <code>mask()</code> final.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>foyers <span class="ot">&lt;-</span> <span class="fu">ifel</span>(pfpr_2022 <span class="sc">&gt;</span> <span class="fl">0.3</span>, <span class="dv">1</span>, <span class="cn">NA</span>)</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>dist_foyers <span class="ot">&lt;-</span> <span class="fu">distance</span>(foyers, <span class="at">unit =</span> <span class="st">"km"</span>)</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>dist_foyers <span class="ot">&lt;-</span> <span class="fu">mask</span>(dist_foyers, pfpr_2022)</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(dist_foyers) <span class="ot">&lt;-</span> <span class="st">"distance_foyer_km"</span></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dist_foyers, <span class="at">main =</span> <span class="st">"Distance au foyer le plus proche (km)"</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-distance-foyers" class="quarto-float quarto-figure quarto-figure-center anchored" width="672" alt="Carte de la distance en kilomètres jusqu'à la zone de forte prévalence la plus proche">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-distance-foyers-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-distance-foyers-1.png" id="fig-distance-foyers" class="img-fluid figure-img" alt="Carte de la distance en kilomètres jusqu'à la zone de forte prévalence la plus proche" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-distance-foyers-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;18
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Le SCR étant en longitude/latitude, <code>distance()</code> raisonne en mètres ; <code>unit = "km"</code> convertit directement le résultat.</p>
+<p>La documentation sur ces fonctions est accessible directement depuis R. Tapez <code>?focal</code> dans la console pour découvrir les arguments disponibles et les exemples fournis.</p>
+</section>
+</section>
+<section id="données-multibandes" class="level2">
+<h2 class="anchored" data-anchor-id="données-multibandes">Données multibandes</h2>
+<p>J’ai déjà mentionné que le package <code>terra</code> dans R permet de traiter plusieurs bandes ou couches de rasters. Nous pouvons donc charger plusieurs rasters simultanément et effectuer des calculs sur ceux-ci de la même manière, ce qui est formidable ! Pour effectuer certaines opérations entre plusieurs rasters, ceux-ci doivent notamment avoir une géométrie compatible, avec une étendue, une résolution et un système de coordonnées appropriés. Nous allons ici charger des données issues de CHIRPS concernant les précipitations mensuelles en 2022.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tout d'abord, nous créons une liste de toutes les images raster provenant de CHIRPS</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>rainfall_rasters <span class="ot">&lt;-</span> <span class="fu">list.files</span>(</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">path =</span> <span class="st">"../../04_mapping_r_part2/data/rasters/"</span>, <span class="at">pattern =</span> <span class="st">"chirps"</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Ensuite, nous les chargeons dans R de la même manière que pour une seule bande</span></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>rainfall_2022 <span class="ot">&lt;-</span> <span class="fu">rast</span>(rainfall_rasters)</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>rainfall_2022</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class       : SpatRaster
+size        : 258, 267, 12  (nrow, ncol, nlyr)
+resolution  : 0.04166667, 0.04166667  (x, y)
+extent      : 29.33333, 40.45833, -11.75, -1  (xmin, xmax, ymin, ymax)
+coord. ref. : lon/lat WGS 84 (EPSG:4326)
+sources     : chirps-v2-0.2022.01.sum.5km.NN.tif
+              chirps-v2-0.2022.02.sum.5km.NN.tif
+              chirps-v2-0.2022.03.sum.5km.NN.tif
+              ... and 9 more sources
+names       : chirp~km.NN, chirp~km.NN, chirp~km.NN, chirp~km.NN, chirp~km.NN, chirp~km.NN, ...
+min values  :   20.051249,   10.480678,    9.421162,    4.000703,    0.041401,           0, ...
+max values  :  944.622925,   671.34375,  610.169739,  804.803101,  403.897919,  224.631592, ...</code></pre>
+</div>
+</div>
+<p>Vous constaterez que les métadonnées indiquent que 12 couches (<code>nlyr</code> dans <code>dimensions</code>) ont été chargées et que chaque couche correspond à un mois de précipitations. Nous pouvons tracer ces données pour voir à quoi cela ressemble :</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(rainfall_2022)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-rainfall-plot" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Douze cartes des précipitations mensuelles en Tanzanie en 2022">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-rainfall-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-rainfall-plot-1.png" class="img-fluid figure-img" alt="Douze cartes des précipitations mensuelles en Tanzanie en 2022" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rainfall-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;19: Les 12 couches mensuelles de précipitations CHIRPS 2022 (plot multi-panneaux)
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Ce qui est pratique, c’est que les 12 couches sont tracées simultanément, mais avec des échelles libres. Nous pouvons également utiliser <code>ggplot</code> pour obtenir le même résultat :</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Commençons par nettoyer les noms, en les transformant en dates</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(rainfall_2022) <span class="ot">&lt;-</span> <span class="fu">seq</span>(</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.Date</span>(<span class="st">"2022-01-01"</span>), <span class="fu">as.Date</span>(<span class="st">"2022-12-01"</span>), <span class="at">by =</span> <span class="st">"months"</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">format</span>(<span class="st">"%b %Y"</span>)</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_spatraster</span>(<span class="at">data =</span> rainfall_2022) <span class="sc">+</span></span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>lyr, <span class="at">ncol =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">palette =</span> <span class="st">"Blues"</span>, <span class="at">direction =</span> <span class="dv">1</span>, <span class="at">na.value =</span> <span class="st">"transparent"</span>, <span class="at">trans =</span> <span class="st">"sqrt"</span>) <span class="sc">+</span></span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
+<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">"mm"</span>, <span class="at">title =</span> <span class="st">"Précipitations"</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-rainfall-facet" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Douze cartes en facettes des précipitations mensuelles en Tanzanie en 2022">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-rainfall-facet-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-rainfall-facet-1.png" class="img-fluid figure-img" alt="Douze cartes en facettes des précipitations mensuelles en Tanzanie en 2022" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rainfall-facet-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;20: Précipitations mensuelles CHIRPS 2022 par facettes (ggplot + facet_wrap)
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Mise en garde</span>ASTUCE : DÉFI N° 4 : traitement des précipitations
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Pouvez-vous extraire la somme des précipitations dans chaque région de Tanzanie pour chaque mois ?</p>
+<p>Créez un graphique illustrant la répartition des précipitations par région et par mois.</p>
+<p>⚠ Solution non incluse ici, voir le dépôt GitHub du hackathon.</p>
+</div>
+</div>
+</section>
+<section id="rastérisation" class="level2">
+<h2 class="anchored" data-anchor-id="rastérisation">Rastérisation</h2>
+<p>Vous pouvez parfois avoir besoin de convertir des données vectorielles en données raster. Ce processus s’appelle la rastérisation. Pour que cette opération fonctionne, vous devez disposer d’un raster de référence que vous souhaitez utiliser afin de lui fournir la résolution, le SCR et les limites.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>rasterise_pop_risk <span class="ot">&lt;-</span> <span class="fu">rasterize</span>(tz_admin1, <span class="at">field =</span> <span class="st">"population_at_risk"</span>, pop_at_risk)</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(rasterise_pop_risk)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-rasterize" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Carte raster de la population à risque obtenue à partir des régions tanzaniennes">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-rasterize-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-rasterize-1.png" class="img-fluid figure-img" alt="Carte raster de la population à risque obtenue à partir des régions tanzaniennes" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rasterize-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;21: Résultat de la rastérisation des régions (population à risque)
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="exportation-de-données-raster" class="level2">
+<h2 class="anchored" data-anchor-id="exportation-de-données-raster">Exportation de données raster</h2>
+<p>Utilisez <code>writeRaster</code> pour sauvegarder des données raster. Vous devez fournir un objet <code>SpatRaster</code> et un nom de fichier. Le format du fichier sera déduit à partir de l’extension du nom de fichier. Si cela ne fonctionne pas, vous pouvez fournir un argument tel que <code>format=GTiff</code>. Notez que l’argument <code>overwrite=TRUE</code> permet de remplacer un fichier préalable portant un même nom. Vous pouvez également consulter <code>?writeRaster</code> pour découvrir d’autres arguments, tels que <code>datatype=</code> permettant de définir un type de données spécifique (par exemple, entier).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">writeRaster</span>(</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>  pop_at_risk, <span class="st">"../../04_mapping_r_part2/data/rasters/population_risk_2022.tif"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="sources-de-données-raster-pour-la-modélisation" class="level2">
+<h2 class="anchored" data-anchor-id="sources-de-données-raster-pour-la-modélisation">Sources de données raster pour la modélisation</h2>
+<p>Dans ce tutoriel, il ne vous a été présenté que deux sources d’informations provenant de WorldPop et de MAP, mais il existe principalement d’autres sources utiles pour obtenir d’autres types de rasters, comme des covariables environnementales :</p>
+<p><a href="https://www.worldclim.org/">WorldClim</a> est une excellente ressource proposant des rasters bioclimatiques prêts à l’emploi. Ceux-ci incluent des données historiques (1970-2000) et futures (jusqu’en 2100) et sont traités à partir de modèles climatiques mondiaux avec certains scénarios SSP (<em>Shared Socio-economic Pathways</em>, ou Trajectoires socio-économiques partagées). Ces données sont également disponibles en différentes résolutions, en fonction de votre analyse.</p>
+<p><a href="https://developers.google.com/earth-engine/datasets/catalog">Google Earth Engine</a> : propose de nombreuses données raster pré-traitées, telles que celles de MODIS (NASA) (température, EVI, couverture végétale), ainsi que certains produits MAP. On y trouve également des données très intéressantes, comme les données d’emprise bâtie de Google.</p>
+<p><a href="https://vectoratlas.icipe.org/">VectorAtlas</a> : un excellent site pour trouver des données compilées sur les vecteurs, ainsi que certaines des cartes de répartition des vecteurs déjà publiées. De nouvelles cartes d’adéquation environnementale y seront mises en ligne très prochainement ; une ressource incontournable pour tous les modélisateurs à la recherche de données sur les vecteurs.</p>
+<p><a href="https://ghdx.healthdata.org/local-and-small-area-estimation">Estimations de la charge de morbidité de l’IHME</a> : certaines données raster relatives à différentes maladies et à la mortalité y sont publiées ; elles peuvent constituer une bonne ressource non seulement pour le paludisme, mais aussi pour analyser les tendances en matière de mortalité.</p>
+<section id="télécharger-ces-données-directement-depuis-r" class="level3">
+<h3 class="anchored" data-anchor-id="télécharger-ces-données-directement-depuis-r">Télécharger ces données directement depuis R</h3>
+<p>Vous avez déjà utilisé le package <code>malariaAtlas</code> dans ce tutoriel pour télécharger le raster PfPR sans passer par un site web. D’autres packages jouent le même rôle à savoir :</p>
+<ul>
+<li><p><a href="https://cran.r-project.org/web/packages/geodata/index.html"><strong>geodata</strong></a> : successeur de la fonction <code>getData()</code> de l’ancien package <code>raster</code>. Il donne accès à WorldClim (<code>worldclim_country()</code>, <code>worldclim_global()</code>), aux projections climatiques CMIP6, à la densité de population, à l’altitude, à la couverture du sol, au temps de trajet vers la ville la plus proche, ainsi qu’aux limites administratives GADM. C’est probablement le plus utile des trois pour constituer un jeu de covariables environnementales à utiliser à des fins de modélisation.</p></li>
+<li><p><a href="https://cran.r-project.org/web/packages/chirps/index.html"><strong>chirps</strong></a> : client de l’API du Climate Hazards Center. Il permet de télécharger les rasters de précipitations CHIRPS et de températures CHIRTS, soit sous forme de valeurs extraites pour des points ou des polygones, soit directement sous forme d’objets <code>SpatRaster</code>. C’est l’alternative programmatique aux fichiers CHIRPS que nous avons chargés manuellement plus haut.</p></li>
+<li><p><a href="https://cran.r-project.org/web/packages/rgee/index.html"><strong>rgee</strong></a> : permet de piloter Google Earth Engine depuis R. Beaucoup plus puissant, mais aussi beaucoup plus exigeant. Pour l’utiliser il faut un compte GEE, une installation Python et une étape d’authentification. C’est à réserver aux besoins que les deux premiers ne couvrent pas.</p></li>
+</ul>
+<p>L’intérêt de télécharger ces données directement depuis R dépasse le simple confort. Lorsque le téléchargement fait partie du script, votre analyse devient reproductible : n’importe qui peut la relancer de bout en bout sans avoir à retrouver les bons fichiers sur les bons portails.</p>
+</section>
+</section>
+<section id="ressources-supplémentaires" class="level2">
+<h2 class="anchored" data-anchor-id="ressources-supplémentaires">Ressources supplémentaires</h2>
+<p><a href="https://datacarpentry.github.io/r-raster-vector-geospatial/01-raster-structure.html">L’introduction de Carpentries aux données géospatiales raster et vectorielles sous R</a> est un excellent tutoriel qui a largement inspiré le contenu de ce hackathon. N’hésitez pas à l’essayer !</p>
+<p><a href="https://malaria-atlas-project.gitlab.io/intro-to-spatial-analysis-for-infectious-diseases/04_spatial_in_R.html#Raster_data">La formation MAP</a> constitue la base sur laquelle ces notes ont été élaborées et contient bien plus d’informations que celles relatives aux seules données raster.</p>
+<p><a href="https://rspatial.org/pkg/1-introduction.html">Le package <code>terra</code></a> met en avant des possibilités encore plus intéressantes que vous pouvez exploiter avec les rasters sous R, au-delà de ce que nous pouvons aborder ici ; il vaut donc vraiment le détour pour les passionnés !</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Astuce</span>ASTUCE : DÉFI « DONNÉES SUPPLÉMENTAIRES » TIDYTUESDAY
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Pour les passionnés qui souhaiteraient s’essayer à la création de rasters encore plus intéressants, voici un défi « tidytuesday » : cartographier les jours fériés et les voyages dans le monde, avec l’aimable autorisation de WorldPop.</p>
+<p>Pour découvrir d’autres défis ludiques et vous entraîner de manière générale à l’utilisation de R, essayez <a href="https://github.com/rfordatascience/tidytuesday">tidytuesday</a> sur GitHub (<code>rfordatascience/tidytuesday</code>).</p>
+</div>
+</div>
+<section id="assistants-ia-accélérateur-utile-pour-lutilisation-des-données-rasters-sous-r" class="level3">
+<h3 class="anchored" data-anchor-id="assistants-ia-accélérateur-utile-pour-lutilisation-des-données-rasters-sous-r">Assistants IA : accélérateur utile pour l’utilisation des données rasters sous R</h3>
+<p>Les assistants conversationnels (ChatGPT, Claude, Gemini, ou l’assistant intégré à des environnements comme Positron) sont devenus des compagnons de débogage efficaces pour le codage. Encore faut-il savoir les solliciter : la qualité de la réponse dépend presque entièrement de la qualité du contexte fourni.</p>
+<p>Quatre réflexes qui changent tout :</p>
+<ul>
+<li><p>Collez la sortie de <code>print()</code> de votre objet, plutôt que de le décrire. Les métadonnées d’un <code>SpatRaster</code> (dimensions, résolution, étendue, SCR, noms de couches) contiennent exactement ce dont l’assistant a besoin pour diagnostiquer un problème spécifique. « Mon raster ne se superpose pas au shapefile » ne mène nulle part ; les deux blocs de métadonnées collés côte à côte, si.</p></li>
+<li><p>Collez le message d’erreur en entier, y compris les lignes ‘<em>Caused by error</em>’ et les avertissements qui précèdent. Ces messages des packages <code>terra</code> et <code>sf</code> sont souvent cryptiques mais très informatifs.</p></li>
+<li><p>Nommez le package visé. Sans précision, les assistants mélangent volontiers <code>terra</code>, l’ancien <code>raster</code>, <code>sf</code> et <code>sp</code> dans une même réponse, voire proposent du code <code>rgdal</code> qui est un package déjà retiré de CRAN. Pour mieux clarifier vos attentes, il est donc nécessaire d’ajouter explicitement des précisions comme « avec terra » ou « avec sf uniquement » afin de mieux orienter les réponses des assistants IA.</p></li>
+<li><p>Demandez toujours une explication, pas seulement du code. « Explique-moi pourquoi cette solution fonctionne » vous fait progresser, alors que du code copié-collé sans compréhension vous laissera bloqué au problème suivant.</p></li>
+</ul>
+<p>Trois exemples de formulations qui donnent de bons résultats :</p>
+<ul>
+<li><p>« Voici les métadonnées de deux <code>SpatRaster</code> [coller les deux sorties]. Je veux les multiplier mais j’obtiens une erreur d’étendue. Avec terra uniquement, comment les aligner, et quelle méthode de rééchantillonnage choisir pour des données de population ? »</p></li>
+<li><p>« J’ai un <code>SpatRaster</code> en EPSG:4326 et un objet <code>sf</code> en EPSG:32735. Faut-il reprojeter le raster ou le vecteur avant d’utiliser <code>extract</code> ? Explique le raisonnement. »</p></li>
+<li><p>« Voici mon code ggplot [coller le bloc] et l’erreur obtenue [coller l’erreur]. Corrige-le en utilisant <code>geom_spatraster</code> de tidyterra, et dis-moi ce qui n’allait pas. »</p></li>
+</ul>
+<p>Pour finir, sachez que ces outils inventent régulièrement des arguments, des fonctions ou des noms de packages qui n’existent pas. Ils sont par ailleurs entraînés sur beaucoup de code ancien, donc vérifiez systématiquement ce que ces outils vous proposent. Par exemple, saisissez <code>?nom_de_fonction</code> dans la console pourra vous permettre de confirmer en une seconde qu’une fonction existe réellement et que les suggestions d’arguments pour une IA sont bonnes. Car un assistant IA est un accélérateur, jamais une source d’autorité.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copié");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copié");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/AMMnet\.github\.io\/ammnet-hackathon\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<script src="https://utteranc.es/client.js" repo="AMMnet/ammnet-hackathon" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
