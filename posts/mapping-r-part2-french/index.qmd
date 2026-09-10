@@ -36,6 +36,8 @@ knitr:
 
 **AMMNET HACKATHON**
 
+{{< video https://www.youtube.com/embed/V-PK2Dscqg0 title="Cartographie sous R, 2e partie" >}}
+
 **Adapté à partir de :**
 
 -   [Live Session 5: Mapping in R part 2 – AMMnet Hackathon (traduction)](https://ammnet.github.io/ammnet-hackathon/posts/mapping-r-part2/mapping_rasters.html)
