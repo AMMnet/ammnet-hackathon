@@ -86,8 +86,6 @@ sous licence CC BY 4.0.
 stopifnot(file.exists("../../04_mapping_r_part2/data/rasters/tza_pop_2022_constrained.tif"))
 ```
 
-{{< video https://www.youtube.com/embed/V-PK2Dscqg0 >}}
-
 ## Aperçu
 
 Bienvenue à nouveau ! Nous espérons que vous avez apprécié la première partie de notre série « Cartographie sous R », consacrée aux données vectorielles. Dans la présente session, nous allons nous plonger dans l'utilisation des données raster sous R. Nous commencerons par une brève introduction aux concepts et aux attributs des données raster, suivie d'un guide pratique s'appuyant sur des exemples concrets.
