@@ -6,8 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Mohamed Sillah Kanu">
+<meta name="dcterms.date" content="2026-09-30">
+<meta name="description" content="Build a DHIS2 system from the ground up, from local setup and metadata through data entry, indicators, visualizations, and a working dashboard.">
 
-<title>About – AMMnet Hackathon</title>
+<title>Live Session 11: DHIS2 From Scratch: From an Empty System to a Working Dashboard – AMMnet Hackathon</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -29,22 +32,23 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-2c67b2a39adbf7b6f184eb4aa7f32025.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-2c67b2a39adbf7b6f184eb4aa7f32025.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -85,14 +89,14 @@ gtag('config', 'G-072Z4G50DN', { 'anonymize_ip': true});
 
 </head>
 
-<body class="nav-fixed fullcontent quarto-light">
+<body class="nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">AMMnet Hackathon</span>
     </a>
   </div>
@@ -103,11 +107,11 @@ gtag('config', 'G-072Z4G50DN', { 'anonymize_ip': true});
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./about.html" aria-current="page"> 
+    <a class="nav-link" href="../../about.html"> 
 <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./contribute.html"> 
+    <a class="nav-link" href="../../contribute.html"> 
 <span class="menu-text">Contribute a post</span></a>
   </li>  
   <li class="nav-item compact">
@@ -128,83 +132,158 @@ gtag('config', 'G-072Z4G50DN', { 'anonymize_ip': true});
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Live Session 11: DHIS2 From Scratch: From an Empty System to a Working Dashboard</h1>
+                  <div>
+        <div class="description">
+          Build a DHIS2 system from the ground up, from local setup and metadata through data entry, indicators, visualizations, and a working dashboard.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">DHIS2</div>
+                <div class="quarto-category">Data visualization</div>
+                <div class="quarto-category">Dashboards</div>
+                <div class="quarto-category">Live session</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Mohamed Sillah Kanu </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">September 30, 2026</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#who-this-is-for" id="toc-who-this-is-for" class="nav-link active" data-scroll-target="#who-this-is-for">Who this is for</a></li>
+  <li><a href="#what-you-will-learn" id="toc-what-you-will-learn" class="nav-link" data-scroll-target="#what-you-will-learn">What you will learn</a></li>
+  <li><a href="#before-the-session" id="toc-before-the-session" class="nav-link" data-scroll-target="#before-the-session">Before the session</a></li>
+  <li><a href="#session-outline" id="toc-session-outline" class="nav-link" data-scroll-target="#session-outline">Session outline</a></li>
+  <li><a href="#training-environment" id="toc-training-environment" class="nav-link" data-scroll-target="#training-environment">Training environment</a></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
-<div class="quarto-about-trestles">
-  <div class="about-entity">
-    <img src="profile.png" class="about-image
-  rounded " style="width: 20em;">
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">About</h1>
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<p>This live session takes participants from an empty local DHIS2 instance to a working malaria programme dashboard. The lesson covers the full workflow: setting up the system, defining its metadata, entering and checking data, calculating indicators, building visualizations, and managing access.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Session and materials">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
 </div>
-<div class="quarto-title-meta">
-  </div>
-</header>
-    <div class="about-links">
-  <a href="https://twitter.com" class="about-link" rel="" target="">
-    <i class="bi bi-twitter"></i>
-     <span class="about-link-text">Twitter</span>
-  </a>
-  <a href="https://linkedin.com" class="about-link" rel="" target="">
-    <i class="bi bi-linkedin"></i>
-     <span class="about-link-text">LinkedIn</span>
-  </a>
-  <a href="https://github.com" class="about-link" rel="" target="">
-    <i class="bi bi-github"></i>
-     <span class="about-link-text">Github</span>
-  </a>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Session and materials
 </div>
-  </div>
-  <div class="about-contents"><main class="content" id="quarto-document-content">
-<section id="a-virtual-hackathon-series-for-continual-learning" class="level2">
-<h2 data-anchor-id="a-virtual-hackathon-series-for-continual-learning">A virtual hackathon series for continual learning</h2>
-<p>A new virtual hackathon series for continual learning was developed by a collaborative effort between the Best Practices and Learning Committees.</p>
-<p>Aims:</p>
+</div>
+<div class="callout-body-container callout-body">
 <ul>
-<li>To create a continual support space that anyone can access</li>
-<li>To learn how to code and how to code better</li>
-<li>To upskill people from a distance, ultimately improving all our abilities in:
-<ul>
-<li>data handling, presentation and analysis</li>
-<li>experimental design</li>
-<li>quantitative understanding</li>
-<li>coding and problem solving</li>
-<li>transmission modelling</li>
-</ul></li>
-<li>To collaborate better and more equitably</li>
+<li><strong>Date and time:</strong> September 30, 2026 at 12:00 UTC</li>
+<li><a href="../../11_dhis2/lesson/index.html">Open the complete 18-topic lesson</a></li>
+<li><a href="https://github.com/AMMnet/ammnet-hackathon/tree/main/11_dhis2">Browse the session materials</a></li>
+<li><a href="https://github.com/mohamedsillahkanu/AMMnet-test-Hackathon">View the original lesson repository</a></li>
 </ul>
-<p>Structure:</p>
+</div>
+</div>
+<section id="who-this-is-for" class="level2">
+<h2 class="anchored" data-anchor-id="who-this-is-for">Who this is for</h2>
+<p>This session is for public-health practitioners, monitoring and evaluation teams, health-information-system administrators, and others who want a practical introduction to configuring and using DHIS2. The lesson begins with the core concepts and does not assume previous DHIS2 administration experience.</p>
+</section>
+<section id="what-you-will-learn" class="level2">
+<h2 class="anchored" data-anchor-id="what-you-will-learn">What you will learn</h2>
+<p>By the end of the session, you will be able to:</p>
+<ol type="1">
+<li>Explain how DHIS2 represents aggregate and case-based health data.</li>
+<li>Run a local DHIS2 instance with Docker and navigate its main apps.</li>
+<li>Configure organisation units, data elements, category combinations, data sets, and data-entry forms.</li>
+<li>Enter and validate aggregate and case-based data.</li>
+<li>Define indicators and check their calculations.</li>
+<li>Build tables, charts, thematic maps, and a programme dashboard.</li>
+<li>Create users, export data, customize the system, and install apps.</li>
+</ol>
+</section>
+<section id="before-the-session" class="level2">
+<h2 class="anchored" data-anchor-id="before-the-session">Before the session</h2>
+<p>To run DHIS2 locally, prepare:</p>
 <ul>
-<li>A theme is selected by the committee</li>
-<li>Experts sign up to support specific themed areas</li>
-<li>A participant submits a coding related problem for consideration within a specific theme</li>
-<li>Experts select 2 – 3 problems per session on the chosen theme, and prepare some solutions to present</li>
+<li>a Windows, macOS, or Ubuntu computer;</li>
+<li><a href="https://www.docker.com/products/docker-desktop/">Docker Desktop</a> or Docker Engine with at least 4 GB of memory assigned;</li>
+<li>about 5 GB of free disk space;</li>
+<li><a href="https://git-scm.com/downloads">Git</a> or the ability to download a ZIP; and</li>
+<li>a modern web browser.</li>
 </ul>
-<p>Experts will work with the Hackathon Committee for a half a day to consider the problems submitted and draft solutions. Once solutions are ready for a hackathon audience, they will present these during a 2-hour training session. Once the 2-hour training session concludes, experts will summarize the session, adapt solutions, and upload them to the shared space. A recording of the training will also be provided.</p>
-<p>If you are an expert in the following topic areas, we need your help!</p>
-<ul>
-<li>Data&nbsp;handling</li>
-<li>Visualisation&nbsp;</li>
-<li>Descriptive statistics</li>
-<li>Power calculations</li>
-<li>Regression statistics</li>
-<li>Mechanistic modelling</li>
-<li>Bayesian statistics</li>
-</ul>
-<p>Why volunteer as an expert? The best way to learn is to teach. You’ll also have an opportunity to network and gain professional visibility within the AMMnet community.</p>
-<p>To volunteer as an expert, please complete the form at the <a href="https://docs.google.com/forms/d/e/1FAIpQLSc49mZiA0RpTLe_2dVpfFVB_J0ASe7wHincmqZTZwh-xG_HGg/viewform?usp=sharing">link here</a>.</p>
+<p>The local setup uses DHIS2 2.42.1 with PostGIS. The first image download is about 1 GB and can take several minutes, so complete it before the session when possible. Topic 2 includes setup and troubleshooting instructions for each supported operating system.</p>
+<div class="callout callout-style-default callout-warning callout-titled" title="CSV exercise files pending">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>CSV exercise files pending
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Topic 3 describes an optional CSV route for importing organisation units, but the referenced <code>orgunits_import.csv</code> and <code>orgunit_groups_template.csv</code> files were not included in the supplied repository. Participants can complete the organisation-unit exercise manually. We will add the CSV files if they become available.</p>
+</div>
+</div>
+</section>
+<section id="session-outline" class="level2">
+<h2 class="anchored" data-anchor-id="session-outline">Session outline</h2>
+<p>The 18 topics build on one another:</p>
+<ol type="1">
+<li><strong>Understand and install DHIS2:</strong> learn the data model and start a local instance.</li>
+<li><strong>Build the metadata:</strong> create organisation units, data elements, category combinations, a data set, and its entry form.</li>
+<li><strong>Enter data:</strong> work with aggregate and case-based records and design custom forms when needed.</li>
+<li><strong>Turn data into information:</strong> define indicators and create charts, maps, and a dashboard.</li>
+<li><strong>Operate the system:</strong> manage users, download data, customize DHIS2, and add apps from the App Hub.</li>
+</ol>
+</section>
+<section id="training-environment" class="level2">
+<h2 class="anchored" data-anchor-id="training-environment">Training environment</h2>
+<p>The supplied Docker configuration is intended for local learning. A production DHIS2 deployment requires secure credentials, HTTPS, backups, monitoring, and an operational maintenance plan. Change the default administrator password after the first login, even in the local training instance.</p>
+<p>The lesson and session materials were prepared by Mohamed Sillah Kanu and are republished by AMMnet with his permission.</p>
 
 
 </section>
-</main></div>
-</div>
- <!-- /main -->
+
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
     const isCodeAnnotation = (el) => {
       for (const clz of el.classList) {
         if (clz.startsWith('code-annotation-')) {                     
