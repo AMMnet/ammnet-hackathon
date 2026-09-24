@@ -1,0 +1,53 @@
+services:
+  database:
+    image: postgis/postgis:13-3.3-alpine
+    container_name: dhis2_test_db
+    environment:
+      POSTGRES_USER: dhis
+      POSTGRES_PASSWORD: dhis
+      POSTGRES_DB: dhis2
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - dhis2-test-db-data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dhis -d dhis2"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - dhis2-test-network
+
+  dhis2:
+    image: dhis2/core:2.42.1
+    container_name: dhis2_test
+    depends_on:
+      database:
+        condition: service_healthy
+    environment:
+      DHIS2_DATABASE_HOST: database
+      DHIS2_DATABASE_NAME: dhis2
+      DHIS2_DATABASE_USERNAME: dhis
+      DHIS2_DATABASE_PASSWORD: dhis
+      DHIS2_HOME: /DHIS2_home
+    ports:
+      - "8010:8080"
+    volumes:
+      - dhis2-test-data:/DHIS2_home
+      - ./dhis.conf:/opt/dhis2/dhis.conf
+    restart: unless-stopped
+    networks:
+      - dhis2-test-network
+
+volumes:
+  dhis2-test-db-data:
+    name: dhis2-test-db-data
+  dhis2-test-data:
+    name: dhis2-test-data
+
+networks:
+  dhis2-test-network:
+    name: dhis2-test-network
+    driver: bridge

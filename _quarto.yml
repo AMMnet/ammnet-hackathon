@@ -1,5 +1,7 @@
 project:
   type: website
+  resources:
+    - "11_dhis2/**"
   render:
     - "*"
     - "!CONTRIBUTING_POSTS.md"
