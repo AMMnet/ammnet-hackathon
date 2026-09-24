@@ -1,0 +1,106 @@
+---
+title: "Live Session 11: DHIS2 From Scratch: From an Empty System to a Working Dashboard"
+description: "Build a DHIS2 system from the ground up, from local setup and metadata through data entry, indicators, visualizations, and a working dashboard."
+author:
+  - Mohamed Sillah Kanu
+date: "2026-09-30"
+categories:
+  - DHIS2
+  - Data visualization
+  - Dashboards
+  - Live session
+format:
+  html:
+    toc: true
+    toc-depth: 3
+editor:
+  markdown:
+    wrap: 72
+execute:
+  enabled: false
+---
+
+This live session takes participants from an empty local DHIS2 instance
+to a working malaria programme dashboard. The lesson covers the full
+workflow: setting up the system, defining its metadata, entering and
+checking data, calculating indicators, building visualizations, and
+managing access.
+
+::: {.callout-note title="Session and materials"}
+- **Date and time:** September 30, 2026 at 12:00 UTC
+- [Open the complete 18-topic lesson](../../11_dhis2/lesson/index.html)
+- [Browse the session materials](https://github.com/AMMnet/ammnet-hackathon/tree/main/11_dhis2)
+- [View the original lesson repository](https://github.com/mohamedsillahkanu/AMMnet-test-Hackathon)
+:::
+
+## Who this is for
+
+This session is for public-health practitioners, monitoring and
+evaluation teams, health-information-system administrators, and others
+who want a practical introduction to configuring and using DHIS2. The
+lesson begins with the core concepts and does not assume previous DHIS2
+administration experience.
+
+## What you will learn
+
+By the end of the session, you will be able to:
+
+1. Explain how DHIS2 represents aggregate and case-based health data.
+2. Run a local DHIS2 instance with Docker and navigate its main apps.
+3. Configure organisation units, data elements, category combinations,
+   data sets, and data-entry forms.
+4. Enter and validate aggregate and case-based data.
+5. Define indicators and check their calculations.
+6. Build tables, charts, thematic maps, and a programme dashboard.
+7. Create users, export data, customize the system, and install apps.
+
+## Before the session
+
+To run DHIS2 locally, prepare:
+
+- a Windows, macOS, or Ubuntu computer;
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) or
+  Docker Engine with at least 4 GB of memory assigned;
+- about 5 GB of free disk space;
+- [Git](https://git-scm.com/downloads) or the ability to download a ZIP;
+  and
+- a modern web browser.
+
+The local setup uses DHIS2 2.42.1 with PostGIS. The first image download
+is about 1 GB and can take several minutes, so complete it before the
+session when possible. Topic 2 includes setup and troubleshooting
+instructions for each supported operating system.
+
+::: {.callout-warning title="CSV exercise files pending"}
+Topic 3 describes an optional CSV route for importing organisation
+units, but the referenced `orgunits_import.csv` and
+`orgunit_groups_template.csv` files were not included in the supplied
+repository. Participants can complete the organisation-unit exercise
+manually. We will add the CSV files if they become available.
+:::
+
+## Session outline
+
+The 18 topics build on one another:
+
+1. **Understand and install DHIS2:** learn the data model and start a
+   local instance.
+2. **Build the metadata:** create organisation units, data elements,
+   category combinations, a data set, and its entry form.
+3. **Enter data:** work with aggregate and case-based records and design
+   custom forms when needed.
+4. **Turn data into information:** define indicators and create charts,
+   maps, and a dashboard.
+5. **Operate the system:** manage users, download data, customize DHIS2,
+   and add apps from the App Hub.
+
+## Training environment
+
+The supplied Docker configuration is intended for local learning. A
+production DHIS2 deployment requires secure credentials, HTTPS,
+backups, monitoring, and an operational maintenance plan. Change the
+default administrator password after the first login, even in the local
+training instance.
+
+The lesson and session materials were prepared by Mohamed Sillah Kanu
+and are republished by AMMnet with his permission.
