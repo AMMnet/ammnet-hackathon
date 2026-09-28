@@ -9,6 +9,9 @@ Open [`lesson/index.html`](lesson/index.html) in a web browser and follow the
 18 topics in order. The lesson is self-contained: its screenshots, styles, and
 navigation are embedded in the HTML files.
 
+The organisation-unit import files used in Topic 3 are in
+[`lesson/csv/`](lesson/csv/).
+
 ## Local DHIS2 setup
 
 The two files under [`setup/`](setup/) run DHIS2 2.42.1 and PostGIS with
@@ -21,12 +24,8 @@ free disk space, Git or a ZIP download, and a modern web browser. Change the
 default DHIS2 administrator password after the first login. This configuration
 is for local training, not production use.
 
-## Known missing files
-
-Topic 3 refers to `csv/orgunits_import.csv` and
-`csv/orgunit_groups_template.csv`. These files were not present in the source
-repository supplied for publication. The organisation-unit exercise can still
-be completed manually, but its CSV-import route requires those files.
+The live session will include a brief walkthrough of the local setup guide,
+not a live installation, before moving directly to the hands-on DHIS2 work.
 
 ## Source and permission
 

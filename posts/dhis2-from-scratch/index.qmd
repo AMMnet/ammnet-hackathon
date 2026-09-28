@@ -29,6 +29,8 @@ managing access.
 ::: {.callout-note title="Session and materials"}
 - **Date and time:** September 30, 2026 at 12:00 UTC
 - [Open the complete 18-topic lesson](../../11_dhis2/lesson/index.html)
+- [Download the organisation-unit import CSV](../../11_dhis2/lesson/csv/orgunits_import.csv)
+- [Download the organisation-unit groups CSV](../../11_dhis2/lesson/csv/orgunit_groups_template.csv)
 - [Browse the session materials](https://github.com/AMMnet/ammnet-hackathon/tree/main/11_dhis2)
 - [View the original lesson repository](https://github.com/mohamedsillahkanu/AMMnet-test-Hackathon)
 :::
@@ -66,18 +68,11 @@ To run DHIS2 locally, prepare:
   and
 - a modern web browser.
 
-The local setup uses DHIS2 2.42.1 with PostGIS. The first image download
-is about 1 GB and can take several minutes, so complete it before the
-session when possible. Topic 2 includes setup and troubleshooting
-instructions for each supported operating system.
-
-::: {.callout-warning title="CSV exercise files pending"}
-Topic 3 describes an optional CSV route for importing organisation
-units, but the referenced `orgunits_import.csv` and
-`orgunit_groups_template.csv` files were not included in the supplied
-repository. Participants can complete the organisation-unit exercise
-manually. We will add the CSV files if they become available.
-:::
+The local setup uses DHIS2 2.42.1 with PostGIS. Because downloading and
+starting the system can take up to 30 minutes, Mohamed will walk through
+the setup guide in about five minutes rather than run the installation
+live. The session will then move directly to hands-on work in DHIS2. Use
+Topic 2 separately if you want to run your own local instance.
 
 ## Session outline
 
