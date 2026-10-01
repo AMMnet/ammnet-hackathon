@@ -19,7 +19,7 @@ editor:
 execute:
   enabled: false
 ---
-
+{{< video https://www.youtube.com/embed/Nqp_9ufNJH8 >}}
 This live session takes participants from an empty local DHIS2 instance
 to a working malaria programme dashboard. The lesson covers the full
 workflow: setting up the system, defining its metadata, entering and
