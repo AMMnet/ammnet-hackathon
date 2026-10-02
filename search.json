@@ -1400,13 +1400,6 @@
     "text": "Summary\nBy following this workflow, you will align DHS administrative names to the WHO ADM2 shapefile using hierarchy‑aware matching, reuse cached decisions, and correct parent misassignments where needed. This should standardise spelling and boundary labelling so that all DHS adm1 and adm2 entries match the WHO reference. Final checks using unmatched‑case statistics and a map overlay will confirm whether the join is clean (no NA polygons). The approach is reproducible, auditable, and reusable across DHS indicators and other datasets."
   },
   {
-    "objectID": "posts/dhis2-from-scratch/index.html",
-    "href": "posts/dhis2-from-scratch/index.html",
-    "title": "Live Session 11: DHIS2 From Scratch: From an Empty System to a Working Dashboard",
-    "section": "",
-    "text": "This live session takes participants from an empty local DHIS2 instance to a working malaria programme dashboard. The lesson covers the full workflow: setting up the system, defining its metadata, entering and checking data, calculating indicators, building visualizations, and managing access."
-  },
-  {
     "objectID": "posts/dhis2-from-scratch/index.html#who-this-is-for",
     "href": "posts/dhis2-from-scratch/index.html#who-this-is-for",
     "title": "Live Session 11: DHIS2 From Scratch: From an Empty System to a Working Dashboard",
