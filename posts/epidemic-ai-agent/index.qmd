@@ -1,0 +1,147 @@
+---
+title: "Live Session 12: Working with an AI Coding Agent: Epidemic Forecasting from Partial Outbreak Data"
+description: "Work with an AI coding agent to plan, review, and evaluate epidemic forecasts, with human scientific judgment guiding each stage."
+author:
+  - Nguyen Tran
+date: "2026-11-10"
+categories:
+  - AI
+  - Python
+  - Epidemiology
+  - Live session
+format:
+  html:
+    toc: true
+    toc-depth: 2
+editor:
+  markdown:
+    wrap: 72
+execute:
+  enabled: false
+---
+
+How can researchers work effectively with an AI coding agent—and
+critically evaluate its results? This interactive Hackathon uses epidemic
+forecasting to explore the research workflow: framing questions, giving
+instructions, reviewing code, challenging assumptions, and evaluating
+results.
+
+Starting with eight observations recorded at two-week intervals from a
+real measles outbreak, participants will work with Nguyen Tran using
+OpenAI Codex to explore the data, identify missing information, consider
+up to three candidate models, and forecast the remaining eight
+observations. Human scientific judgment will guide each stage.
+
+::: {.callout-note title="Session and materials"}
+- **Date:** Tuesday, 10 November 2026
+- **Time:** 05:00–07:00 UTC (two hours)
+- **Local start times:** 12:00 Bangkok / 13:00 Perth / 15:00 Brisbane /
+  10:00 Islamabad / 06:00 Lagos / 08:00 Nairobi
+- **Instructor:** Nguyen Tran
+- [Read the complete participant guide](../../12_epidemic-agent/index.html)
+- [Download the clean starter ZIP](../../12_epidemic-agent/epidemic-agent-starter.zip)
+- <a href="../../12_epidemic-agent/participant-guide.md" download data-noresolveinput>Download the Markdown participant guide</a>
+- [Browse the session materials on GitHub](https://github.com/AMMnet/ammnet-hackathon/tree/main/12_epidemic-agent)
+:::
+
+## Who this is for
+
+All experience levels are welcome. No advanced programming skills or
+individual Codex access are required. The main workflow will be
+facilitator-led, so everyone can join the discussion and scientific
+review. Participants who wish to run the Codex workflow on their own
+computers will need their own Codex access and the setup described below.
+
+## What you will learn
+
+By the end of the session, you will be able to:
+
+1. Describe a practical workflow for collaborating with an AI coding
+   agent in scientific research.
+2. Understand how a coding-agent workflow differs from a conventional
+   chatbot conversation.
+3. Identify where human guidance, code review, and scientific judgment
+   are essential.
+4. Explain the difference between fitting observed data and forecasting
+   unseen observations.
+5. Recognise how limited data and analytical assumptions affect
+   predictions and uncertainty.
+6. Explain why evaluation criteria should be agreed before withheld
+   observations are revealed.
+7. Recognise the importance of reproducibility, held-out validation,
+   and preventing data leakage.
+8. Critically assess AI-generated results, distinguishing evidence
+   from assumptions and hindsight.
+
+## Before the session
+
+Bring a computer with a reliable internet connection and access to the
+free version of ChatGPT for accompanying activities. The opening exercise
+uses CSV upload and data analysis; if those capabilities are unavailable
+in your account, follow the demonstration.
+
+To run the full workflow yourself, also prepare:
+
+- Codex access, signed in and able to open a local project folder;
+- a working Python environment with NumPy, pandas, SciPy, and Matplotlib
+  available to Codex; and
+- Git, optionally, to record your own forecast checkpoint.
+
+Download and extract the starter ZIP into a new folder. It contains only
+`WORKSHOP_BRIEF.md` and `data/observed.csv`. Keep a separate copy for the
+opening plotting demonstration, then use a fresh starter copy for the
+formal challenge. Open that extracted folder in Codex rather than the
+whole Hackathon repository, which contains materials from other sessions.
+You do not need to install Quarto to follow the lab.
+
+## Session outline
+
+The two-hour session moves through six stages:
+
+1. **Compare workflows:** use ChatGPT and Codex to explore the same data,
+   examining context, tools, and saved project files.
+2. **Establish project rules:** document known evidence, missing
+   information, and the boundary around withheld observations; check
+   that a fresh session can recover the saved context.
+3. **Review a scientific plan:** select at most three candidate models
+   with explicit assumptions, uncertainty, and diagnostic checks.
+4. **Implement and inspect:** watch the agent write and run code,
+   resolve errors, produce figures, and examine sensitivity to an
+   important assumption.
+5. **Freeze and evaluate:** agree on evaluation criteria and save the
+   forecasts and uncertainty estimates before the facilitator releases
+   biweeks 9–16. Compare the frozen predictions with those observations.
+6. **Conduct a scientific postmortem:** discuss what worked, what
+   failed, and how assumptions shaped the results, preserving the
+   distinction between prior reasoning and hindsight.
+
+The target is reported cases, not all infections. Population size,
+vaccination coverage, reporting completeness, and other community
+metadata are not supplied. Model choice remains open; participants are
+not required to use an SIR model. A convincing fit to the rising segment
+does not establish that a model will forecast the future well.
+
+::: {.callout-important title="Preserve the forecasting challenge"}
+Use only the supplied observations before the reveal. Do not search for
+the original outbreak or unreleased outcomes. The facilitator will
+supply the withheld observations after forecasts have been frozen.
+:::
+
+## About the instructor
+
+Dr. Tran Dang Nguyen is the founder of the Center for Computational
+Epidemiology and Infectious Diseases (CEID) in Vietnam, established
+following his tenure as a Research Assistant Professor at Temple
+University and Penn State University. He earned his PhD from The Open
+University, UK, in 2016, focusing on individual-based simulations to
+combat the spread of antimalarial drug resistance.
+
+During his doctoral and postdoctoral work, Dr. Nguyen developed and
+validated a microsimulation model for malaria, used to evaluate
+strategies including multiple first-line therapies, triple
+artemisinin-based combination therapies (TACTs), and mass drug
+administration (MDA). His research has informed policy decisions in
+Uganda, Rwanda, and Tanzania.
+
+The participant guide and starter materials were supplied by Nguyen Tran
+for this session.
