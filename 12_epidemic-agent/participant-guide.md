@@ -1,0 +1,553 @@
+---
+title: "Working with an AI Coding Agent: Epidemic Forecasting from Partial Outbreak Data"
+subtitle: "From a chat conversation to a reviewable scientific workflow"
+date: 2026-11-10
+author:
+  - name: Nguyen Tran
+description: "Learn how context, tools, project instructions, and human review help coding agents investigate an outbreak and produce a forecast that can be checked against unseen observations."
+categories: [AI, Python, Epidemiology, Live session]
+toc: true
+toc-depth: 2
+---
+
+## Welcome
+
+**Session:** Tuesday, November 10, 2026 · **05:00–07:00 UTC** (two hours).
+
+**Local start times:** 12:00 Bangkok · 13:00 Perth · 15:00 Brisbane · 10:00 Islamabad · 06:00 Lagos · 08:00 Nairobi.
+
+**We gave an AI agent half an epidemic. What could it infer?**
+
+In this two-hour lab, we use an AI coding agent to investigate the early part of a measles outbreak and forecast what happens next. We will establish project rules, review a scientific plan, let the agent implement it, and save a forecast before seeing the remaining observations.
+
+You do not need to know Python or epidemic equations to participate. Your role is to ask what the AI knows, what it assumes, and whether its conclusions make sense. You can follow the facilitator's demonstration, work with a partner, or run the steps yourself if your environment is ready.
+
+The objective is a defensible, reviewable workflow. An inaccurate forecast can be informative if we preserve the original prediction and understand why it failed.
+
+### What you will learn
+
+By the end, you should be able to:
+
+- Explain how an LLM, its tools, and its available context work together in an agent workflow.
+- Organize project context so work can continue in a fresh session.
+- Review an agent's scientific assumptions before implementation.
+- Distinguish a good fit to observed data from a useful forecast.
+- Freeze a prediction, evaluate it on unseen observations, and conduct a scientific postmortem.
+
+### Session route
+
+| Approximate time | Activity |
+|---|---|
+| 00:00–00:30 | ChatGPT and Codex demonstrations; context, tools, and project instructions |
+| 00:30–00:55 | Project constitution, fresh-session check, and scientific planning |
+| 00:55–01:20 | Implementation, forecast inspection, and focused sensitivity review |
+| 01:20–01:30 | Forecast selection and freeze |
+| 01:30–01:40 | Reveal and evaluation |
+| 01:40–02:00 | Scientific postmortem and closing discussion |
+
+Wait for the facilitator at each review checkpoint. Independent runs may propose different models and produce different results.
+
+## Before the session
+
+For hands-on participation, prepare:
+
+1. Access to ChatGPT with CSV upload and data-analysis capability for the opening exercise. If unavailable, follow the demonstration.
+2. Access to Codex, signed in and able to open a local project folder. Check access before the session; availability and limits depend on your account and configuration.
+3. A working Python environment with NumPy, pandas, SciPy, and Matplotlib available to Codex. Ask the facilitator for help checking this before the session.
+4. Git if you want to record the forecast checkpoint yourself. The facilitator can demonstrate this step.
+
+You do not need to install Quarto to follow the lab. Quarto is used to publish this guide.
+
+Download the [clean starter ZIP](epidemic-agent-starter.zip) and extract it into a new folder. It contains only:
+
+```text
+epidemic-agent-starter/
+├── WORKSHOP_BRIEF.md
+└── data/
+    └── observed.csv
+```
+
+Individual downloads: [workshop brief](WORKSHOP_BRIEF.md) and [starting observations](data/observed.csv).
+
+Keep a separate copy for the introductory plotting demonstration. Use a fresh copy of the two-file starter when the formal challenge begins. Open only the relevant folder in Codex. The facilitator will supply future observations after forecasts are frozen.
+
+## 1. Start with a familiar ChatGPT workflow
+
+### Upload a CSV and request a plot
+
+Upload the demonstration copy of `observed.csv` to a new ChatGPT conversation. Begin with a short request:
+
+```text
+Describe the columns in this CSV and plot the counts over time.
+Do not guess missing units or background information. Identify anything
+you need me to clarify.
+```
+
+Inspect the response together. Are the labels clear? Does the system know what a period means or what the counts measure?
+
+Now supply additional context:
+
+```text
+Each row covers two weeks. The biweek column is a period index,
+not a calendar date. The cases column contains reported measles cases
+in one community, not all infections or the number currently infectious.
+Update the plot labels and briefly describe the observed pattern.
+```
+
+Check what changed. If the interface exposes the analysis, inspect the code-execution step used to read the file and make the figure.
+
+### What this demonstrates
+
+**Context** is the information available to the model for its current work: instructions, messages, file contents it has received, and tool results. The extra explanation gives meaning to the numbers.
+
+**Tools** allow the system to act. For example, code execution can read a CSV, calculate quantities, and generate a chart. An LLM generates responses and proposed actions; the surrounding application provides tools and manages their execution.
+
+In this exercise, we direct the work through a conversation. As a project grows, instructions, corrections, and decisions can become difficult to track across messages and sessions. We need a deliberate way to preserve them.
+
+ChatGPT can also use tools and support agentic workflows. The comparison today concerns how we organize the work; it is not a claim that ChatGPT only generates text.
+
+**Discuss:** What context did we provide? What was still missing? Which part required a tool?
+
+## 2. Repeat the task with Codex
+
+Open the demonstration folder in Codex. Show both `WORKSHOP_BRIEF.md` and `data/observed.csv`, then send:
+
+```text
+Read WORKSHOP_BRIEF.md and inspect data/observed.csv.
+Plot the observed case counts over time with appropriate labels.
+Save a reproducible plotting script and the figure in this project.
+Briefly explain what the data show and what information is missing.
+Do not fit models, forecast future cases, or search for the outbreak source.
+```
+
+Watch for the agent to:
+
+1. Locate and read the relevant files.
+2. Use the brief to interpret the columns and units.
+3. Write and execute code.
+4. Inspect results or errors and revise if needed.
+5. Save the script and figure and explain its work.
+
+Inspect the saved files. Can you see where the axis labels came from? Can the plot be recreated from the script? File access alone does not establish that the agent read or correctly understood a file.
+
+### From chatting to an agent workflow
+
+An **AI agent** uses a model and tools to take steps toward a goal, checking results and deciding what to do next. A **coding agent** has tools for working with project files, writing code, and running it.
+
+| Aspect | Human-directed chat in our example | Coding-agent project in our example |
+|---|---|---|
+| Tools | We request actions and direct follow-up steps | The agent selects and combines available tools within the task |
+| Context | We upload files and explain their meaning in messages | The agent retrieves context from project files and instructions |
+| Continuity | Important decisions must be carried into later work | Saved rules, plans, and outputs can be read in another session |
+| Results | We inspect the conversational response and attachments | We inspect the response and the project artifacts |
+
+The core working loop is:
+
+```text
+Understand the task → inspect relevant context → act with tools
+        ↑                                      ↓
+        └──── revise or finish ← check results ─┘
+```
+
+Both workflows need human judgment. More autonomy does not establish greater scientific validity.
+
+## 3. Understand the context and tools behind the scenes
+
+### Where instructions and evidence come from
+
+The following is a simplified view of how Codex receives context, not a mandatory sequence of tool calls:
+
+```text
+Built-in instructions and available tool definitions
+                    +
+Applicable AGENTS.md guidance
+  personal → project → more specific folder, when present
+                    +
+Your task and conversation
+                    +
+Project files the agent reads and tool results it receives
+```
+
+Codex discovers applicable `AGENTS.md` instructions automatically. The project brief, CSV, and other ordinary files become working context when read; opening a folder does not load every file into the model. More specific project guidance can refine broader guidance, within higher-level instructions. See the [official AGENTS.md guide](https://learn.chatgpt.com/docs/agent-configuration/agents-md).
+
+Agents also have limited context. Project files provide a durable record that can be retrieved; they do not guarantee perfect recall or understanding.
+
+### Tools a coding agent can use
+
+The facilitator will show this list without demonstrating every capability:
+
+- Find and read files.
+- Create and edit documents and code.
+- Run scripts, inspect errors, and check outputs.
+- Generate figures and tables.
+- Inspect changes and Git history.
+- Search the web or use connected services when enabled.
+
+External services and user-defined tools can extend an agent's capabilities. Building those tools is outside this workshop. Actual capabilities depend on the tools and permissions enabled in the environment.
+
+For this challenge, tool access does not grant permission to look for the original outbreak or retrieve future observations.
+
+## 4. Meet the forecasting challenge
+
+Switch to a **fresh two-file starter folder** for the formal lab. The earlier plotting example was an orientation exercise.
+
+Our target is **reported measles cases in each of biweeks 9–16**, using observations from biweeks 1–8. Each biweek is a two-week period: we observe 16 weeks and forecast the next 16 weeks.
+
+| Biweek | Reported cases |
+|---|---:|
+| 1 | 1 |
+| 2 | 2 |
+| 3 | 7 |
+| 4 | 4 |
+| 5 | 20 |
+| 6 | 38 |
+| 7 | 125 |
+| 8 | 290 |
+
+We know the disease, reporting unit, and time scale. Population size, susceptible population, vaccination coverage, reporting completeness, intervention history, calendar dates, and the historical source are not supplied.
+
+The organizer has already withheld future observations. Do not identify the historical outbreak or search for its unreleased outcomes. General measles knowledge may inform an analysis, but it must remain distinct from evidence measured in this community.
+
+Model choice is open. We are not requiring an SIR model or a particular forecast shape.
+
+## 5. Phase 0: Create the project constitution
+
+Before delegating a larger scientific task, establish the rules. We call these rules a **project constitution**; `AGENTS.md` is the file that carries them.
+
+### Copy this prompt
+
+```text
+Read WORKSHOP_BRIEF.md and inspect the structure and period coverage of
+data/observed.csv. Use only supplied information to describe this project.
+Do not analyze the epidemic, fit models, or forecast yet.
+
+The organizer has already withheld future observations. Define rules for
+respecting that evidence boundary; do not trim or hide data yourself.
+
+Create exactly these three files:
+1. AGENTS.md: concise, persistent scientific and working rules.
+2. README.md: the challenge, available data, forecast horizon, and workflow.
+3. data/metadata.md: known metadata and important missing information.
+
+In AGENTS.md, require agents to:
+- Distinguish observations, supplied metadata, general scientific knowledge,
+  assumptions, estimated quantities, and unrevealed information.
+- Never invent community-specific facts or present assumptions as evidence.
+- Use only released outbreak observations. Do not identify, retrieve, or
+  reconstruct withheld outcomes through external sources, Git history,
+  or files outside the workspace. Disclose accidental exposure and do not
+  use unreleased outcomes before official release.
+- Preserve original data and save derived work separately.
+- Use reproducible scripts, saved outputs, and fixed seeds where relevant.
+- Disclose uncertainty, unstable estimates, sensitivity, poor fit, and errors.
+- Preserve frozen forecasts; label post-reveal work as retrospective.
+- Seek human review of major scientific decisions. Routine reversible
+  technical steps within an approved scope may proceed autonomously.
+
+General measles knowledge is allowed when clearly labeled. Do not prescribe
+a model. Keep phase-specific tasks out of the persistent rules.
+
+Document missing population, susceptibility, vaccination, reporting,
+intervention, and timing information without guessing values.
+Use plain language. Audit the files for invented facts, unclear evidence
+boundaries, or an accidentally imposed model.
+Summarize what you created and pause for human review before analysis.
+```
+
+### Human review checkpoint
+
+Read all three documents. Compare an observed statement, “Biweek 8 has 290 reported cases,” with a statement such as “The community has 10,000 residents.” The second is not supplied evidence.
+
+Check that the documents preserve unknowns, keep model choice open, and make the evidence boundary clear. Request corrections before proceeding.
+
+## 6. Start a new session: recover context from files
+
+After approving the constitution, start a fresh Codex chat/session in the same project folder. Use the new-session control available in your interface.
+
+```text
+Read AGENTS.md, README.md, WORKSHOP_BRIEF.md, data/metadata.md,
+and data/observed.csv. Summarize the challenge, the available evidence,
+the missing information, and the project rules. Explain the next phase.
+Do not fit models or forecast yet.
+```
+
+Check the summary together. This is **recovery from saved context**, not recollection of the previous conversation. `AGENTS.md` preserves rules; the brief and metadata preserve context. Later files will preserve plans and decisions. Unsaved discussion does not automatically transfer.
+
+When creating or changing instruction files during an existing session, explicitly ask the agent to read the updated files before continuing. A fresh session also lets you check that the project guidance is being picked up.
+
+## 7. Phase 1: Develop and review the scientific plan
+
+The rules govern how the agent works. The plan records what analysis we agree it should perform.
+
+### Copy this prompt
+
+```text
+Act as the lead epidemiological modeler. Read AGENTS.md, README.md,
+WORKSHOP_BRIEF.md, data/metadata.md, and data/observed.csv.
+
+Plan a forecast of reported cases for biweeks 9–16 using only biweeks 1–8.
+Do not implement models yet.
+
+Write a concise PLAN.md that:
+1. Describes the observed trajectory without claiming an unseen peak.
+2. Separates evidence, general measles knowledge, and assumptions.
+3. Identifies missing information and quantities the data cannot determine.
+4. Proposes at least three plausible model families and selects at most
+   three candidates with meaningfully different forecasting assumptions.
+5. Defines each candidate's target, parameters, fixed assumptions,
+   fitting approach, forecast procedure, and diagnostic checks.
+6. Checks the two-week time scale and the link from model output to
+   reported incident cases, rather than infectious prevalence.
+7. Specifies uncertainty and a small, useful sensitivity analysis.
+8. Explains how a convincing fit could still yield a wrong forecast.
+9. Lists scientific decisions for human approval.
+
+Keep the plan feasible for a short live workshop. Explain technical terms.
+Do not write model code. Pause for human review.
+```
+
+**Identifiability** means whether the observations can distinguish different parameter values. Several combinations of population, susceptibility, transmission, and reporting can explain similar early growth. Eight observations do not make all of these quantities estimable.
+
+### Human review checkpoint
+
+- Does each candidate make a different assumption about future behavior?
+- What would cause its predicted peak or decline?
+- Which quantities would be estimated, fixed, or left unknown?
+- Are uncertainty and assumptions visible?
+- Can the plan be implemented within the session?
+
+Ask for revisions, then approve at most three candidates. Save the approved plan in `PLAN.md`. Do not assume that a lengthy plan is a feasible one.
+
+## 8. Phase 2: Implement and inspect
+
+### Copy this prompt
+
+```text
+Read AGENTS.md, the human-approved PLAN.md, data/metadata.md,
+and data/observed.csv. Implement the reviewed plan in reproducible Python.
+Do not redesign the science or select the final preferred forecast.
+
+Fit the approved models using only released observations. Respect the
+two-week time scale and the reported-case target. Record assumptions,
+fixed values, fitted values, bounds, and numerical or identification issues.
+If implementation requires a scientific change, explain it for human review.
+
+Create:
+- src/: analysis scripts
+- ASSUMPTIONS.md
+- REPORT.md
+- outputs/forecast.csv
+- figures/forecast.png
+
+The candidate forecast table must contain biweek,model,predicted_cases
+for every candidate and each biweek 9–16. Clearly name model scenarios.
+Define whether predicted_cases is a mean or median and use that convention
+consistently. Save uncertainty estimates in documented additional columns.
+
+The figure must show observed data, candidate forecasts, and the forecast
+boundary. Label any uncertainty bands and what they exclude.
+Record dependencies, seeds where relevant, and exact rerun commands in
+README.md. Run the workflow and check that it can be reproduced.
+Preserve original data. Do not search for the outbreak or future outcomes.
+Summarize results and limitations, then pause for human review.
+```
+
+Watch the agent's cycle of running code, reading errors, fixing problems, and rerunning. A successful run is a technical milestone; it does not validate the scientific assumptions.
+
+### Human review checkpoint
+
+Inspect the forecast table, figure, assumptions, and report. Confirm that:
+
+- All eight future biweeks are covered once per model/scenario.
+- Predictions are finite, nonnegative, and consistently defined.
+- Time units and the meaning of reported cases are correct.
+- Observed data remain unchanged.
+- Important departures from the approved plan are disclosed.
+- The README explains how to reproduce the outputs.
+
+### Challenge one important assumption
+
+Ask the agent to explain why the candidate curves diverge. Then use a focused sensitivity check already approved in the plan:
+
+```text
+Explain in plain language what causes each candidate forecast to keep
+growing, flatten, or decline. Identify a high-impact unknown assumption.
+Use the approved sensitivity analysis to show how changing it affects
+the forecast. Keep observed data and the information cutoff unchanged.
+Label scenario values as assumptions, not measured community facts.
+If this would expand the approved plan, propose the change and pause first.
+```
+
+**Sensitivity analysis** asks how a result changes when an assumption or input changes. A range of scenarios is not automatically a probability interval.
+
+Ask: “Could two models fit the same rising segment well but disagree about the future?”
+
+## 9. Phase 3: Select and freeze a forecast
+
+Before the reveal, agree on evaluation. We will compare forecasts on biweeks 9–16 using:
+
+| Measure | Meaning |
+|---|---|
+| Mean absolute error (MAE) | Average absolute difference between predicted and observed cases across the eight held-out periods |
+| Window-maximum timing error | Absolute difference in the biweek of the largest count within biweeks 9–16 |
+| Window-maximum magnitude error | Absolute difference between the largest predicted and observed counts within that window |
+| Cumulative reported-count error | Absolute difference between predicted and observed sums over biweeks 9–16 |
+
+Use the earliest biweek to break ties in window maxima. If a model has an uncertainty interval, also inspect which observations fall inside it and its width. Eight outcomes are too few to establish reliable calibration. Use the same point-summary convention across models.
+
+### Copy this prompt
+
+```text
+Read the project rules, reviewed plan, assumptions, report, and candidate
+forecasts. The held-out observations have not been released.
+
+Compare the candidates using scientific plausibility, extrapolation
+assumptions, identifiability, sensitivity, and behavior beyond the data.
+Do not choose solely by observed-period fit.
+Choose one preferred forecast or a justified ensemble for human approval.
+
+Write PRE_REVEAL_DECISION.md with:
+1. Information cutoff, target, selected approach, and rationale.
+2. Why alternatives were not preferred.
+3. Predicted maximum biweek and count within biweeks 9–16.
+4. Predicted cumulative reported cases through biweek 16, clearly
+   distinguished from infections and whole-epidemic size.
+5. Whether the whole-outbreak peak or final size can be inferred;
+   explicitly say when no defensible estimate is available.
+6. Uncertainty and its exclusions.
+7. Strongest and weakest assumptions; most likely failure mode.
+8. The single additional piece of information that would help most.
+9. The agreed evaluation measures and point-summary convention.
+
+Create outputs/final_forecast.csv with exactly biweek,predicted_cases
+and one finite, nonnegative prediction for each biweek 9–16.
+Preserve candidate forecasts and any saved uncertainty separately.
+Do not access withheld outcomes. Pause for human approval before freezing.
+```
+
+A maximum at biweek 16 may simply mean a model is still growing at the end of the window. It does not establish the eventual epidemic peak. Reported cases are not the same as all infections, and the period-16 cumulative count is not necessarily final epidemic size.
+
+### Freeze after approval
+
+Ask the agent to check the final table and save the approved decision. With Git available, ask it to inspect the files being recorded, initialize a local repository if necessary, and create a commit and tag named `pre-reveal`. The facilitator can help with Git setup. This step records work locally; it does not publish it.
+
+The frozen record should include the predictions, candidate forecasts, assumptions, decision, code, and reproduction instructions. Avoid recording a virtual environment or credentials. If Git is unavailable, make a separate dated copy of the complete pre-reveal project and retain it unchanged.
+
+**Stop here until the facilitator releases the future observations.**
+
+## 10. Reveal and evaluate
+
+After the freeze, save the facilitator-supplied observations as `data/reveal.csv`, with columns `biweek,cases`. It should cover biweeks 9–16. Do not replace `data/observed.csv`.
+
+First compare visually, before requesting an explanation:
+
+```text
+The facilitator has officially released data/reveal.csv.
+Read the frozen forecast and released observations. Validate that both
+contain exactly biweeks 9–16, without missing or duplicate periods,
+and that values are finite and nonnegative.
+Do not modify frozen artifacts or refit models.
+
+Save a new observed-versus-frozen-forecast plot with the cutoff marked.
+Include periods 1–8 as historical context. Do not explain forecast failure
+yet; report validation issues and show the comparison first.
+Save all new outputs under outputs/post_reveal/ and figures/post_reveal/.
+```
+
+Describe what surprised you. Then request evaluation:
+
+```text
+Using the unchanged frozen predictions, calculate the four evaluation
+measures agreed before reveal. Save the comparison table in
+outputs/post_reveal/evaluation.csv. Use biweeks 9–16 only for these scores.
+Compare candidate forecasts separately using the same rules and point
+summary; do not reselect or rewrite the original final forecast.
+If saved intervals exist, report coverage counts and interval widths
+descriptively, without claiming calibration from eight outcomes.
+Do not refit models. Explain what each measure captures and omits.
+```
+
+Ask: “Which model performed best under which measure? Does a better score establish that its assumptions were true?”
+
+## 11. Phase 4: Conduct a scientific postmortem
+
+### Copy this prompt
+
+```text
+The held-out observations have been officially revealed. Read the project
+rules, observed and reveal data, plan, assumptions, report, frozen decision,
+frozen forecasts, and post-reveal evaluation.
+Do not alter frozen artifacts or refit models during this postmortem.
+
+Write POSTMORTEM.md addressing:
+1. Which candidate fit the observed segment best, using comparable
+   diagnostics where available? Which forecast the future best?
+2. Why did forecasts diverge? Where did their turning points come from?
+3. Which parameters or quantities could eight observations not determine?
+4. Which assumptions or model structures dominated the forecast?
+5. Were time units and the mapping to reported cases handled correctly?
+6. Did general measles knowledge help, and was it kept separate from
+   community-specific evidence? Were any facts invented?
+7. Did uncertainty represent the important ways the forecast could fail?
+8. Were errors mainly due to limited data, model structure, estimation,
+   implementation, or scientific judgment? Support the assessment.
+9. What should human reviewers have challenged before the reveal?
+10. What additional information would have helped most?
+11. What seems obvious now only because we have seen the future?
+
+Distinguish pre-reveal reasoning from retrospective interpretation.
+Do not claim a fair best-fit ranking if diagnostics are not comparable.
+End with a section titled: What we would do differently next time.
+Do not rewrite history.
+```
+
+Check the agent's narrative against the saved plan and commitment. A plausible explanation after the event also needs scrutiny.
+
+Discuss three distinctions:
+
+- **Fit versus forecast:** explaining observed growth does not establish what happens next.
+- **Scenario versus evidence:** a successful scenario does not prove its assumed inputs were correct.
+- **Conditional versus broader uncertainty:** intervals within one model may omit interventions, reporting changes, or alternative model structures.
+
+## 12. Optional follow-up: What does the complete curve add?
+
+After the main session, use all released data for a clearly labeled retrospective analysis. Keep it separate from the frozen prediction.
+
+```text
+Propose a retrospective comparison of the same model fitted to biweeks
+1–8 versus 1–16. Keep model structure and fixed assumptions consistent
+so we can examine what the additional observations change.
+Explain parameter tradeoffs, boundary estimates, and uncertainty that
+remains conditional on fixed assumptions. Request approval before fitting.
+Save retrospective scripts and outputs separately and preserve all frozen
+pre-reveal artifacts. Do not present a full-data fit as a successful forecast.
+```
+
+Possible questions include whether the peak and decline constrain parameters, whether assumed reporting and susceptibility still dominate interpretation, and which additional metadata would be most valuable.
+
+## Troubleshooting and continuing later
+
+| Situation | What to do |
+|---|---|
+| The agent reads the wrong folder | Check the workspace and explicitly name the intended files |
+| A package or execution tool is unavailable | Ask the agent to report what is missing; follow the facilitator if setup would take too long |
+| The agent starts modeling before approval | Stop it, restate the current phase, and inspect changes before continuing |
+| The plan is too elaborate | Reduce it to at most three candidates and a focused sensitivity check |
+| The plot is empty or forecasts look implausible | Check units, time alignment, output schema, and model assumptions |
+| The session loses context | Read saved rules, approved plan, and current reports; ask for a summary before resuming |
+| Hidden outcomes are encountered early | Disclose the exposure; treat the affected run as a demonstration rather than an uncontaminated prospective test |
+
+Before ending a session, save important decisions in project files. In a new session, ask the agent to read the relevant files, explain the current stage, and identify the next approved task. Do not rely on unsaved conversational memory.
+
+## Takeaways
+
+Context management and tool use make larger workflows possible. Scientific review makes their decisions inspectable.
+
+- Keep evidence, assumptions, and decisions explicit in project files.
+- Let tools handle technical execution while humans review consequential scientific choices.
+- Preserve predictions before seeing outcomes: **fit is not forecast**.
+
+## Further reading
+
+- [Codex project instructions with AGENTS.md](https://learn.chatgpt.com/docs/agent-configuration/agents-md).
+- [Iterating development workflows with Codex](https://developers.openai.com/cookbook/examples/codex/iterating-development-workflows-with-codex), for a more technical discussion of durable project records and phased work.
