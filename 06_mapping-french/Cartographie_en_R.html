@@ -8,7 +8,7 @@
 
 <meta name="author" content="Dr Ousmane Diao">
 
-<title>Cartographie sous R – AMMnet Hackathon – AMMnet Hackathon</title>
+<title>Cartographie sous R – AMMnet Hackathon – AMMnet Analytics Skills Lab</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -143,7 +143,7 @@ gtag('config', 'G-072Z4G50DN', { 'anonymize_ip': true});
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../index.html">
-    <span class="navbar-title">AMMnet Hackathon</span>
+    <span class="navbar-title">AMMnet Analytics Skills Lab</span>
     </a>
   </div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Basculer la navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
@@ -160,7 +160,7 @@ gtag('config', 'G-072Z4G50DN', { 'anonymize_ip': true});
 <span class="menu-text">Contribute a post</span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/AMMnet/ammnet-hackathon"> <i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/AMMnet/skills-lab"> <i class="bi bi-github" role="img">
 </i> 
 <span class="menu-text"></span></a>
   </li>  
@@ -253,7 +253,7 @@ gtag('config', 'G-072Z4G50DN', { 'anonymize_ip': true});
 <h1>Téléchargement des données</h1>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Télécharger et décompresser les données (AMMnet Hackathon)</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/AMMnet/AMMnet-Hackathon/main/03_mapping-r/data.zip"</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/AMMnet/skills-lab/main/03_mapping-r/data.zip"</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(url, <span class="st">"data.zip"</span>, <span class="at">mode =</span> <span class="st">"wb"</span>)</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">unzip</span>(<span class="st">"data.zip"</span>, <span class="at">exdir =</span> <span class="st">"."</span>)</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -791,7 +791,7 @@ GEOGCRS["WGS 84",
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp("https:\/\/AMMnet\.github\.io\/ammnet-hackathon\/");
+        var filterRegex = new RegExp("https:\/\/labs\.ammnet\.org");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
@@ -1194,7 +1194,7 @@ GEOGCRS["WGS 84",
   <script type="application/javascript">
   window.quartoScrollableRegionsLabels = {"code":"Code défilable","output":"Sortie défilable"};
   </script>
-<script src="https://utteranc.es/client.js" repo="AMMnet/ammnet-hackathon" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+<script src="https://utteranc.es/client.js" repo="AMMnet/skills-lab" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
 </script>
 </div> <!-- /content -->
 

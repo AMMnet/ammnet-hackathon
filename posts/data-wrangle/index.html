@@ -12,7 +12,7 @@
 <meta name="author" content="Justin Millar">
 <meta name="dcterms.date" content="2024-10-14">
 
-<title>Live Session 2: Introduction to Data Wrangling in R – AMMnet Hackathon</title>
+<title>Live Session 2: Introduction to Data Wrangling in R – AMMnet Analytics Skills Lab</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -135,7 +135,7 @@ gtag('config', 'G-072Z4G50DN', { 'anonymize_ip': true});
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../../index.html">
-    <span class="navbar-title">AMMnet Hackathon</span>
+    <span class="navbar-title">AMMnet Analytics Skills Lab</span>
     </a>
   </div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
@@ -152,7 +152,7 @@ gtag('config', 'G-072Z4G50DN', { 'anonymize_ip': true});
 <span class="menu-text">Contribute a post</span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/AMMnet/ammnet-hackathon"> <i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/AMMnet/skills-lab"> <i class="bi bi-github" role="img">
 </i> 
 <span class="menu-text"></span></a>
   </li>  
@@ -241,9 +241,9 @@ gtag('config', 'G-072Z4G50DN', { 'anonymize_ip': true});
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>All of the raw materials, including the <a href="https://github.com/AMMnet/ammnet-hackathon/tree/main/02_data-wrangle/R">R code</a> and <a href="https://github.com/AMMnet/ammnet-hackathon/tree/main/02_data-wrangle/data">data</a>, are available in the <a href="https://github.com/AMMnet/ammnet-hackathon/tree/main/02_data-wrangle">Github repository</a>.</p>
+<p>All of the raw materials, including the <a href="https://github.com/AMMnet/skills-lab/tree/main/02_data-wrangle/R">R code</a> and <a href="https://github.com/AMMnet/skills-lab/tree/main/02_data-wrangle/data">data</a>, are available in the <a href="https://github.com/AMMnet/skills-lab/tree/main/02_data-wrangle">Github repository</a>.</p>
 <p>We will be using the <code>tidyverse</code> and <code>validate</code> packages in this tutorial. You may need to install them if you do not have them already. To install, run the following command in your R console: <code>install.packages("tidyverse", "validate")</code>. Note that the <code>tidyverse</code> package is large and may take a few minutes to install.</p>
-<p>Code from the live session is avaible <a href="https://github.com/AMMnet/ammnet-hackathon/tree/main/02_data-wrangle/R/live-session-code.R">on the Github</a>.</p>
+<p>Code from the live session is avaible <a href="https://github.com/AMMnet/skills-lab/tree/main/02_data-wrangle/R/live-session-code.R">on the Github</a>.</p>
 </div>
 </div>
 <div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/GkuePnX4MrQ?si=LoGYPdp6tHToo6Zl" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
@@ -281,14 +281,14 @@ gtag('config', 'G-072Z4G50DN', { 'anonymize_ip': true});
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load packages</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Next, let’s download the two example datasets we will use in this tutorial. These are available in the <a href="https://github.com/AMMnet/AMMnet-Hackathon">AMMnet Hackathon GitHub repository</a>.</p>
+<p>Next, let’s download the two example datasets we will use in this tutorial. These are available in the <a href="https://github.com/AMMnet/skills-lab">AMMnet Hackathon GitHub repository</a>.</p>
 <p>I suggest creating a <code>data</code> folder inside your R project, then we can download the two example datasets so that they are saved to your computer.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a data folder</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">"data"</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Download example data</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/AMMnet/AMMnet-Hackathon/main/02_data-wrangle/data/"</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/AMMnet/skills-lab/main/02_data-wrangle/data/"</span></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(<span class="fu">paste0</span>(url, <span class="st">"mockdata_cases1.csv"</span>), <span class="at">destfile =</span> <span class="st">"data/mockdata_cases1.csv"</span>)</span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(<span class="fu">paste0</span>(url, <span class="st">"mosq_mock1.csv"</span>), <span class="at">destfile =</span> <span class="st">"data/mosq_mock1.csv"</span>)</span>
@@ -1084,7 +1084,7 @@ x
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp("https:\/\/AMMnet\.github\.io\/ammnet-hackathon\/");
+        var filterRegex = new RegExp("https:\/\/labs\.ammnet\.org");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
@@ -1487,7 +1487,7 @@ x
   <script type="application/javascript">
   window.quartoScrollableRegionsLabels = {"code":"Scrollable code","output":"Scrollable output"};
   </script>
-<script src="https://utteranc.es/client.js" repo="AMMnet/ammnet-hackathon" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+<script src="https://utteranc.es/client.js" repo="AMMnet/skills-lab" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
 </script>
 </div> <!-- /content -->
 

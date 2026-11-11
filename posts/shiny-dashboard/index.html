@@ -12,7 +12,7 @@
 <meta name="dcterms.date" content="2026-07-16">
 <meta name="description" content="Build a reactive malaria dashboard for Burkina Faso with Shiny, bslib, leaflet, and plotly.">
 
-<title>Live Session 9: Building Interactive Malaria Dashboards with R Shiny – AMMnet Hackathon</title>
+<title>Live Session 9: Building Interactive Malaria Dashboards with R Shiny – AMMnet Analytics Skills Lab</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -135,7 +135,7 @@ gtag('config', 'G-072Z4G50DN', { 'anonymize_ip': true});
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../../index.html">
-    <span class="navbar-title">AMMnet Hackathon</span>
+    <span class="navbar-title">AMMnet Analytics Skills Lab</span>
     </a>
   </div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
@@ -152,7 +152,7 @@ gtag('config', 'G-072Z4G50DN', { 'anonymize_ip': true});
 <span class="menu-text">Contribute a post</span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/AMMnet/ammnet-hackathon"> <i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/AMMnet/skills-lab"> <i class="bi bi-github" role="img">
 </i> 
 <span class="menu-text"></span></a>
   </li>  
@@ -260,10 +260,10 @@ gtag('config', 'G-072Z4G50DN', { 'anonymize_ip': true});
 </div>
 <div class="callout-body-container callout-body">
 <ul>
-<li><a href="https://github.com/AMMnet/ammnet-hackathon/tree/main/09_shiny">Download the AMMnet session materials</a></li>
-<li><a href="https://github.com/AMMnet/ammnet-hackathon/blob/main/09_shiny/app.R">View the starter <code>app.R</code></a></li>
-<li><a href="https://github.com/AMMnet/ammnet-hackathon/blob/main/09_shiny/app_teacher.R">View the completed teacher app</a></li>
-<li><a href="https://github.com/AMMnet/ammnet-hackathon/tree/main/09_shiny/data">Download the prepared data</a></li>
+<li><a href="https://github.com/AMMnet/skills-lab/tree/main/09_shiny">Download the AMMnet session materials</a></li>
+<li><a href="https://github.com/AMMnet/skills-lab/blob/main/09_shiny/app.R">View the starter <code>app.R</code></a></li>
+<li><a href="https://github.com/AMMnet/skills-lab/blob/main/09_shiny/app_teacher.R">View the completed teacher app</a></li>
+<li><a href="https://github.com/AMMnet/skills-lab/tree/main/09_shiny/data">Download the prepared data</a></li>
 <li><a href="https://myalla-christina.github.io/ammnet-shiny-training/">Open the complete interactive lesson</a></li>
 <li><a href="https://github.com/myalla-christina/ammnet-shiny-training">View the original training repository</a></li>
 </ul>
@@ -293,9 +293,9 @@ gtag('config', 'G-072Z4G50DN', { 'anonymize_ip': true});
 </ul>
 <section id="get-the-project" class="level3">
 <h3 class="anchored" data-anchor-id="get-the-project">Get the project</h3>
-<p>Download the <code>09_shiny</code> folder from the <a href="https://github.com/AMMnet/ammnet-hackathon/tree/main/09_shiny">AMMnet repository</a>, or clone the complete AMMnet Hackathon repository:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/AMMnet/ammnet-hackathon.git</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ammnet-hackathon/09_shiny</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Download the <code>09_shiny</code> folder from the <a href="https://github.com/AMMnet/skills-lab/tree/main/09_shiny">AMMnet repository</a>, or clone the complete AMMnet Hackathon repository:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/AMMnet/skills-lab.git</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> skills-lab/09_shiny</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Open the <code>09_shiny</code> folder in RStudio. It contains the starter app, completed app, and prepared training data. The instructions are in this post, with the full interactive lesson linked above.</p>
 </section>
 <section id="install-the-r-packages" class="level3">
@@ -629,7 +629,7 @@ Deployment   rsconnect::deployApp()</code></pre>
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp("https:\/\/AMMnet\.github\.io\/ammnet-hackathon\/");
+        var filterRegex = new RegExp("https:\/\/labs\.ammnet\.org");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
@@ -1032,7 +1032,7 @@ Deployment   rsconnect::deployApp()</code></pre>
   <script type="application/javascript">
   window.quartoScrollableRegionsLabels = {"code":"Scrollable code","output":"Scrollable output"};
   </script>
-<script src="https://utteranc.es/client.js" repo="AMMnet/ammnet-hackathon" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+<script src="https://utteranc.es/client.js" repo="AMMnet/skills-lab" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
 </script>
 </div> <!-- /content -->
 

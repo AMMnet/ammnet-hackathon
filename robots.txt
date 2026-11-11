@@ -1,1 +1,1 @@
-Sitemap: https://AMMnet.github.io/ammnet-hackathon/sitemap.xml
+Sitemap: https://labs.ammnet.org/sitemap.xml
