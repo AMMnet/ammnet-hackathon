@@ -28,8 +28,8 @@ execute:
 
 ::: {.callout-note title="Links for this session"}
 - [Google Colab notebook](https://colab.research.google.com/github/merlinvn/ai-guided-modeling-hackathon/blob/main/notebooks/sir_llm_hackathon_skeleton.ipynb)
-- [Materials for this session](https://github.com/AMMnet/ammnet-hackathon/tree/main/08_ai-sir)
-- [Source notebook](https://github.com/AMMnet/ammnet-hackathon/blob/main/08_ai-sir/notebooks/sir_llm_hackathon_skeleton.ipynb)
+- [Materials for this session](https://github.com/AMMnet/skills-lab/tree/main/08_ai-sir)
+- [Source notebook](https://github.com/AMMnet/skills-lab/blob/main/08_ai-sir/notebooks/sir_llm_hackathon_skeleton.ipynb)
 - Local data file used in this post: `data/niamey.csv`
 - [Example of final output](https://colab.research.google.com/github/merlinvn/ai-guided-modeling-hackathon/blob/main/notebooks/sir_llm_hackathon_final.ipynb)
 - [PDF version of materials (with code and outputs)](sir_llm_hackathon_final.pdf)

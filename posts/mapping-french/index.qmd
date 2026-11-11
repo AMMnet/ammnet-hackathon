@@ -30,7 +30,7 @@ Ce document consiste a faire de la cartographie avec des commentaires **en fran�
 
 ```{r}
 # Télécharger et décompresser les données (AMMnet Hackathon)
-url <- "https://raw.githubusercontent.com/AMMnet/AMMnet-Hackathon/main/03_mapping-r/data.zip"
+url <- "https://raw.githubusercontent.com/AMMnet/skills-lab/main/03_mapping-r/data.zip"
 download.file(url, "data.zip", mode = "wb")
 unzip("data.zip", exdir = ".")
 ```

@@ -1,7 +1,7 @@
 # How to create and publish a blog post
 
 This guide explains how to add a post to the
-[AMMnet Hackathon blog](https://ammnet.github.io/ammnet-hackathon/) using
+[AMMnet Analytics Skills Lab blog](https://labs.ammnet.org/) using
 Quarto and GitHub.
 
 ## Use an AI assistant
@@ -56,8 +56,8 @@ quarto --version
 ### If you can create branches in the AMMnet repository
 
 ```bash
-git clone https://github.com/AMMnet/ammnet-hackathon.git
-cd ammnet-hackathon
+git clone https://github.com/AMMnet/skills-lab.git
+cd skills-lab
 git switch main
 git pull --ff-only
 ```
@@ -65,13 +65,13 @@ git pull --ff-only
 ### If you cannot create branches in the AMMnet repository
 
 On GitHub, open the
-[AMMnet repository](https://github.com/AMMnet/ammnet-hackathon), select
+[AMMnet repository](https://github.com/AMMnet/skills-lab), select
 **Fork**, and create a fork in your account. Then run:
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/ammnet-hackathon.git
-cd ammnet-hackathon
-git remote add upstream https://github.com/AMMnet/ammnet-hackathon.git
+git clone https://github.com/YOUR-USERNAME/skills-lab.git
+cd skills-lab
+git remote add upstream https://github.com/AMMnet/skills-lab.git
 git fetch upstream
 git switch main
 git merge --ff-only upstream/main
@@ -105,7 +105,7 @@ posts/
 Using `index.qmd` gives the post a clean URL:
 
 ```text
-https://ammnet.github.io/ammnet-hackathon/posts/topic-name/
+https://labs.ammnet.org/posts/topic-name/
 ```
 
 Images, PDFs, and small data files used only by the post should normally go
@@ -285,7 +285,7 @@ introduces one.
 
 1. Open your repository on GitHub after pushing the branch.
 2. Select **Compare & pull request**.
-3. Set the destination to `AMMnet/ammnet-hackathon` and the base branch to
+3. Set the destination to `AMMnet/skills-lab` and the base branch to
    `main`.
 4. Give the pull request a clear title and briefly describe the session,
    local checks performed, and any special software needed to rerun the code.
@@ -297,7 +297,7 @@ Do not publish the site manually. After a maintainer approves and merges the
 pull request, the **Quarto Publish** workflow renders the site and updates
 `gh-pages`. Follow the workflow in the repository's **Actions** tab. When it
 finishes, verify the post on the
-[published blog](https://ammnet.github.io/ammnet-hackathon/).
+[published blog](https://labs.ammnet.org/).
 
 ## Troubleshooting
 

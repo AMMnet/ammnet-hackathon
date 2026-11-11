@@ -22,8 +22,8 @@ editor:
 ![](ammnet-github-infograph.png){fig-alt="GitHub, R, and Quarto workflow infographic"}
 
 ::: {.callout-note title="Links for this session!"}
-- [AMMnet Hackathon Github repository](https://github.com/AMMnet/ammnet-hackathon)
-- [Materials for this session](https://github.com/AMMnet/ammnet-hackathon/tree/main/07_github)
+- [AMMnet Hackathon Github repository](https://github.com/AMMnet/skills-lab)
+- [Materials for this session](https://github.com/AMMnet/skills-lab/tree/main/07_github)
 - [Download Git](https://git-scm.com/downloads)
 - [Github](https://github.com)
 - [Quarto installation guide](https://quarto.org/docs/get-started/)

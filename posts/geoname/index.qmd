@@ -32,11 +32,11 @@ editor:
 ::: {#prerequisites .callout-important}
 *Before you begin, we expect participants to have a basic working knowledge of R.
 If you are new to R or need a refresher, we recommend reviewing the earlier
-sessions on [data visualization](https://ammnet.github.io/ammnet-hackathon/posts/data-vis/)
-and [data wrangling](https://ammnet.github.io/ammnet-hackathon/posts/data-wrangle/).*
+sessions on [data visualization](https://labs.ammnet.org/posts/data-vis/)
+and [data wrangling](https://labs.ammnet.org/posts/data-wrangle/).*
 
 *No prior experience with geographic data cleaning is required. However,
-familiarity with the previous [mapping in R](https://ammnet.github.io/ammnet-hackathon/posts/mapping-r/)
+familiarity with the previous [mapping in R](https://labs.ammnet.org/posts/mapping-r/)
 session will be useful. In this session, we focus on systematic approaches to
 geographic name standardisation. You will learn how to detect mismatches,
 apply string-distance algorithms, use interactive review for ambiguous cases,

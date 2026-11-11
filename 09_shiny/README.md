@@ -37,5 +37,5 @@ Open `app.R` and select **Run App** to work through the exercises. Open
 
 Read the local [complete workshop lesson](_lesson/09_rshiny_dashboard.qmd), or use
 the [rendered lesson](https://myalla-christina.github.io/ammnet-shiny-training/).
-The [Session 9 blog post](https://ammnet.github.io/ammnet-hackathon/posts/shiny-dashboard/)
+The [Session 9 blog post](https://labs.ammnet.org/posts/shiny-dashboard/)
 provides an overview and links to the materials.

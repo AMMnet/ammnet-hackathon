@@ -1,9 +1,9 @@
 ---
 title: "Contribute a post"
-description: "Share prepared AMMnet Hackathon session materials on the blog."
+description: "Share prepared AMMnet Analytics Skills Lab session materials on the blog."
 ---
 
-AMMnet Hackathon blog posts turn completed workshops, training sessions, and
+AMMnet Analytics Skills Lab posts turn completed workshops, training sessions, and
 other learning materials into resources that the wider community can reuse.
 Contributions are welcome from session facilitators, organizers, and
 participants working with the session team.
@@ -42,7 +42,7 @@ are submitted.
 
 ### Create the post manually
 
-Follow the [step-by-step contribution guide](https://github.com/AMMnet/ammnet-hackathon/blob/main/CONTRIBUTING_POSTS.md)
+Follow the [step-by-step contribution guide](https://github.com/AMMnet/skills-lab/blob/main/CONTRIBUTING_POSTS.md)
 to create a Quarto post, preview it locally, and submit a pull request.
 
 ## Review and publication

@@ -1,21 +1,21 @@
 ## ----echo=FALSE, out.width="100%"-------------------------------------------------------------
-knitr::include_graphics("C:/Users/Ousmane Diao/Desktop/Training/ammnet-hackathon/03_mapping-r/figs/points-lines-polygons-vector-data-types.png")
+knitr::include_graphics("../03_mapping-r/figs/points-lines-polygons-vector-data-types.png")
 
 
 ## ----echo=FALSE, out.width="100%"-------------------------------------------------------------
-knitr::include_graphics("C:/Users/Ousmane Diao/Desktop/Training/ammnet-hackathon/03_mapping-r/figs/raster_concept.png")
+knitr::include_graphics("../03_mapping-r/figs/raster_concept.png")
 
 
 ## ----echo=FALSE, out.width="100%"-------------------------------------------------------------
-knitr::include_graphics("C:/Users/Ousmane Diao/Desktop/Training/ammnet-hackathon/03_mapping-r/figs/Spatial_Layers.png")
+knitr::include_graphics("../03_mapping-r/figs/Spatial_Layers.PNG")
 
 
 ## ----echo=FALSE, out.width="100%"-------------------------------------------------------------
-knitr::include_graphics("C:/Users/Ousmane Diao/Desktop/Training/ammnet-hackathon/03_mapping-r/figs/crs.png")
+knitr::include_graphics("../03_mapping-r/figs/crs.png")
 
 
 ## ----echo=FALSE, out.width="100%"-------------------------------------------------------------
-knitr::include_graphics("C:/Users/Ousmane Diao/Desktop/Training/ammnet-hackathon/03_mapping-r/figs/spatial-projection-transformations-crs.png")
+knitr::include_graphics("../03_mapping-r/figs/spatial-projection-transformations-crs.png")
 
 
 ## ----libraries, warning = FALSE,message=FALSE-------------------------------------------------
@@ -28,11 +28,11 @@ library(malariaAtlas)
 
 
 ## ----echo=FALSE, out.width="100%"-------------------------------------------------------------
-knitr::include_graphics("C:/Users/Ousmane Diao/Desktop/Training/ammnet-hackathon/03_mapping-r/figs/shapefiles_in_r.png")
+knitr::include_graphics("../03_mapping-r/figs/shapefiles_in_r.png")
 
 
 ## ----read_dat, message=FALSE------------------------------------------------------------------
-tz_admin1 <- st_read("C:/Users/Ousmane Diao/Desktop/Training/ammnet-hackathon/03_mapping-r/data/shapefiles/TZ_admin1.shp")
+tz_admin1 <- st_read("../03_mapping-r/data/shapefiles/TZ_admin1.shp")
 
 
 ## ----sf1, results ='hide',message=FALSE, warning = FALSE--------------------------------------
@@ -40,11 +40,11 @@ tz_admin1
 
 
 ## ----figurename3, echo=FALSE, fig.cap="", out.width = '90%'-----------------------------------
-knitr::include_graphics("C:/Users/Ousmane Diao/Desktop/Training/ammnet-hackathon/03_mapping-r/figs/sf_features.png")
+knitr::include_graphics("../03_mapping-r/figs/sf_features.png")
 
 
 ## ----make points------------------------------------------------------------------------------
-tz_pr <- read_csv("C:/Users/Ousmane Diao/Desktop/Training/ammnet-hackathon/03_mapping-r/data/pfpr-mis-tanzania-clean.csv")
+tz_pr <- read_csv("../03_mapping-r/data/pfpr-mis-tanzania-clean.csv")
 
 # Transformer les données GPS en entité ponctuelle simple (sf)
 tz_pr_points <- st_as_sf(tz_pr, coords = c("longitude", "latitude"), crs = 4326)

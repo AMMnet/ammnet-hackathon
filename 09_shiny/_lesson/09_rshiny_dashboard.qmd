@@ -90,7 +90,7 @@ epidemiological patterns for the country.
 Download the three `.rds` files from the link below and save them into
 your project's `data/` folder before starting:
 
-📁 [**Download training data**](https://github.com/AMMnet/ammnet-hackathon/tree/main/09_shiny/data)
+📁 [**Download training data**](https://github.com/AMMnet/skills-lab/tree/main/09_shiny/data)
 
 Your `data/` folder should contain:
 

@@ -4,7 +4,7 @@
 
 Nguyen Tran · 10 November 2026 · 05:00–07:00 UTC
 
-- [Read the participant guide online](https://ammnet.github.io/ammnet-hackathon/12_epidemic-agent/).
+- [Read the participant guide online](https://labs.ammnet.org/12_epidemic-agent/).
 - [Download the clean starter ZIP](epidemic-agent-starter.zip) and extract it into a new project folder.
 - [Read the Markdown participant guide](participant-guide.md).
 

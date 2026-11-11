@@ -1,7 +1,7 @@
 # AMMnet Hackathon - Mapping in R
 
 # Download our data
-url <- "https://raw.githubusercontent.com/AMMnet/AMMnet-Hackathon/main/03_mapping-r/data.zip"
+url <- "https://raw.githubusercontent.com/AMMnet/skills-lab/main/03_mapping-r/data.zip"
 download.file(url, "data.zip")
 unzip("data.zip")
 

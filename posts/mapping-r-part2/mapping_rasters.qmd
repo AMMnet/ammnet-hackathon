@@ -40,14 +40,14 @@ to take the survey.
 *Before you begin, we expect participants to have basic knowledge of R.
 If you're new to R or would like a refresher, we recommend reviewing the
 first two live sessions on [data
-visualization](https://ammnet.github.io/ammnet-hackathon/posts/data-vis/)
+visualization](https://labs.ammnet.org/posts/data-vis/)
 and [data
-wrangling](https://ammnet.github.io/ammnet-hackathon/posts/data-wrangle/)
+wrangling](https://labs.ammnet.org/posts/data-wrangle/)
 beforehand.*
 
 *Prior experience with GIS data is not required, though it may be
 helpful. This session builds on the previous [mapping in
-R](https://ammnet.github.io/ammnet-hackathon/posts/mapping-r/) session
+R](https://labs.ammnet.org/posts/mapping-r/) session
 that introduced vector data (e.g. shapefiles). In this session we'll
 focus primarily on rasters in R, with a several cool techniques to
 manipulate rasters to help you in your malaria modelling.*
@@ -56,7 +56,7 @@ manipulate rasters to help you in your malaria modelling.*
 ::: {.callout-tip title="Before you start"}
 All of the raw materials, including the R code and data, are available
 in the [Github
-repository](https://github.com/AMMnet/ammnet-hackathon/tree/main/04_mapping-r-part2).
+repository](https://github.com/AMMnet/skills-lab/tree/main/04_mapping_r_part2).
 
 We will be using the `tidyverse` , `terra`, `tidyterra` , `sf`,
 `malariaAtlas`, `RColorBrewer`, and `tmap` packages in this tutorial.
@@ -67,7 +67,7 @@ Note that the `tidyverse` package is large and may take a few minutes to
 install.
 
 Code from the live session is available on the
-[Github](https://github.com/AMMnet/ammnet-hackathon/tree/main/04_mapping-r-part2).
+[Github](https://github.com/AMMnet/skills-lab/tree/main/04_mapping_r_part2).
 
 Data for this tutorial has been uploaded onto
 [Figshare](https://figshare.com/articles/figure/AMMnet_Hackathon_-_rasters/28839191)
