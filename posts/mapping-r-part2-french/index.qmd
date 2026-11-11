@@ -40,9 +40,9 @@ knitr:
 
 **Adapté à partir de :**
 
--   [Live Session 5: Mapping in R part 2 – AMMnet Hackathon (traduction)](https://ammnet.github.io/ammnet-hackathon/posts/mapping-r-part2/mapping_rasters.html)
+-   [Live Session 5: Mapping in R part 2 – AMMnet Hackathon (traduction)](https://labs.ammnet.org/posts/mapping-r-part2/mapping_rasters.html)
 
--   [Cartographie sous R – AMMnet Hackathon](https://ammnet.github.io/ammnet-hackathon/posts/mapping-french/)
+-   [Cartographie sous R – AMMnet Hackathon](https://labs.ammnet.org/posts/mapping-french/)
 
 ::: {.callout-important}
 ## IMPORTANT
@@ -57,7 +57,7 @@ Une expérience préalable des données SIG n'est pas requise, mais elle peut s'
 
 Toutes les ressources, y compris ce document et les données, sont
 disponibles dans le dossier
-[`04_mapping_r_part2`](https://github.com/AMMnet/ammnet-hackathon/tree/main/04_mapping_r_part2)
+[`04_mapping_r_part2`](https://github.com/AMMnet/skills-lab/tree/main/04_mapping_r_part2)
 du dépôt GitHub du hackathon. Téléchargez le dossier complet ou clonez
 le dépôt afin de conserver la structure `data/rasters/` attendue par le
 code.

@@ -1,6 +1,6 @@
 ---
 name: add-ammnet-blog-post
-description: Publish already-prepared workshop, training, or session materials as an AMMnet Hackathon blog post. Use when an AI assistant needs to inspect supplied local files or a source repository, select the key participant materials, create the numbered session folder and Quarto post, validate the complete site, and optionally prepare a GitHub pull request. Do not use to invent scientific content or develop an unfinished lesson.
+description: Publish already-prepared workshop, training, or session materials as an AMMnet Analytics Skills Lab blog post. Use when an AI assistant needs to inspect supplied local files or a source repository, select the key participant materials, create the numbered session folder and Quarto post, validate the complete site, and optionally prepare a GitHub pull request. Do not use to invent scientific content or develop an unfinished lesson.
 ---
 
 # Add an AMMnet Blog Post
@@ -11,7 +11,7 @@ the smallest complete change.
 
 ## Establish the repository rules
 
-1. Work from the AMMnet Hackathon repository root.
+1. Work from the AMMnet Analytics Skills Lab repository root.
 2. Read `CONTRIBUTING_POSTS.md` completely; treat it as the source of truth.
 3. Inspect `_quarto.yml`, `posts/_metadata.yml`, the publishing workflow, and
    one or two recent posts before editing.

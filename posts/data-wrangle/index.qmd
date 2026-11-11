@@ -19,11 +19,11 @@ If you are present for the live session on Monday October 21st, please [click he
 :::
 
 ::: {.callout-tip title="Before you start"}
-All of the raw materials, including the [R code](https://github.com/AMMnet/ammnet-hackathon/tree/main/02_data-wrangle/R) and [data](https://github.com/AMMnet/ammnet-hackathon/tree/main/02_data-wrangle/data), are available in the [Github repository](https://github.com/AMMnet/ammnet-hackathon/tree/main/02_data-wrangle).
+All of the raw materials, including the [R code](https://github.com/AMMnet/skills-lab/tree/main/02_data-wrangle/R) and [data](https://github.com/AMMnet/skills-lab/tree/main/02_data-wrangle/data), are available in the [Github repository](https://github.com/AMMnet/skills-lab/tree/main/02_data-wrangle).
 
 We will be using the `tidyverse` and `validate` packages in this tutorial. You may need to install them if you do not have them already. To install, run the following command in your R console: `install.packages("tidyverse", "validate")`. Note that the `tidyverse` package is large and may take a few minutes to install.
 
-Code from the live session is available [on the Github](https://github.com/AMMnet/ammnet-hackathon/tree/main/02_data-wrangle/R/live-session-code.R).
+Code from the live session is available [on the Github](https://github.com/AMMnet/skills-lab/tree/main/02_data-wrangle/R/live-session-code.R).
 :::
 
 {{< video https://www.youtube.com/embed/GkuePnX4MrQ?si=LoGYPdp6tHToo6Zl >}}
@@ -81,7 +81,7 @@ Next, we will load the `tidyverse` package. This package provides a set of usefu
 library(tidyverse)
 ```
 
-Next, let's download the two example datasets we will use in this tutorial. These are available in the [AMMnet Hackathon GitHub repository](https://github.com/AMMnet/AMMnet-Hackathon). 
+Next, let's download the two example datasets we will use in this tutorial. These are available in the [AMMnet Hackathon GitHub repository](https://github.com/AMMnet/skills-lab). 
 
 I suggest creating a `data` folder inside your R project, then we can download the two example datasets so that they are saved to your computer.
 
@@ -93,7 +93,7 @@ I suggest creating a `data` folder inside your R project, then we can download t
 dir.create("data")
 
 # Download example data
-url <- "https://raw.githubusercontent.com/AMMnet/AMMnet-Hackathon/main/02_data-wrangle/data/"
+url <- "https://raw.githubusercontent.com/AMMnet/skills-lab/main/02_data-wrangle/data/"
 
 download.file(paste0(url, "mockdata_cases1.csv"), destfile = "data/mockdata_cases1.csv")
 download.file(paste0(url, "mosq_mock1.csv"), destfile = "data/mosq_mock1.csv")
@@ -106,7 +106,7 @@ mosq_data  <- read_csv("data/mosq_mock1.csv")
 ```{r load-local}
 #| echo: false
 # Load example data
-url <- "https://raw.githubusercontent.com/AMMnet/AMMnet-Hackathon/main/02_data-wrangle/data/"
+url <- "https://raw.githubusercontent.com/AMMnet/skills-lab/main/02_data-wrangle/data/"
 data_cases   <- read_csv(paste0(url, "mockdata_cases1.csv"), col_types = cols())
 mosq_data  <- read_csv(paste0(url, "mosq_mock1.csv"), col_types = cols())
 ```

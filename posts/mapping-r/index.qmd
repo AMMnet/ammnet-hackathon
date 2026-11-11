@@ -36,9 +36,9 @@ to take the survey.
 *Before you begin, we expect participants to have basic knowledge of R.
 If you're new to R or would like a refresher, we recommend reviewing the
 first two live sessions on [data
-visualization](https://ammnet.github.io/ammnet-hackathon/posts/data-vis/)
+visualization](https://labs.ammnet.org/posts/data-vis/)
 and [data
-wrangling](https://ammnet.github.io/ammnet-hackathon/posts/data-wrangle/)
+wrangling](https://labs.ammnet.org/posts/data-wrangle/)
 beforehand.*
 
 *Prior experience with GIS data is not required, though it may be
@@ -48,11 +48,11 @@ introduction to key GIS concepts as needed.*
 
 ::: {.callout-tip title="Before you start"}
 All of the raw materials, including the [R
-code](https://github.com/AMMnet/ammnet-hackathon/tree/main/02_data-wrangle/R)
+code](https://github.com/AMMnet/skills-lab/tree/main/02_data-wrangle/R)
 and
-[data](https://github.com/AMMnet/ammnet-hackathon/tree/main/02_data-wrangle/data),
+[data](https://github.com/AMMnet/skills-lab/tree/main/02_data-wrangle/data),
 are available in the [Github
-repository](https://github.com/AMMnet/ammnet-hackathon/tree/main/02_data-wrangle).
+repository](https://github.com/AMMnet/skills-lab/tree/main/02_data-wrangle).
 
 We will be using the `tidyverse` , `sf`, `malariaAtlas`, `tmap` and
 `ggmaps` packages in this tutorial. You may need to install them if you
@@ -62,16 +62,16 @@ R console:
 Note that the `tidyverse` package is large and may take a few minutes to
 install.
 
-You will also need to download the data files used in this tutoral. You can download them [here](https://github.com/AMMnet/ammnet-hackathon/tree/main/03_mapping-r/data), or use are to add them to your active R project with this code:
+You will also need to download the data files used in this tutoral. You can download them [here](https://github.com/AMMnet/skills-lab/tree/main/03_mapping-r/data), or use are to add them to your active R project with this code:
 
 ``` 
-url <- "https://raw.githubusercontent.com/AMMnet/AMMnet-Hackathon/main/03_mapping-r/data.zip"
+url <- "https://raw.githubusercontent.com/AMMnet/skills-lab/main/03_mapping-r/data.zip"
 download.file(url, "data.zip")
 unzip("data.zip")
 ```
 
 Code from the live session is available [on the
-Github](https://github.com/AMMnet/ammnet-hackathon/tree/main/02_data-wrangle/R/live-session-code.R).
+Github](https://github.com/AMMnet/skills-lab/tree/main/02_data-wrangle/R/live-session-code.R).
 :::
 
 {{< video https://www.youtube.com/embed/z-yGKvORJE8?si=G3HdTeloRFm8Ol1f >}}
@@ -465,7 +465,7 @@ using the `crs` command; crs 4326 is the standard WGS 84 CRS.
 Now that we have some shapefiles let's try make a plot of them both. We
 can use the geom called `geom_sf()` with the ggplot funtions to make a
 plot. This was explored in the previous hackathon on [data
-visualization](https://ammnet.github.io/ammnet-hackathon/posts/data-vis/)
+visualization](https://labs.ammnet.org/posts/data-vis/)
 
 ```{r plot1}
 tz_region <- ggplot(tz_admin1)+

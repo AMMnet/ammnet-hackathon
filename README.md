@@ -1,4 +1,6 @@
-# AMMnet Hackathon
+# AMMnet Analytics Skills Lab
+
+*Formerly the AMMnet Hackathon. The site now lives at <https://labs.ammnet.org>.*
 
 ## A virtual hackathon series for continual learning
 
@@ -44,9 +46,9 @@ To volunteer as an expert, please complete the form at the [link here](https://d
 
 ### Navigating the Github
 
-Each Hackathon session will have it own folder in this Github repo that will contain all code and data files needed to participate. For example, materials for the [Hackathon on Data Visualization](https://ammnet.github.io/ammnet-hackathon/posts/data-vis/) in R can be found in the folder called `01_data-vis`.
+Each Hackathon session will have it own folder in this Github repo that will contain all code and data files needed to participate. For example, materials for the [Hackathon on Data Visualization](https://labs.ammnet.org/posts/data-vis/) in R can be found in the folder called `01_data-vis`.
 
-You can either download those files directly from the folder, or you can clone this entire respository (including the files used to make our [Hackathon Blog](https://ammnet.github.io/ammnet-hackathon/)).
+You can either download those files directly from the folder, or you can clone this entire respository (including the files used to make our [Skills Lab blog](https://labs.ammnet.org/)).
 
 ### Contribute a blog post
 

@@ -23,11 +23,11 @@ Si vous êtes présent à la session en direct le lundi 21 octobre, veuillez [cl
 :::
 
 ::: {.callout-tip title="Before you start"}
-Tout le matériel nécessaire, y compris le [code R](https://github.com/AMMnet/ammnet-hackathon/tree/main/02_data-wrangle/R) et les [données](https://github.com/AMMnet/ammnet-hackathon/tree/main/02_data-wrangle/data), sont disponibles dans le [répertoire Github](https://github.com/AMMnet/ammnet-hackathon/tree/main/02_data-wrangle).
+Tout le matériel nécessaire, y compris le [code R](https://github.com/AMMnet/skills-lab/tree/main/02_data-wrangle/R) et les [données](https://github.com/AMMnet/skills-lab/tree/main/02_data-wrangle/data), sont disponibles dans le [répertoire Github](https://github.com/AMMnet/skills-lab/tree/main/02_data-wrangle).
 
 Nous utiliserons les packages `tidyverse` and `validate` dans ce tutoriel. Vous devrez peut-être les installer si vous ne les avez pas déjà. Pour les installer, exécutez la commande suivante dans votre console R : `install.packages("tidyverse", "validate")`. Notez que le package `tidyverse` est volumineux et peut prendre quelques minutes pour s'installer.
 
-Le code de la session en direct est disponible [sur  Github](https://github.com/AMMnet/ammnet-hackathon/tree/main/02_data-wrangle/R/live-session-code.R).
+Le code de la session en direct est disponible [sur  Github](https://github.com/AMMnet/skills-lab/tree/main/02_data-wrangle/R/live-session-code.R).
 :::
 
 {{< video https://www.youtube.com/embed/vC8yTnvm_XA >}}
@@ -85,7 +85,7 @@ Ensuite, nous allons charger le package `tidyverse`. Ce package fournit un ensem
 library(tidyverse)
 ```
 
-Ensuite, nous allons télécharger les deux exemples de jeux de données que nous utiliserons dans ce tutoriel. Ceux-ci sont disponibles dans le [répertoire GitHub AMMnet Hackathon](https://github.com/AMMnet/AMMnet-Hackathon). 
+Ensuite, nous allons télécharger les deux exemples de jeux de données que nous utiliserons dans ce tutoriel. Ceux-ci sont disponibles dans le [répertoire GitHub AMMnet Hackathon](https://github.com/AMMnet/skills-lab). 
 
 Je suggère de créer un dossier `data` dans votre projet R, puis nous pourrons télécharger les deux exemples d'ensembles de données afin qu'ils soient enregistrés sur votre ordinateur.
 
@@ -97,7 +97,7 @@ Je suggère de créer un dossier `data` dans votre projet R, puis nous pourrons 
 dir.create("data")
 
 # Download example data
-url <- "https://raw.githubusercontent.com/AMMnet/AMMnet-Hackathon/main/02_data-wrangle/data/"
+url <- "https://raw.githubusercontent.com/AMMnet/skills-lab/main/02_data-wrangle/data/"
 
 download.file(paste0(url, "mockdata_cases1.csv"), destfile = "data/mockdata_cases1.csv")
 download.file(paste0(url, "mosq_mock1.csv"), destfile = "data/mosq_mock1.csv")
@@ -110,7 +110,7 @@ mosq_data  <- read_csv("data/mosq_mock1.csv")
 ```{r load-local}
 #| echo: false
 # Load example data
-url <- "https://raw.githubusercontent.com/AMMnet/AMMnet-Hackathon/main/02_data-wrangle/data/"
+url <- "https://raw.githubusercontent.com/AMMnet/skills-lab/main/02_data-wrangle/data/"
 data_cases   <- read_csv(paste0(url, "mockdata_cases1.csv"), col_types = cols())
 mosq_data  <- read_csv(paste0(url, "mosq_mock1.csv"), col_types = cols())
 ```

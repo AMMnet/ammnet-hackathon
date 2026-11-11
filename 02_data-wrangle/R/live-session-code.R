@@ -8,7 +8,7 @@
 dir.create("data")
 
 # Download example data
-url <- "https://raw.githubusercontent.com/AMMnet/AMMnet-Hackathon/main/02_data-wrangle/data/"
+url <- "https://raw.githubusercontent.com/AMMnet/skills-lab/main/02_data-wrangle/data/"
 
 download.file(paste0(url, "mockdata_cases1.csv"), destfile = "data/mockdata_cases1.csv")
 download.file(paste0(url, "mosq_mock1.csv"), destfile = "data/mosq_mock1.csv")

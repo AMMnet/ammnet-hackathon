@@ -1,6 +1,7 @@
 project:
   type: website
   resources:
+    - CNAME
     - "11_dhis2/**"
     - "12_epidemic-agent/epidemic-agent-starter.zip"
     - "12_epidemic-agent/participant-guide.md"
@@ -13,13 +14,14 @@ project:
     - "!12_epidemic-agent/*.md"
 
 website:
-  title: "AMMnet Hackathon"
+  title: "AMMnet Analytics Skills Lab"
+  site-url: https://labs.ammnet.org
   navbar:
     right:
       - about.qmd
       - contribute.qmd
       - icon: github
-        href: https://github.com/AMMnet/ammnet-hackathon
+        href: https://github.com/AMMnet/skills-lab
       - icon: twitter
         href: https://x.com/AMMnetwork
   google-analytics: "G-072Z4G50DN"
@@ -31,7 +33,7 @@ format:
     - custom.scss
     comments:
       utterances:
-         repo: AMMnet/ammnet-hackathon
+         repo: AMMnet/skills-lab
 
 execute:
   freeze: auto

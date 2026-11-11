@@ -41,7 +41,7 @@ observations. Human scientific judgment will guide each stage.
 - [Read the complete participant guide](../../12_epidemic-agent/index.html)
 - [Download the clean starter ZIP](../../12_epidemic-agent/epidemic-agent-starter.zip)
 - <a href="../../12_epidemic-agent/participant-guide.md" download data-noresolveinput>Download the Markdown participant guide</a>
-- [Browse the session materials on GitHub](https://github.com/AMMnet/ammnet-hackathon/tree/main/12_epidemic-agent)
+- [Browse the session materials on GitHub](https://github.com/AMMnet/skills-lab/tree/main/12_epidemic-agent)
 :::
 
 ## Who this is for

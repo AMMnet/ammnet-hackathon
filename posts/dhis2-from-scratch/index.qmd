@@ -31,7 +31,7 @@ managing access.
 - [Open the complete 18-topic lesson](../../11_dhis2/lesson/index.html)
 - [Download the organisation-unit import CSV](../../11_dhis2/lesson/csv/orgunits_import.csv)
 - [Download the organisation-unit groups CSV](../../11_dhis2/lesson/csv/orgunit_groups_template.csv)
-- [Browse the session materials](https://github.com/AMMnet/ammnet-hackathon/tree/main/11_dhis2)
+- [Browse the session materials](https://github.com/AMMnet/skills-lab/tree/main/11_dhis2)
 - [View the original lesson repository](https://github.com/mohamedsillahkanu/AMMnet-test-Hackathon)
 :::
 

@@ -33,10 +33,10 @@ O material principal está em português. Uma versão correspondente em
 inglês está disponível como referência.
 
 ::: {.callout-note title="Materiais da formação"}
-- [Abrir os materiais da Sessão 10](https://github.com/AMMnet/ammnet-hackathon/tree/main/10_reproducible-analysis-r-quarto)
-- [Usar o projeto em português](https://github.com/AMMnet/ammnet-hackathon/tree/main/10_reproducible-analysis-r-quarto/portuguese)
-- [Ler o tutorial em português](https://github.com/AMMnet/ammnet-hackathon/blob/main/10_reproducible-analysis-r-quarto/portuguese/tutorial.md)
-- [Consultar a versão em inglês](https://github.com/AMMnet/ammnet-hackathon/tree/main/10_reproducible-analysis-r-quarto/english)
+- [Abrir os materiais da Sessão 10](https://github.com/AMMnet/skills-lab/tree/main/10_reproducible-analysis-r-quarto)
+- [Usar o projeto em português](https://github.com/AMMnet/skills-lab/tree/main/10_reproducible-analysis-r-quarto/portuguese)
+- [Ler o tutorial em português](https://github.com/AMMnet/skills-lab/blob/main/10_reproducible-analysis-r-quarto/portuguese/tutorial.md)
+- [Consultar a versão em inglês](https://github.com/AMMnet/skills-lab/tree/main/10_reproducible-analysis-r-quarto/english)
 :::
 
 ::: {.callout-tip title="English-language materials"}
@@ -44,8 +44,8 @@ Would you prefer to follow the lesson in English? The complete English
 project contains the equivalent tutorial, simulated data, R scripts,
 and Quarto report sources.
 
-- [Open the English training materials](https://github.com/AMMnet/ammnet-hackathon/tree/main/10_reproducible-analysis-r-quarto/english)
-- [Read the English tutorial](https://github.com/AMMnet/ammnet-hackathon/blob/main/10_reproducible-analysis-r-quarto/english/tutorial.md)
+- [Open the English training materials](https://github.com/AMMnet/skills-lab/tree/main/10_reproducible-analysis-r-quarto/english)
+- [Read the English tutorial](https://github.com/AMMnet/skills-lab/blob/main/10_reproducible-analysis-r-quarto/english/tutorial.md)
 :::
 {{< video https://www.youtube.com/embed/i4VVd7nxTWM >}}
 ## Objetivos de aprendizagem
@@ -92,12 +92,12 @@ install.packages(c(
 ### Obter o projeto
 
 Descarregue a pasta
-[`10_reproducible-analysis-r-quarto`](https://github.com/AMMnet/ammnet-hackathon/tree/main/10_reproducible-analysis-r-quarto)
+[`10_reproducible-analysis-r-quarto`](https://github.com/AMMnet/skills-lab/tree/main/10_reproducible-analysis-r-quarto)
 ou clone o repositório completo:
 
 ```bash
-git clone https://github.com/AMMnet/ammnet-hackathon.git
-cd ammnet-hackathon/10_reproducible-analysis-r-quarto/portuguese
+git clone https://github.com/AMMnet/skills-lab.git
+cd skills-lab/10_reproducible-analysis-r-quarto/portuguese
 ```
 
 Abra a pasta do idioma pretendido no RStudio e siga o respetivo

@@ -40,10 +40,10 @@ patterns are realistic, but the indicator values must not be used for
 programme decisions.
 
 ::: {.callout-note title="Training materials"}
-- [Download the AMMnet session materials](https://github.com/AMMnet/ammnet-hackathon/tree/main/09_shiny)
-- [View the starter `app.R`](https://github.com/AMMnet/ammnet-hackathon/blob/main/09_shiny/app.R)
-- [View the completed teacher app](https://github.com/AMMnet/ammnet-hackathon/blob/main/09_shiny/app_teacher.R)
-- [Download the prepared data](https://github.com/AMMnet/ammnet-hackathon/tree/main/09_shiny/data)
+- [Download the AMMnet session materials](https://github.com/AMMnet/skills-lab/tree/main/09_shiny)
+- [View the starter `app.R`](https://github.com/AMMnet/skills-lab/blob/main/09_shiny/app.R)
+- [View the completed teacher app](https://github.com/AMMnet/skills-lab/blob/main/09_shiny/app_teacher.R)
+- [Download the prepared data](https://github.com/AMMnet/skills-lab/tree/main/09_shiny/data)
 - [Open the complete interactive lesson](https://myalla-christina.github.io/ammnet-shiny-training/)
 - [View the original training repository](https://github.com/myalla-christina/ammnet-shiny-training)
 :::
@@ -79,12 +79,12 @@ Install the following software:
 ### Get the project
 
 Download the `09_shiny` folder from the
-[AMMnet repository](https://github.com/AMMnet/ammnet-hackathon/tree/main/09_shiny),
+[AMMnet repository](https://github.com/AMMnet/skills-lab/tree/main/09_shiny),
 or clone the complete AMMnet Hackathon repository:
 
 ```bash
-git clone https://github.com/AMMnet/ammnet-hackathon.git
-cd ammnet-hackathon/09_shiny
+git clone https://github.com/AMMnet/skills-lab.git
+cd skills-lab/09_shiny
 ```
 
 Open the `09_shiny` folder in RStudio. It contains the starter app,

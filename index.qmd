@@ -1,5 +1,5 @@
 ---
-title: "Welcome to AMMNet Hackathon Blog!"
+title: "Welcome to the AMMnet Analytics Skills Lab!"
 listing:
   contents: posts
   sort: "date desc"
@@ -12,5 +12,5 @@ title-block-banner: true
 comments: false
 ---
 
-Have prepared materials from an AMMnet Hackathon session? [Contribute a post](contribute.qmd) so others can learn from them.
+Have prepared materials from an AMMnet Analytics Skills Lab session? [Contribute a post](contribute.qmd) so others can learn from them.
 

@@ -30,7 +30,7 @@ Next, we will load the `tidyverse` package. This package provides a set of usefu
 library(tidyverse)
 ```
 
-Next, let's download the two example datasets we will use in this tutorial. These are available in the [AMMnet Hackathon GitHub repository](https://github.com/AMMnet/AMMnet-Hackathon). 
+Next, let's download the two example datasets we will use in this tutorial. These are available in the [AMMnet Hackathon GitHub repository](https://github.com/AMMnet/skills-lab). 
 
 I suggest creating a `data` folder inside your R project, then we can download the two example datasets so that they are saved to your computer.
 
@@ -42,7 +42,7 @@ I suggest creating a `data` folder inside your R project, then we can download t
 dir.create("data")
 
 # Download example data
-url <- "https://raw.githubusercontent.com/AMMnet/AMMnet-Hackathon/main/01_data-vis/data/"
+url <- "https://raw.githubusercontent.com/AMMnet/skills-lab/main/01_data-vis/data/"
 
 download.file(paste0(url, "mockdata_cases.csv"), destfile = "data/mockdata_cases.csv")
 download.file(paste0(url, "mosq_mock.csv"), destfile = "data/mosq_mock.csv")
@@ -55,7 +55,7 @@ mosquito_data  <- read_csv("data/mosq_mock.csv")
 ```{r load-local}
 #| echo: false
 # Load example data
-url <- "https://raw.githubusercontent.com/AMMnet/AMMnet-Hackathon/main/01_data-vis/data/"
+url <- "https://raw.githubusercontent.com/AMMnet/skills-lab/main/01_data-vis/data/"
 malaria_data   <- read_csv(paste0(url, "mockdata_cases.csv"), col_types = cols())
 mosquito_data  <- read_csv(paste0(url, "mosq_mock.csv"), col_types = cols())
 ```
