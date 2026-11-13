@@ -32,6 +32,8 @@ OpenAI Codex to explore the data, identify missing information, consider
 up to three candidate models, and forecast the remaining eight
 observations. Human scientific judgment will guide each stage.
 
+{{< video https://www.youtube.com/embed/_oHlYSlEBZE >}}
+
 ::: {.callout-note title="Session and materials"}
 - **Date:** Tuesday, 10 November 2026
 - **Time:** 05:00–07:00 UTC (two hours)
